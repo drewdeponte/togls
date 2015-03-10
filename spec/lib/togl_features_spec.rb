@@ -18,6 +18,7 @@ describe "Togl feature creation" do
   end
 
   it "defaults to false when a feature is not defined" do
+    allow(Togl.logger).to receive(:warn)
     Togl.features do
       feature(:test).on
     end

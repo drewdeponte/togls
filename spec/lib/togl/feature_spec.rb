@@ -6,12 +6,16 @@ describe Togl::Feature do
     it "assigns the passed key" do
       expect(subject.key).to eq(:key)
     end
+
+    it "defaults to off" do
+      expect(subject.on?).to eq(false)
+    end
   end
 
   describe "#on" do
     context "when the rule is nil" do
       it "creates a new rule" do
-        expect(Togl::Rule).to receive(:new)
+        expect(Togl::Rule).to receive(:new).twice
         subject.on
       end
     end
@@ -42,7 +46,7 @@ describe Togl::Feature do
   describe "#off" do
     context "when the rule is nil" do
       it "creates a new rule" do
-        expect(Togl::Rule).to receive(:new)
+        expect(Togl::Rule).to receive(:new).twice
         subject.off
       end
     end

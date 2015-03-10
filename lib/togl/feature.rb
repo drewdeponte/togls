@@ -4,6 +4,7 @@ module Togl
 
     def initialize(key)
       @key = key
+      off
     end
 
     def on(rule = nil)
