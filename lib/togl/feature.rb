@@ -6,12 +6,19 @@ module Togl
       @key = key
     end
 
-    def on
-      @state = :on
+    def on(rule = nil)
+      if rule.nil?
+        rule = Rule.new { true }
+      end
+      @rule = rule 
+    end
+
+    def off
+      @rule = Rule.new { false }
     end
     
-    def on?
-      @state == :on
+    def on?(target = nil)
+      @rule.run(target)
     end
   end
 end

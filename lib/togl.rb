@@ -1,6 +1,7 @@
 require "togl/version"
 require "togl/feature_registry"
 require "togl/feature"
+require "togl/rule"
 
 module Togl
   def self.features(&features)

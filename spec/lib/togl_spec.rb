@@ -17,6 +17,23 @@ describe Togl do
 
       expect(Togl.feature(:test).on?).to eq(true)
     end
+
+    it "creates a new feature toggled off" do
+      Togl.features do
+        feature(:test).off
+      end
+
+      expect(Togl.feature(:test).on?).to eq(false)
+    end
+
+    it "creates a new feature with a rule" do
+      rule = Togl::Rule.new { |v| !v }
+      Togl.features do
+        feature(:test).on(rule)
+      end
+
+      expect(Togl.feature(:test).on?(true)).to eq(false)
+    end
   end
 
   describe ".feature" do
