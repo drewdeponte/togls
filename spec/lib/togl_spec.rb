@@ -19,4 +19,14 @@ describe Togl do
       expect(Togl.feature(:key)).to eq(feature)
     end
   end
+
+  describe ".logger" do
+    it "memoizes a new logger instance" do
+      logger = double('logger')
+      Togl.instance_variable_set(:@logger, nil)
+      allow(Logger).to receive(:new).with(STDOUT).and_return(logger)
+      expect(Togl.logger).to eq(logger)
+      expect(Togl.logger).to eq(logger)
+    end
+  end
 end
