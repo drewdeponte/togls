@@ -2,6 +2,7 @@ require "togl/version"
 require "togl/feature_registry"
 require "togl/feature"
 require "togl/rule"
+require "togl/rules"
 
 module Togl
   def self.features(&features)
@@ -14,23 +15,3 @@ module Togl
 end
 
 
-# class Group
-#     def member?(key)
-#     end
-# end
-#
-# group = Togl::Group.new
-# 
-# Togl.features do
-#     feature(:foo).on
-#     feature(:foo).off
-#     feature(:foo).on(group)
-# end
-# 
-# group = Togl::Group.new
-# group = Togl::LdapGroup.new
-# group = Togl::ADGroup.new
-# group = Togl::ArrayGroup.new
-#
-# Togl.feature(:foo).on?(user.email)
-# Togl.report(user.email)

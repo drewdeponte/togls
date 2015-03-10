@@ -1,8 +1,6 @@
 # Togl
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/togl`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A lightweight feature toggle library.
 
 ## Installation
 
@@ -22,7 +20,58 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Setup
+
+```ruby
+Togl.features do
+  # Set this feature to always be on
+  feature(:my_first_feature).on 
+  # Set this feature to always be off
+  feature(:my_second_feature).off
+  # Create a group rule
+  rule = Togl::Rules::Group.new(["user@email.com"])
+  feature(:my_third_feature).on(rule)
+end
+```
+
+### Evaluate
+
+```ruby
+if Togl.feature(:my_third_feature).on?("user@email.com")
+  # Do my awesome feature
+end
+```
+
+### Custom Rules
+
+A simple rule can be defined by created a rule object and passing a block
+
+```ruby
+# Only allow users with email addresses at gmail.com
+gmail_rule = Togl::Rule.new { |target| target =~ /gmail.com$/ }
+
+Togl.features do
+  feature(:only_gmail_users).on(gmail_rule)
+end
+```
+
+To implement a more complex rule a new rule object can be defined under Togl::Rules that implements the run method and returns a boolean. When a feature is defined, the rule will be added to the feature object and the run method called with whatever target is passed.
+
+```ruby
+module Togl
+  module Rules
+    class Group < Rule
+      def initialize(list)
+        @list = list
+      end
+
+      def run(target)
+        @list.include?(target)
+      end
+    end
+  end
+end
+```
 
 ## Development
 
