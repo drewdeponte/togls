@@ -9,16 +9,6 @@ describe Togl do
     end
   end
 
-  describe "feature creation" do
-    it "creates a new feature toggled on" do
-      Togl.features do
-        feature(:test).on
-      end
-
-      expect(Togl.feature(:test).on?).to eq(true)
-    end
-  end
-
   describe ".feature" do
     it "returns the feature identified by the key" do
       feature = double('feature')

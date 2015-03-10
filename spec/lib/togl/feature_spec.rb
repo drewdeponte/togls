@@ -9,18 +9,47 @@ describe Togl::Feature do
   end
 
   describe "#on" do
-    it "sets the feature state to on" do
+    context "when the rule is nil" do
+      it "creates a new rule" do
+        expect(Togl::Rule).to receive(:new)
+        subject.on
+      end
+    end
+
+    it "sets the feature rule to true" do
       subject.on
-      expect(subject.instance_variable_get(:@state)).to eq(:on)
+      expect(subject.instance_variable_get(:@rule).run).to eq(true)
     end
   end
 
   describe "#on?" do
+    it "runs the associated rule" do
+      rule = double('rule')
+      target = double('target')
+      subject.instance_variable_set(:@rule, rule)
+      expect(rule).to receive(:run).with(target)
+      subject.on?(target)
+    end
+
     context "when state is on" do
       it "returns true" do
         subject.on
         expect(subject.on?).to eq(true)
       end
+    end
+  end
+
+  describe "#off" do
+    context "when the rule is nil" do
+      it "creates a new rule" do
+        expect(Togl::Rule).to receive(:new)
+        subject.off
+      end
+    end
+
+    it "sets the feature rule to false" do
+      subject.off
+      expect(subject.instance_variable_get(:@rule).run).to eq(false)
     end
   end
 end
