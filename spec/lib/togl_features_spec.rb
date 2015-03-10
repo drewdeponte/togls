@@ -17,6 +17,15 @@ describe "Togl feature creation" do
     expect(Togl.feature(:test).on?).to eq(false)
   end
 
+  it "defaults to false when a feature is not defined" do
+    allow(Togl.logger).to receive(:warn)
+    Togl.features do
+      feature(:test).on
+    end
+
+    expect(Togl.feature(:not_defined).on?).to eq(false)
+  end
+
   it "creates a new feature with a rule" do
     Togl.features do
       rule = Togl::Rule.new { |v| !v }

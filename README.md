@@ -22,22 +22,24 @@ Or install it yourself as:
 
 ### Setup
 
+The default behaviour for any feature that has not been defined that is accessed is to default to false.
+
 ```ruby
 Togl.features do
   # Set this feature to always be on
-  feature(:my_first_feature).on 
+  feature(:pop_up_login_form).on 
   # Set this feature to always be off
-  feature(:my_second_feature).off
+  feature(:send_follup_email).off
   # Create a group rule
   rule = Togl::Rules::Group.new(["user@email.com"])
-  feature(:my_third_feature).on(rule)
+  feature(:new_contact_form).on(rule)
 end
 ```
 
 ### Evaluate
 
 ```ruby
-if Togl.feature(:my_third_feature).on?("user@email.com")
+if Togl.feature(:new_contact_form).on?("user@email.com")
   # Do my awesome feature
 end
 ```

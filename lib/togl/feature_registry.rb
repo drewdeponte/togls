@@ -2,6 +2,7 @@ module Togl
   class FeatureRegistry
     def initialize
       @registry = {}
+      @default_feature = Feature.new(:default).tap {|f| f.on(Rule.new { false }) }
     end
 
     def self.create(&features)
@@ -15,7 +16,10 @@ module Togl
     end
 
     def get(key)
-      @registry[key]
+      @registry.fetch(key) do |key|
+        Togl.logger.warn("Feature identified by #{key} has not been defined")
+        @default_feature
+      end
     end
   end
 end
