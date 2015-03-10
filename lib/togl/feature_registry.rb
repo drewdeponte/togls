@@ -16,12 +16,9 @@ module Togl
     end
 
     def get(key)
-      feature = @registry[key] 
-      if feature.nil?
+      @registry.fetch(key) do |key|
         Togl.logger.warn("Feature identified by #{key} has not been defined")
         @default_feature
-      else
-        feature 
       end
     end
   end
