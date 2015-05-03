@@ -1,7 +1,7 @@
 require_relative '../../spec_helper'
 
-describe Togl::Feature do
-  subject { Togl::Feature.new(:key) }
+describe Togls::Feature do
+  subject { Togls::Feature.new(:key) }
 
   describe "#initialize" do
     it "assigns the passed key" do
@@ -16,7 +16,7 @@ describe Togl::Feature do
   describe "#on" do
     context "when the rule is nil" do
       it "creates a new rule" do
-        expect(Togl::Rule).to receive(:new).twice
+        expect(Togls::Rule).to receive(:new).twice
         subject.on
       end
     end
@@ -30,7 +30,7 @@ describe Togl::Feature do
   describe "#off" do
     context "when the rule is nil" do
       it "creates a new rule" do
-        expect(Togl::Rule).to receive(:new).twice
+        expect(Togls::Rule).to receive(:new).twice
         subject.off
       end
     end

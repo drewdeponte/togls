@@ -1,4 +1,4 @@
-module Togl
+module Togls
   module Rules
     class Group < Rule
       def initialize(list)

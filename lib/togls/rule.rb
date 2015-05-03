@@ -1,4 +1,4 @@
-module Togl
+module Togls
   class Rule
     def initialize(&rule)
       @definition = rule  

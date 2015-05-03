@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'togl/version'
+require 'togls/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "togl"
-  spec.version       = Togl::VERSION
+  spec.name          = "togls"
+  spec.version       = Togls::VERSION
   spec.authors       = ["Brian Miller", "Andrew DePonte"]
   spec.email         = ["brimil01@gmail.com", "cyphactor@gmail.com"]
 
