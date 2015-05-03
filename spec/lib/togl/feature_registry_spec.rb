@@ -3,6 +3,18 @@ require_relative '../../spec_helper'
 describe Togl::FeatureRegistry do
   let(:key) { :key }
 
+  describe "#initalize" do
+    it "initalizes registry to an empty hash" do
+      expect(subject.instance_variable_get(:@registry)).to eq({})
+    end
+
+    it "creates a default false feature" do
+      default_feature = double('default_feature').as_null_object
+      allow(Togl::Feature).to receive(:new).and_return(default_feature)
+      expect(subject.instance_variable_get(:@default_feature)).to eq(default_feature)
+    end
+  end
+
   describe ".create" do
     it "creates a new instance of a feature registry" do
       registry = double('registry')
@@ -25,17 +37,6 @@ describe Togl::FeatureRegistry do
     end
   end
 
-  describe "#initalize" do
-    it "initalizes registry to an empty hash" do
-      expect(subject.instance_variable_get(:@registry)).to eq({})
-    end
-
-    it "creates a default false feature" do
-      default_feature = double('default_feature').as_null_object
-      allow(Togl::Feature).to receive(:new).and_return(default_feature)
-      expect(subject.instance_variable_get(:@default_feature)).to eq(default_feature)
-    end
-  end
 
   describe "#feature" do
     before do
