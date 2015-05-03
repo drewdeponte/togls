@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/codebreakdown/togls.svg?branch=master)](https://travis-ci.org/codebreakdown/togls)
-[![Code Climate](https://img.shields.io/codeclimate/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
+[![Code Climate](https://img.shields.io/codeclimate/github/codebreakdown/togls.svg)](https://codeclimate.com/github/codebreakdown/togls)
 [![Code
-Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
+Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togls.svg)](https://codeclimate.com/github/codebreakdown/togls)
 [![Dependency Status](https://gemnasium.com/codebreakdown/togls.svg)](https://gemnasium.com/codebreakdown/togls)
 
 # Togls
