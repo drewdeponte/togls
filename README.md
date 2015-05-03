@@ -1,3 +1,4 @@
+[![Version](https://img.shields.io/gem/v/togls.svg)](https://rubygems.org/gems/togls)
 [![Build Status](https://travis-ci.org/codebreakdown/togls.svg?branch=master)](https://travis-ci.org/codebreakdown/togls)
 [![Code Climate](https://img.shields.io/codeclimate/github/codebreakdown/togls.svg)](https://codeclimate.com/github/codebreakdown/togls)
 [![Code
