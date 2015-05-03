@@ -13,7 +13,7 @@ A lightweight feature toggle library.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'togl'
+gem 'togls'
 ```
 
 And then execute:
@@ -22,7 +22,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install togl
+    $ gem install togls
 
 ## Usage
 
@@ -89,7 +89,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/togl/fork )
+1. Fork it ( https://github.com/[my-github-username]/togls/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
