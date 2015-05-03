@@ -17,7 +17,7 @@ module Togl
     def off
       @rule = Rule.new { false }
     end
-    
+
     def on?(target = nil)
       @rule.run(target)
     end

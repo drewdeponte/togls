@@ -1,7 +1,8 @@
-require 'spec_helper'
+require_relative '../../spec_helper'
 
 describe Togl::Feature do
   subject { Togl::Feature.new(:key) }
+
   describe "#initialize" do
     it "assigns the passed key" do
       expect(subject.key).to eq(:key)
@@ -26,6 +27,20 @@ describe Togl::Feature do
     end
   end
 
+  describe "#off" do
+    context "when the rule is nil" do
+      it "creates a new rule" do
+        expect(Togl::Rule).to receive(:new).twice
+        subject.off
+      end
+    end
+
+    it "sets the feature rule to false" do
+      subject.off
+      expect(subject.instance_variable_get(:@rule).run).to eq(false)
+    end
+  end
+
   describe "#on?" do
     it "runs the associated rule" do
       rule = double('rule')
@@ -40,20 +55,6 @@ describe Togl::Feature do
         subject.on
         expect(subject.on?).to eq(true)
       end
-    end
-  end
-
-  describe "#off" do
-    context "when the rule is nil" do
-      it "creates a new rule" do
-        expect(Togl::Rule).to receive(:new).twice
-        subject.off
-      end
-    end
-
-    it "sets the feature rule to false" do
-      subject.off
-      expect(subject.instance_variable_get(:@rule).run).to eq(false)
     end
   end
 end
