@@ -18,5 +18,3 @@ module Togl
     @logger ||= Logger.new(STDOUT)
   end
 end
-
-
