@@ -2,7 +2,7 @@
 [![Code Climate](https://img.shields.io/codeclimate/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
 [![Code
 Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
-[![Dependency Status](https://gemnasium.com/codebreakdown/togl.svg)](https://gemnasium.com/codebreakdown/togl)
+[![Dependency Status](https://gemnasium.com/codebreakdown/togls.svg)](https://gemnasium.com/codebreakdown/togls)
 
 # Togls
 
