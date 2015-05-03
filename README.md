@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/codebreakdown/togl.svg?branch=master)](https://travis-ci.org/codebreakdown/togl)
+[![Dependency Status](https://gemnasium.com/codebreakdown/togl.svg)](https://gemnasium.com/codebreakdown/togl)
 
 # Togl
 
