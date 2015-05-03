@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/codebreakdown/togl.svg?branch=master)](https://travis-ci.org/codebreakdown/togl)
+[![Code Climate](https://img.shields.io/codeclimate/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
+[![Code
+Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
 [![Dependency Status](https://gemnasium.com/codebreakdown/togl.svg)](https://gemnasium.com/codebreakdown/togl)
 
 # Togl
