@@ -1,4 +1,4 @@
-require 'spec_helper'
+require_relative '../spec_helper'
 
 describe "Togl feature creation" do
   it "creates a new feature toggled on" do

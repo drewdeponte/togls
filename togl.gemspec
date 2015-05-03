@@ -9,11 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Brian Miller", "Andrew DePonte"]
   spec.email         = ["brimil01@gmail.com", "cyphactor@gmail.com"]
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com' to prevent pushes to rubygems.org, or delete to allow pushes to any server."
-  end
-
-
   spec.summary       = %q{A lightweight feature toggle library.}
   spec.description   = %q{A lightweight feature toggle library.}
   spec.homepage      = ""
