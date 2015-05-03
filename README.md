@@ -4,7 +4,7 @@
 Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togl.svg)](https://codeclimate.com/github/codebreakdown/togl)
 [![Dependency Status](https://gemnasium.com/codebreakdown/togl.svg)](https://gemnasium.com/codebreakdown/togl)
 
-# Togl
+# Togls
 
 A lightweight feature toggle library.
 
@@ -31,13 +31,13 @@ Or install it yourself as:
 The default behaviour for any feature that has not been defined that is accessed is to default to false.
 
 ```ruby
-Togl.features do
+Togls.features do
   # Set this feature to always be on
   feature(:pop_up_login_form).on 
   # Set this feature to always be off
   feature(:send_follup_email).off
   # Create a group rule
-  rule = Togl::Rules::Group.new(["user@email.com"])
+  rule = Togls::Rules::Group.new(["user@email.com"])
   feature(:new_contact_form).on(rule)
 end
 ```
@@ -45,7 +45,7 @@ end
 ### Evaluate
 
 ```ruby
-if Togl.feature(:new_contact_form).on?("user@email.com")
+if Togls.feature(:new_contact_form).on?("user@email.com")
   # Do my awesome feature
 end
 ```
@@ -56,17 +56,17 @@ A simple rule can be defined by created a rule object and passing a block
 
 ```ruby
 # Only allow users with email addresses at gmail.com
-gmail_rule = Togl::Rule.new { |target| target =~ /gmail.com$/ }
+gmail_rule = Togls::Rule.new { |target| target =~ /gmail.com$/ }
 
-Togl.features do
+Togls.features do
   feature(:only_gmail_users).on(gmail_rule)
 end
 ```
 
-To implement a more complex rule a new rule object can be defined under Togl::Rules that implements the run method and returns a boolean. When a feature is defined, the rule will be added to the feature object and the run method called with whatever target is passed.
+To implement a more complex rule a new rule object can be defined under Togls::Rules that implements the run method and returns a boolean. When a feature is defined, the rule will be added to the feature object and the run method called with whatever target is passed.
 
 ```ruby
-module Togl
+module Togls
   module Rules
     class Group < Rule
       def initialize(list)
