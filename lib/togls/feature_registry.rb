@@ -1,4 +1,4 @@
-module Togl
+module Togls
   class FeatureRegistry
     def initialize
       @registry = {}
@@ -17,7 +17,7 @@ module Togl
 
     def get(key)
       @registry.fetch(key) do |key|
-        Togl.logger.warn("Feature identified by #{key} has not been defined")
+        Togls.logger.warn("Feature identified by #{key} has not been defined")
         @default_feature
       end
     end

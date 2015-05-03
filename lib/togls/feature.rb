@@ -1,4 +1,4 @@
-module Togl
+module Togls
   class Feature
     attr_reader :key
 

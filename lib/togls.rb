@@ -1,11 +1,11 @@
-require "togl/version"
-require "togl/feature_registry"
-require "togl/feature"
-require "togl/rule"
-require "togl/rules"
+require "togls/version"
+require "togls/feature_registry"
+require "togls/feature"
+require "togls/rule"
+require "togls/rules"
 require "logger"
 
-module Togl
+module Togls
   def self.features(&features)
     @feature_registry = FeatureRegistry.create(&features)
   end

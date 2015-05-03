@@ -1,3 +1,3 @@
-module Togl
+module Togls
   VERSION = "0.1.0"
 end
