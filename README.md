@@ -159,7 +159,7 @@ aren't necessary in order to use it for basic feature toggles.
 ### Custom Rules
 
 `Togls` is specifically architected on top of a generic concept of a
-`Togls::Rule`.  This empowers the users to define any custome rules they would
+`Togls::Rule`.  This empowers the users to define any custom rules they would
 like and use them to control their feature toggles.  For example, you could
 use them to do A/B testing, define alpha test group, give a percentage of a
 user base a feature, etc.
