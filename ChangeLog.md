@@ -6,6 +6,10 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Require human readable description to define a feature toggle
+* Add rake task that outputs all the feature toggles states (on, off, ? -
+  unknown due to Compex Rule), keys, and human readable descritpions
+
 #### v0.1.0
 
 * Add concept of Groups as a provided rule

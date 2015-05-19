@@ -40,32 +40,35 @@ describe Togls::FeatureRegistry do
 
   describe "#feature" do
     before do
-      allow(Togls::Feature).to receive(:new).with(:default).and_return(spy)
+      allow(Togls::Feature).to receive(:new).with(:default, "the official default feature").and_return(spy)
     end
 
     it "creates a new feature object with the passed key" do
-      expect(Togls::Feature).to receive(:new).with(key)
-      subject.feature(key)
+      desc = double('feature desc')
+      expect(Togls::Feature).to receive(:new).with(key, desc)
+      subject.feature(key, desc)
     end
 
     it "adds the feature to the registry" do
+      desc = double('feature desc')
       feature = double('feature')
-      allow(Togls::Feature).to receive(:new).with(key).and_return(feature)
-      subject.feature(key)
+      allow(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
+      subject.feature(key, desc)
       expect(subject.instance_variable_get(:@registry)[key]).to eq(feature)
     end
   end
 
   describe "#get" do
     before do
-      allow(Togls::Feature).to receive(:new).with(:default).and_return(spy)
+      allow(Togls::Feature).to receive(:new).with(:default, "the official default feature").and_return(spy)
     end
 
     context "when feature exists in registry" do
       it "returns the feature identified by key" do
+        desc = double('feature desc')
         feature = double('feature')
-        allow(Togls::Feature).to receive(:new).with(key).and_return(feature)
-        subject.feature(key)
+        allow(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
+        subject.feature(key, desc)
         expect(subject.get(key)).to eq(feature)
       end
     end
@@ -82,6 +85,16 @@ describe Togls::FeatureRegistry do
         subject.instance_variable_set(:@default_feature, feature)
         expect(subject.get(key)).to eq(feature)
       end
+    end
+  end
+
+  describe "#registry" do
+    it "returns the registry of feature objects" do
+      feature_double = double('feature')
+      feature_registry = Togls::FeatureRegistry.create do
+      end
+      feature_registry.instance_variable_set(:@registry, { :test => feature_double })
+      expect(feature_registry.registry).to eq({ :test => feature_double })
     end
   end
 end

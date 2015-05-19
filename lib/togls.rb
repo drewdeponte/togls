@@ -1,4 +1,5 @@
 require "togls/version"
+require "togls/errors"
 require "togls/feature_registry"
 require "togls/feature"
 require "togls/rule"
@@ -7,7 +8,15 @@ require "logger"
 
 module Togls
   def self.features(&features)
-    @feature_registry = FeatureRegistry.create(&features)
+    if !features.nil?
+      @feature_registry = FeatureRegistry.create(&features)
+    else
+      if @feature_registry.nil?
+        raise Togls::NoFeaturesError, "Need to define features before you can get them"
+      else
+        @feature_registry.registry
+      end
+    end
   end
   
   def self.feature(key)
