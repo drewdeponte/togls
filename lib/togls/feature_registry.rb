@@ -2,7 +2,7 @@ module Togls
   class FeatureRegistry
     def initialize
       @registry = {}
-      @default_feature = Feature.new(:default).tap {|f| f.on(Rule.new { false }) }
+      @default_feature = Feature.new(:default, "the official default feature").tap {|f| f.on(Rule.new { false }) }
     end
 
     def self.create(&features)
@@ -11,8 +11,8 @@ module Togls
       registry
     end
 
-    def feature(tag)
-      @registry[tag.to_sym] = Feature.new(tag.to_sym)
+    def feature(tag, desc)
+      @registry[tag.to_sym] = Feature.new(tag.to_sym, desc)
     end
 
     def get(key)

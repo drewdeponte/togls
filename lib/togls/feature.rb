@@ -1,9 +1,10 @@
 module Togls
   class Feature
-    attr_reader :key
+    attr_reader :key, :description
 
-    def initialize(key)
+    def initialize(key, description)
       @key = key
+      @description = description
       off
     end
 
