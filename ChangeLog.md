@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+#### v1.0.0
+
 * Require human readable description to define a feature toggle
 * Add rake task that outputs all the feature toggles states (on, off, ? -
   unknown due to Compex Rule), keys, and human readable descritpions
