@@ -87,4 +87,14 @@ describe Togls::FeatureRegistry do
       end
     end
   end
+
+  describe "#registry" do
+    it "returns the registry of feature objects" do
+      feature_double = double('feature')
+      feature_registry = Togls::FeatureRegistry.create do
+      end
+      feature_registry.instance_variable_set(:@registry, { :test => feature_double })
+      expect(feature_registry.registry).to eq({ :test => feature_double })
+    end
+  end
 end

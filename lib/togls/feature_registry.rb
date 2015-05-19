@@ -21,5 +21,9 @@ module Togls
         @default_feature
       end
     end
+
+    def registry
+      @registry
+    end
   end
 end

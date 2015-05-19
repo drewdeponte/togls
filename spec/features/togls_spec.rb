@@ -44,4 +44,22 @@ describe "Togl feature creation" do
     expect(Togls.feature(:test).on?("someone")).to eq(true)
     expect(Togls.feature(:test).on?("someone_else")).to eq(false)
   end
+
+  it "outputs all the features" do
+    Togls.features do
+      feature(:test1, "test1 readable description").on
+      feature(:test2, "test2 readable description").off
+      feature(:test3, "test3 readable description")
+      feature(:test4, "test4 readable description").on(Togls::Rule.new { true })
+    end
+
+    require 'rake'
+    load 'lib/tasks/togls.rake'
+
+    expect { Rake::Task["togls:features"].invoke }.to output(%q{ on - :test1 - test1 readable description
+off - :test2 - test2 readable description
+off - :test3 - test3 readable description
+  ? - :test4 - test4 readable description
+}).to_stdout
+  end
 end

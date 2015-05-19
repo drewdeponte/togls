@@ -29,6 +29,11 @@ describe Togls::Feature do
       subject.on
       expect(subject.instance_variable_get(:@rule).run).to eq(true)
     end
+
+    it "returns its associated feature object" do
+      retval = subject.on
+      expect(retval).to eq(subject)
+    end
   end
 
   describe "#off" do
@@ -42,6 +47,11 @@ describe Togls::Feature do
     it "sets the feature rule to false" do
       subject.off
       expect(subject.instance_variable_get(:@rule).run).to eq(false)
+    end
+
+    it "returns its associated feature object" do
+      retval = subject.off
+      expect(retval).to eq(subject)
     end
   end
 
@@ -65,6 +75,23 @@ describe Togls::Feature do
   describe "#description" do
     it "returns the description" do
       expect(subject.description).to eq("some description")
+    end
+  end
+
+  describe "#to_s" do
+    context "when based on boolean rule" do
+      it "returns a human readable string representation of the feature including value" do
+        feature = Togls::Feature.new(:key, "some description").on(Togls::Rules::Boolean.new(true))
+        expect(feature.to_s).to eq(" on - :key - some description")
+      end
+    end
+
+    context "when NOT based on boolean rule" do
+      it "returns a human readable string representation of the feature with an unknown value" do
+        rule = Togls::Rule.new { |v| !v }
+        feature = Togls::Feature.new(:another_key, "another description").on(rule)
+        expect(feature.to_s).to eq("  ? - :another_key - another description")
+      end
     end
   end
 end
