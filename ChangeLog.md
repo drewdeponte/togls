@@ -7,6 +7,7 @@ versions, as well as provide a rough history.
 #### Next Release
 
 * Rename var in `FeatureRegistry.create` avoid confusion with overloaded name
+* Make default boolean rule class configurable
 
 #### v1.0.0
 
