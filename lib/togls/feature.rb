@@ -10,14 +10,14 @@ module Togls
 
     def on(rule = nil)
       if rule.nil?
-        rule = Togls.default_boolean_rule_klass.new(true)
+        rule = Togls.default_boolean_rule_klass.new(true, @key)
       end
       @rule = rule 
       self
     end
 
     def off
-      @rule = Togls.default_boolean_rule_klass.new(false)
+      @rule = Togls.default_boolean_rule_klass.new(false, @key)
       self
     end
 

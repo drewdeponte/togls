@@ -4,8 +4,14 @@ describe Togls::Rules::Boolean do
   describe "#initialize" do
     it "stores the passed boolean" do
       bool = double('bool')
-      group = Togls::Rules::Boolean.new(bool)
+      group = Togls::Rules::Boolean.new(bool, double)
       expect(group.instance_variable_get(:@bool)).to eq(bool)
+    end
+
+    it "stores the passed feature key" do
+      feature_key = double('feature key')
+      group = Togls::Rules::Boolean.new(double, feature_key)
+      expect(group.instance_variable_get(:@feature_key)).to eq(feature_key)
     end
   end
 

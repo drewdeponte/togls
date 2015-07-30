@@ -1,8 +1,9 @@
 module Togls
   module Rules
     class Boolean < Rule
-      def initialize(bool)
+      def initialize(bool, feature_key = nil)
         @bool = bool
+        @feature_key = feature_key
       end
 
       def run(target = nil)

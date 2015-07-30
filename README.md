@@ -261,6 +261,100 @@ Lets take a closer look at exactly what is going on here.
 *Complex Rules* are a simple yet extremely power concept that you shouldn't
 hesitate to use.
 
+## Provided Rules Reference
+
+The following is a list of all of the provided rules, their explanations, and
+some examples of how they can be used.
+
+### Togls::Rules::Boolean
+
+This is the simplest of the provided rules. In fact it is also the **default**
+rule that is used with the `Togls.default_boolean_rule_klass`. It simply takes
+a boolean during construction and returns that boolean value when `run` is
+called on it. Example:
+
+```ruby
+rule = Togls::Rules::Boolean.new(true)
+rule.run # => true
+```
+
+*Note:* The constructor can optionally take the `feature_key` in addition to
+the boolean value, but it is ignored.
+
+For a real world example of how Togls itself uses the this rule as
+the `default_boolean_rule_klass`. Check out the following.
+
+[togls/lib/togls/feature.rb](https://github.com/codebreakdown/togls/blob/master/lib/togls/feature.rb)
+
+### Togls::Rules::BooleanEnvOverride
+
+This rule is nearly the same as the `Togls::Rules::Boolean` rule with one very
+important difference. It allows the initialized values of the rules to be
+overriden at runtime via environment variables following the naming scheme
+below.
+
+```shell
+TOGLS_<feature_key as a string upper cased>
+```
+
+`<feature_key as a string upper cased>` should be replaced with
+whatever the `feature_key` is as a string when upper cased.
+
+For example. Lets say you have a feature key of
+`:new_forecasting_algorithm`. The value of this rule could be set to **true**
+by setting the environment variable, `TOGLS_NEW_FORECASTING_ALGORITHM` to
+a value of `"true"`. If `TOGLS_NEW_FORECASTING_ALGORITHM` is any value
+other than `"true"` the rule will return **false**.
+
+This type of rule is extremely useful when you want to be able to use
+environment variables set in various environments to override your in code
+values of feature toggles. A prime example of this is often QA, Product,
+Design, because they wants to test a feature or a portion of a feature that is
+toggled off in code.
+
+*Note:* This rule conforms to the interface of the
+`default_boolean_rule_klass`. Therefore, it can be set as the default boolean
+rule class by doing the following.
+
+```ruby
+Togls.default_boolean_rule_klass = Togls::Rules::BooleanEnvOverride
+
+Togls.features do
+  feature(:pop_up_login_form, "use the pop up login instead of normal login").on 
+  feature(:send_follup_email, "send the follow up email").off
+end
+```
+
+### Togls::Rules::Group
+
+This rule is intended to allow feature toggles to be able to controled based
+on someone or something existing/not exsiting within a group. For example this
+could be used to enable a feature on for a specified list of email addresses.
+
+```ruby
+# defining the feature toggles
+
+Togls.features do
+  # Create a group rule
+  rule = Togls::Rules::Group.new(["drew@example.com", "brian@example.com"])
+  feature(:new_contact_form, "use new contact form instead of old one").on(rule)
+end
+
+# evaluating the feature toggles
+
+if Togls.feature(:new_contact_form).on?("user@example.com")
+  # Use new contact form
+else
+  # Use old contact form
+end
+```
+
+In the above snippet the `:new_contact_form` feature toggle is on/off
+conditionally based on if "user@example.com" is in the group
+("drew@example.com", "brian@example.com"). In this particular case
+"user@example.com" is not. Therefore, `on?` would come back with a value of
+**false** and we would end up in the `# Use old contact form` branch.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
