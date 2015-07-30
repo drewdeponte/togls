@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Rename var in `FeatureRegistry.create` avoid confusion with overloaded name
+
 #### v1.0.0
 
 * Require human readable description to define a feature toggle

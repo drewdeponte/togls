@@ -6,9 +6,9 @@ module Togls
     end
 
     def self.create(&features)
-      registry = self.new
-      registry.instance_eval(&features) 
-      registry
+      feature_registry = self.new
+      feature_registry.instance_eval(&features) 
+      feature_registry
     end
 
     def feature(tag, desc)
