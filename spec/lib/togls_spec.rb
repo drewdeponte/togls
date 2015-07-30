@@ -1,6 +1,42 @@
 require_relative '../spec_helper'
 
 describe Togls do
+  describe ".default_boolean_rule_klass" do
+    context "when it has NOT been set" do
+      it "returns the class of the default boolean rule" do
+        expect(subject.default_boolean_rule_klass).to eq(Togls::Rules::Boolean)
+      end
+    end
+
+    context "when it HAS been set" do
+      before do
+        @default_boolean_rule_klass = double('default rule klass')
+        subject.instance_variable_set(:@default_boolean_rule_klass,
+                                      @default_boolean_rule_klass) 
+      end
+
+      after do
+        subject.send(:remove_instance_variable, :@default_boolean_rule_klass)
+      end
+
+      it "returns the class the default boolean rule was set to" do
+        expect(subject.default_boolean_rule_klass).to eq(@default_boolean_rule_klass)
+      end
+    end
+  end
+
+  describe ".default_boolean_rule_klass=" do
+    after do
+      subject.send(:remove_instance_variable, :@default_boolean_rule_klass)
+    end
+
+    it "assigns the default boolean rule klass to an instance variable"  do
+      some_rule_klass = double('some rule klass')
+      subject.default_boolean_rule_klass = some_rule_klass
+      expect(subject.instance_variable_get(:@default_boolean_rule_klass)).to eq(some_rule_klass)
+    end
+  end
+
   describe ".features" do
     context "when features have NOT been defined" do
       context "when given a block" do

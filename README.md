@@ -156,6 +156,18 @@ off - :test3 - test 3 feature
 Below is a breakdown of some of the more advanced features of `Togls` which
 aren't necessary in order to use it for basic feature toggles.
 
+### Override Default Boolean Rule
+
+`Togls` allows you to override the Rule class that is used for default boolean
+values. The default boolean rule class is `Togls::Rules::Boolean`.
+
+If you want to use a different default boolean rule you can override the
+default using the following:
+
+```ruby
+Togls.default_boolean_rule_klass = WhateverBooleanRuleKlassYouWant
+```
+
 ### Custom Rules
 
 `Togls` is specifically architected on top of a generic concept of a
