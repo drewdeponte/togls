@@ -4,14 +4,8 @@ describe Togls::Rules::BooleanEnvOverride do
   describe "#initialize" do
     it "stores the passed boolean" do
       bool = double('bool')
-      group = Togls::Rules::BooleanEnvOverride.new(bool, double)
+      group = Togls::Rules::BooleanEnvOverride.new(bool)
       expect(group.instance_variable_get(:@bool)).to eq(bool)
-    end
-
-    it "stores the passed feature key" do
-      feature_key = double('feature key')
-      group = Togls::Rules::BooleanEnvOverride.new(double, feature_key)
-      expect(group.instance_variable_get(:@feature_key)).to eq(feature_key)
     end
   end
 
@@ -19,7 +13,7 @@ describe Togls::Rules::BooleanEnvOverride do
     context "when environment variable is NOT present" do
       it "returns the provided boolean value" do
         bool_rule = Togls::Rules::BooleanEnvOverride.new(true)
-        expect(bool_rule.run).to eq(true)
+        expect(bool_rule.run(double('feature_key'))).to eq(true)
       end
     end
 
@@ -31,9 +25,8 @@ describe Togls::Rules::BooleanEnvOverride do
 
         it "returns true" do
           ENV["TOGLS_TEST_FEATURE_HOOPTY"]="true"
-          bool_rule = Togls::Rules::BooleanEnvOverride.new(false,
-                                                           :test_feature_hoopty)
-          expect(bool_rule.run).to eq(true)
+          bool_rule = Togls::Rules::BooleanEnvOverride.new(false)
+          expect(bool_rule.run(:test_feature_hoopty)).to eq(true)
         end
       end
 
@@ -44,9 +37,8 @@ describe Togls::Rules::BooleanEnvOverride do
 
         it "returns false" do
           ENV["TOGLS_TEST_FEATURE_DOOPTY"]="aeuoeuao"
-          bool_rule = Togls::Rules::BooleanEnvOverride.new(false,
-                                                           :test_feature_hoopty)
-          expect(bool_rule.run).to eq(false)
+          bool_rule = Togls::Rules::BooleanEnvOverride.new(false)
+          expect(bool_rule.run(:test_feature_doopty)).to eq(false)
         end
       end
     end

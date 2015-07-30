@@ -7,7 +7,7 @@ Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togls
 
 # Togls
 
-A lightweight feature toggle library.
+A lightweight feature toggle library for Ruby.
 
 ## Installation
 
@@ -31,18 +31,21 @@ The basic usage of `Togls` is outlined below.
 
 ### Defining Feature Toggles
 
-The first thing to do to use `Togls` is to define your feature toggles. The
-following is an example of how you might define your feature toggles. It is
-recommended this live in its own file. In Rails projects we recommend putting
-it in `config/initializers/togls_features.rb`.
+The first thing to do to use `Togls` is to define your feature toggles.
+The following is an example of how you might define your feature
+toggles. It is recommended this live in its own file. In Rails projects
+we recommend putting it in `config/initializers/togls_features.rb`.
 
 ```ruby
 Togls.features do
   # Set this feature to always be on
   feature(:pop_up_login_form, "use the pop up login instead of normal login").on 
+
   # Set this feature to always be off
   feature(:send_follup_email, "send the follow up email").off
-  # Create a group rule
+
+  # Create a group rule so the feature is on if the user is a member of
+  # the group.
   rule = Togls::Rules::Group.new(["user@email.com"])
   feature(:new_contact_form, "use new contact form instead of old one").on(rule)
 end
@@ -50,9 +53,9 @@ end
 
 ### Evaluating Feature Toggles
 
-Once you have defined your feature toggles. The next thing you would likely
-want to do is conditionally control something based on them. The following are
-a few examples of how you would do this given the above.
+Once you have defined your feature toggles. The next thing you would
+likely want to do is conditionally control something based on them. The
+following are a few examples of how you would do this given the above.
 
 ```ruby
 if Togls.feature(:pop_up_login_form).on?
@@ -72,22 +75,24 @@ else
 end
 ```
 
-**Note:** The default behaviour for any feature that has not been defined that
-is accessed is to default to false.
+**Note:** The default behaviour for any feature that has not been
+defined and is accessed is to default to **off**.
 
 ### Output Feature Toggles
 
-One other use case that we support as part of the *Basic Usage* is outputing all
-of the features in your system and their respective, **states** (`on`, `off`, `?` -
-unkown due to *Complex Rule*), **key**, and **human readable descrption**.
+One other use case that we support as part of the *Basic Usage* is
+outputing all of the features in your system and their respective,
+**states** (`on`, `off`, `?` - unkown due to *Complex Rule*), **key**,
+and **human readable descrption**.
 
-We provide this functionality via a [rake](https://github.com/ruby/rake) task.
+We provide this functionality via a [rake](https://github.com/ruby/rake)
+task.
 
 #### Load rake task
 
 To use it you must first load the provided
-[rake](https://github.com/ruby/rake) file. This can be done in a number of
-different ways.
+[rake](https://github.com/ruby/rake) file. This can be done in a number
+of different ways.
 
 ##### Load rake task in another gem
 
@@ -99,13 +104,14 @@ spec = Gem::Specification.find_by_name 'togls'
 load "#{spec.gem_dir}/lib/tasks/togls.rake"
 ```
 
-**Note:** The features must be defined and loaded before calling this task or
-it will error out informing you that you need to define your features first.
+**Note:** The features must be defined and loaded before calling this
+task or it will error out informing you that you need to define your
+features first.
 
 ##### Load rake task in a Rails app
 
-To use the it in a Rails app you can do so by adding the following to the
-`Rakefile`.
+To use the it in a Rails app you can do so by adding the following to
+the `Rakefile`.
 
 ```ruby
 namespace :togls do
@@ -117,17 +123,17 @@ spec = Gem::Specification.find_by_name 'togls'
 load "#{spec.gem_dir}/lib/tasks/togls.rake"
 ```
 
-**Note:** The first hunk where it defines an empty `togls:features` tasks is
-important in Rails because it takes advantage of
-[rake](https://github.com/ruby/rake) task stacking and calls out the Rails
-environment as a dependency. That way before the `togls:feature` task is
-executed the `config/initializers/togls_features.rb` file is loaded which
-defines the feature toggles.
+**Note:** The first hunk where it defines an empty `togls:features`
+tasks is important in Rails because it takes advantage of
+[rake](https://github.com/ruby/rake) task stacking and calls out the
+Rails environment as a dependency. That way before the `togls:feature`
+task is executed the `config/initializers/togls_features.rb` file is
+loaded which defines the feature toggles.
 
 #### Verify rake task loaded
 
-To verify that the rake task is loaded you can run `rake -T` and you should
-see something similar to the following in the output.
+To verify that the rake task is loaded you can run `rake -T` and you
+should see something similar to the following in the output.
 
 ```text
 rake togls:features                     # Output all features including status (on, off, ? - unknown due to complex rule), ke...
@@ -135,15 +141,15 @@ rake togls:features                     # Output all features including status (
 
 #### Run the rake task
 
-Once you have verified the task is loaded and available you can run it as
-follows.
+Once you have verified the task is loaded and available you can run it
+as follows.
 
 ```shell
 rake togls:features
 ```
 
-The following is an example of what the output might look like if you defined
-a few test features.
+The following is an example of what the output might look like if you
+defined a few test features.
 
 ```text
  on - :test1 - test 1 feature
@@ -153,13 +159,14 @@ off - :test3 - test 3 feature
 
 ## Advanced Usage
 
-Below is a breakdown of some of the more advanced features of `Togls` which
-aren't necessary in order to use it for basic feature toggles.
+Below is a breakdown of some of the more advanced features of `Togls`
+which aren't necessary in order to use it for basic feature toggles.
 
 ### Override Default Boolean Rule
 
-`Togls` allows you to override the Rule class that is used for default boolean
-values. The default boolean rule class is `Togls::Rules::Boolean`.
+`Togls` allows you to override the Rule class that is used for default
+boolean values. The default boolean rule class is
+`Togls::Rules::Boolean`.
 
 If you want to use a different default boolean rule you can override the
 default using the following:
@@ -171,20 +178,22 @@ Togls.default_boolean_rule_klass = WhateverBooleanRuleKlassYouWant
 ### Custom Rules
 
 `Togls` is specifically architected on top of a generic concept of a
-`Togls::Rule`.  This empowers the users to define any custom rules they would
-like and use them to control their feature toggles.  For example, you could
-use them to do A/B testing, define alpha test group, give a percentage of a
-user base a feature, etc.
+`Togls::Rule`.  This empowers the users to define any custom rules they
+would like and use them to control their feature toggles.  For example,
+you could use them to do A/B testing, define alpha test group, give a
+percentage of a user base a feature, etc.
 
 ### Simple Rules
 
-A simple rule can be defined by creating a rule object and passing a block. In
-the following example any feature using the `gmail_rule` would only be on if
-the given `target` contained `gmail.com` at the end of the `target`.
+A simple rule can be defined by creating a rule object and passing a
+block. In the following example any feature using the `gmail_rule` would
+only be on if the given `target` contained `gmail.com` at the end of the
+`target`. *Note:* The block is also handed the feature's key which can
+be used to evaluate the boolean result as well.
 
 ```ruby
 # Only allow users with email addresses at gmail.com
-gmail_rule = Togls::Rule.new { |target| target =~ /gmail.com$/ }
+gmail_rule = Togls::Rule.new { |key, target| target =~ /gmail.com$/ }
 
 Togls.features do
   feature(:only_gmail_users).on(gmail_rule)
@@ -193,35 +202,38 @@ end
 
 ### Complex Rules
 
-To implement a more complex rule, a new rule object can be defined under
-`Togls::Rules` that abides by the following.
+To implement a more complex rule, a new rule object can be defined that
+abides by the following.
 
 - inherits from `Togls::Rule` or a decendent of it
-- has an instance method named `run` that takes either a default value
-  parameter of `target` or a required paramter of `target`.
+- has an instance method named `run` that takes a required feature key
+  and either a default value parameter of `target` or a required
+  paramter of `target`.
 
     ```ruby
-    def run(target = 'foo')
+    def run(key, target = 'foo')
     ...
     end
     
     # or
 
-    def run(target)
+    def run(key, target)
     ...
     end
     ```
 
-- has the instance method named `run` return a boolean value identifying if
-  that feature should be on(`true`)/off(`false`) given the `target`.
+- has the instance method named `run` return a boolean value identifying
+  if that feature should be on(**true**)/off(**false**) given the `key`
+  and `target`.
 
 Thats it!
 
 #### Example Complex Rule
 
-Internally `Togls` uses these *Complex Rules* to provide functionality and
-will evolve to contain more official rules over time. If you have a generic
-*Complex Rule* you think should be part of `Togls` please make a pull request.
+Internally `Togls` uses these *Complex Rules* to provide functionality
+and will evolve to contain more official rules over time. If you have a
+generic *Complex Rule* you think should be part of `Togls` please make a
+pull request.
 
 A prime example of a *Complex Rule* provided by `Togls` is the
 `Togls::Rules::Group` rule. You can see it below.
@@ -234,7 +246,7 @@ module Togls
         @list = list
       end
 
-      def run(target)
+      def run(key, target)
         @list.include?(target)
       end
     end
@@ -244,54 +256,54 @@ end
 
 Lets take a closer look at exactly what is going on here.
 
-- it is inheriting from the `Togls::Rule` class which meets one of the minimum
-  requirements for a rule.
-- its defines constructor takes an array identifiers and stores them. These
-  identifiers could be id numbers, email address, etc. **Note:** This
-  constructor is completely different than that of `Togls::Rule`. This
-  is fine because it is **not** a requirements that the constructor match.
-- its `run` method returns a boolean value identifying if the feature should
-  be on(`true`)/off(`false`) for the given `target`. It does so by identifying
-  if the array passed in at construction time `include?` the given `target`.
-  This meets one of the minimum requirement for a rule.
-- its `run` method signature requires a `target`. This meets a minimum
-  requirement for a rule as well. It also makes sense in the case of group
-  based rule as it has to have something to compare against the group.
+- it is inheriting from the `Togls::Rule` class which meets one of the
+  minimum requirements for a rule.
+- it defined constructor takes an array of identifiers and stores them.
+  These identifiers could be id numbers, email address, etc. **Note:**
+  This constructor is completely different than that of `Togls::Rule`.
+  This is fine because it is **not** a requirement that the constructor
+  match.
+- its `run` method returns a boolean value identifying if the feature
+  should be on(**true**)/off(**false**) for the given `key` and
+  `target`. It does so by identifying if the array passed in at
+  construction time `include?` the given `target`.  This meets one of
+  the minimum requirement for a rule.
+- its `run` method signature requires a `key` and `target`. This meets a
+  minimum requirement for a rule as well. It also makes sense in the
+  case of group based rule as it has to have something to compare
+  against the group.
 
-*Complex Rules* are a simple yet extremely power concept that you shouldn't
-hesitate to use.
+*Complex Rules* are a simple yet extremely power concept that you
+shouldn't hesitate to use.
 
 ## Provided Rules Reference
 
-The following is a list of all of the provided rules, their explanations, and
-some examples of how they can be used.
+The following is a list of all of the provided rules, their
+explanations, and some examples of how they can be used.
 
 ### Togls::Rules::Boolean
 
-This is the simplest of the provided rules. In fact it is also the **default**
-rule that is used with the `Togls.default_boolean_rule_klass`. It simply takes
-a boolean during construction and returns that boolean value when `run` is
-called on it. Example:
+This is the simplest of the provided rules. In fact it is also the
+**default** rule that is used with the
+`Togls.default_boolean_rule_klass`. It simply takes a boolean during
+construction and returns that boolean value when `run` is called on it.
+Example:
 
 ```ruby
 rule = Togls::Rules::Boolean.new(true)
-rule.run # => true
+rule.run(:some_feature_key) # => true
 ```
 
-*Note:* The constructor can optionally take the `feature_key` in addition to
-the boolean value, but it is ignored.
-
 For a real world example of how Togls itself uses the this rule as
-the `default_boolean_rule_klass`. Check out the following.
-
-[togls/lib/togls/feature.rb](https://github.com/codebreakdown/togls/blob/master/lib/togls/feature.rb)
+the `default_boolean_rule_klass`. Check out 
+[togls/lib/togls/feature.rb](https://github.com/codebreakdown/togls/blob/master/lib/togls/feature.rb).
 
 ### Togls::Rules::BooleanEnvOverride
 
-This rule is nearly the same as the `Togls::Rules::Boolean` rule with one very
-important difference. It allows the initialized values of the rules to be
-overriden at runtime via environment variables following the naming scheme
-below.
+This rule is nearly the same as the `Togls::Rules::Boolean` rule with
+one very important difference. It allows the initialized values of the
+rules to be overriden at runtime via environment variables following the
+naming scheme below.
 
 ```shell
 TOGLS_<feature_key as a string upper cased>
@@ -301,20 +313,21 @@ TOGLS_<feature_key as a string upper cased>
 whatever the `feature_key` is as a string when upper cased.
 
 For example. Lets say you have a feature key of
-`:new_forecasting_algorithm`. The value of this rule could be set to **true**
-by setting the environment variable, `TOGLS_NEW_FORECASTING_ALGORITHM` to
-a value of `"true"`. If `TOGLS_NEW_FORECASTING_ALGORITHM` is any value
-other than `"true"` the rule will return **false**.
+`:new_forecasting_algorithm`. The value of this rule could be set to
+**true** by setting the environment variable,
+`TOGLS_NEW_FORECASTING_ALGORITHM` to a value of `"true"`. If
+`TOGLS_NEW_FORECASTING_ALGORITHM` is any value other than `"true"` the
+rule will return **false**.
 
 This type of rule is extremely useful when you want to be able to use
-environment variables set in various environments to override your in code
-values of feature toggles. A prime example of this is often QA, Product,
-Design, because they wants to test a feature or a portion of a feature that is
-toggled off in code.
+environment variables set in various environments to override your in
+code values of feature toggles. A prime example of this is often
+Development, QA, Product, Design, because they want to test a feature
+or a portion of a feature that is toggled off in code.
 
 *Note:* This rule conforms to the interface of the
-`default_boolean_rule_klass`. Therefore, it can be set as the default boolean
-rule class by doing the following.
+`default_boolean_rule_klass`. Therefore, it can be set as the default
+boolean rule class by doing the following.
 
 ```ruby
 Togls.default_boolean_rule_klass = Togls::Rules::BooleanEnvOverride
@@ -325,15 +338,19 @@ Togls.features do
 end
 ```
 
+The above would allow any of your features defined by using the simple
+`on` or `off` methods to be overridden by an environment variable
+following the schema described above.
+
 ### Togls::Rules::Group
 
-This rule is intended to allow feature toggles to be able to controled based
-on someone or something existing/not exsiting within a group. For example this
-could be used to enable a feature on for a specified list of email addresses.
+This rule is intended to allow feature toggles to be able to be
+controled based on someone or something existing/not exsiting within a
+group. For example this could be used to enable a feature for a
+specified list of email addresses.
 
 ```ruby
 # defining the feature toggles
-
 Togls.features do
   # Create a group rule
   rule = Togls::Rules::Group.new(["drew@example.com", "brian@example.com"])
@@ -341,7 +358,6 @@ Togls.features do
 end
 
 # evaluating the feature toggles
-
 if Togls.feature(:new_contact_form).on?("user@example.com")
   # Use new contact form
 else
@@ -352,8 +368,9 @@ end
 In the above snippet the `:new_contact_form` feature toggle is on/off
 conditionally based on if "user@example.com" is in the group
 ("drew@example.com", "brian@example.com"). In this particular case
-"user@example.com" is not. Therefore, `on?` would come back with a value of
-**false** and we would end up in the `# Use old contact form` branch.
+"user@example.com" is not. Therefore, `on?` would come back with a value
+of **false** and we would end up in the `# Use old contact form` code
+branch.
 
 ## Development
 

@@ -5,7 +5,7 @@ module Togls
         @list = list
       end
 
-      def run(target)
+      def run(key, target)
         @list.include?(target)
       end
     end

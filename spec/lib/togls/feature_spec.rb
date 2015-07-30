@@ -27,7 +27,7 @@ describe Togls::Feature do
 
     it "sets the feature rule to true" do
       subject.on
-      expect(subject.instance_variable_get(:@rule).run).to eq(true)
+      expect(subject.instance_variable_get(:@rule).run(double('feature key'))).to eq(true)
     end
 
     it "returns its associated feature object" do
@@ -46,7 +46,8 @@ describe Togls::Feature do
 
     it "sets the feature rule to false" do
       subject.off
-      expect(subject.instance_variable_get(:@rule).run).to eq(false)
+      expect(subject.instance_variable_get(:@rule).\
+             run(double('feature key'))).to eq(false)
     end
 
     it "returns its associated feature object" do
@@ -60,7 +61,7 @@ describe Togls::Feature do
       rule = double('rule')
       target = double('target')
       subject.instance_variable_set(:@rule, rule)
-      expect(rule).to receive(:run).with(target)
+      expect(rule).to receive(:run).with(subject.key, target)
       subject.on?(target)
     end
 

@@ -12,7 +12,7 @@ describe Togls::Rule do
   describe "#run" do
     it "runs the defined rule" do
       rule = Togls::Rule.new { "test value" }
-      expect(rule.run).to eq("test value")
+      expect(rule.run(double('feature key'))).to eq("test value")
     end
   end
 end

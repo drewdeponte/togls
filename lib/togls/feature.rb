@@ -10,24 +10,24 @@ module Togls
 
     def on(rule = nil)
       if rule.nil?
-        rule = Togls.default_boolean_rule_klass.new(true, @key)
+        rule = Togls.default_boolean_rule_klass.new(true)
       end
       @rule = rule 
       self
     end
 
     def off
-      @rule = Togls.default_boolean_rule_klass.new(false, @key)
+      @rule = Togls.default_boolean_rule_klass.new(false)
       self
     end
 
     def on?(target = nil)
-      @rule.run(target)
+      @rule.run(@key, target)
     end
 
     def to_s
       if @rule.is_a?(Togls.default_boolean_rule_klass)
-        display_value = @rule.run ? ' on' : 'off'
+        display_value = @rule.run(@key) ? ' on' : 'off'
       else
         display_value = '  ?'
       end
