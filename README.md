@@ -165,14 +165,19 @@ which aren't necessary in order to use it for basic feature toggles.
 ### Override Default Boolean Rule
 
 `Togls` allows you to override the Rule class that is used for default
-boolean values. The default boolean rule class is
+boolean values. This rule class is used when you use the convenience
+methods `on` and `off`. The default boolean rule class is
 `Togls::Rules::Boolean`.
 
-If you want to use a different default boolean rule you can override the
-default using the following:
+If you want to use a different default boolean rule, lets say,
+`Togls::Rules::BooleanEnvOverride`  you can override the default by
+doing the following:
 
 ```ruby
-Togls.default_boolean_rule_klass = WhateverBooleanRuleKlassYouWant
+Togls.features(Togls::Rules::BooleanEnvOverride) do
+  feature(:some_feature, "some feature description").on
+  feature(:some_other_feature, "some other feature description").on
+end
 ```
 
 ### Custom Rules
@@ -196,7 +201,7 @@ be used to evaluate the boolean result as well.
 gmail_rule = Togls::Rule.new { |key, target| target =~ /gmail.com$/ }
 
 Togls.features do
-  feature(:only_gmail_users).on(gmail_rule)
+  feature(:only_gmail_users, "Only enabled for Gmail users").on(gmail_rule)
 end
 ```
 

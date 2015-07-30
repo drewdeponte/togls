@@ -1,6 +1,7 @@
 require_relative '../../spec_helper'
 
 describe Togls::FeatureRegistry do
+  subject { Togls::FeatureRegistry.new(Togls::Rules::Boolean) }
   let(:key) { :key }
 
   describe "#initalize" do
@@ -20,7 +21,7 @@ describe Togls::FeatureRegistry do
       registry = double('registry')
       expect(Togls::FeatureRegistry).to receive(:new).and_return(registry)
       b = Proc.new {}
-      Togls::FeatureRegistry.create(&b)
+      Togls::FeatureRegistry.create(double, &b)
     end
 
     it "calls instance eval with the passed block" do
@@ -28,31 +29,34 @@ describe Togls::FeatureRegistry do
       allow(Togls::FeatureRegistry).to receive(:new).and_return(feature_registry)
       b = Proc.new {}
       expect(feature_registry).to receive(:instance_eval).and_yield(&b)
-      Togls::FeatureRegistry.create(&b)
+      Togls::FeatureRegistry.create(double, &b)
     end
 
     it "returns a configured feature registry object" do
       b = Proc.new {}
-      expect(Togls::FeatureRegistry.create(&b)).to be_a(Togls::FeatureRegistry)
+      expect(Togls::FeatureRegistry.create(Togls::Rules::Boolean, &b)).to be_a(Togls::FeatureRegistry)
     end
   end
 
 
   describe "#feature" do
     before do
-      allow(Togls::Feature).to receive(:new).with(:default, "the official default feature").and_return(spy)
+      allow(Togls::Feature).to receive(:new).with(:default, "the official default feature",
+                                                  Togls::Rules::Boolean).and_return(spy)
     end
 
     it "creates a new feature object with the passed key" do
       desc = double('feature desc')
-      expect(Togls::Feature).to receive(:new).with(key, desc)
+      expect(Togls::Feature).to receive(:new).with(key, desc,
+                                                   Togls::Rules::Boolean)
       subject.feature(key, desc)
     end
 
     it "adds the feature to the registry" do
       desc = double('feature desc')
       feature = double('feature')
-      allow(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
+      allow(Togls::Feature).to receive(:new).with(key, desc,
+                                                  Togls::Rules::Boolean).and_return(feature)
       subject.feature(key, desc)
       expect(subject.instance_variable_get(:@registry)[key]).to eq(feature)
     end
@@ -60,14 +64,16 @@ describe Togls::FeatureRegistry do
 
   describe "#get" do
     before do
-      allow(Togls::Feature).to receive(:new).with(:default, "the official default feature").and_return(spy)
+      allow(Togls::Feature).to receive(:new).with(:default, "the official default feature",
+                                                  Togls::Rules::Boolean).and_return(spy)
     end
 
     context "when feature exists in registry" do
       it "returns the feature identified by key" do
         desc = double('feature desc')
         feature = double('feature')
-        allow(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
+        allow(Togls::Feature).to receive(:new).with(key, desc,
+                                                    Togls::Rules::Boolean).and_return(feature)
         subject.feature(key, desc)
         expect(subject.get(key)).to eq(feature)
       end
@@ -91,7 +97,7 @@ describe Togls::FeatureRegistry do
   describe "#registry" do
     it "returns the registry of feature objects" do
       feature_double = double('feature')
-      feature_registry = Togls::FeatureRegistry.create do
+      feature_registry = Togls::FeatureRegistry.create(Togls::Rules::Boolean) do
       end
       feature_registry.instance_variable_set(:@registry, { :test => feature_double })
       expect(feature_registry.registry).to eq({ :test => feature_double })
