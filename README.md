@@ -288,20 +288,14 @@ explanations, and some examples of how they can be used.
 
 ### Togls::Rules::Boolean
 
-This is the simplest of the provided rules. In fact it is also the
-**default** rule that is used with the
-`Togls.default_boolean_rule_klass`. It simply takes a boolean during
-construction and returns that boolean value when `run` is called on it.
-Example:
+This is the simplest of the provided rules. It simply takes a boolean
+during construction and returns that boolean value when `run` is called
+on it. Example:
 
 ```ruby
 rule = Togls::Rules::Boolean.new(true)
 rule.run(:some_feature_key) # => true
 ```
-
-For a real world example of how Togls itself uses the this rule as
-the `default_boolean_rule_klass`. Check out 
-[togls/lib/togls/feature.rb](https://github.com/codebreakdown/togls/blob/master/lib/togls/feature.rb).
 
 ### Togls::Rules::BooleanEnvOverride
 
@@ -329,19 +323,6 @@ environment variables set in various environments to override your in
 code values of feature toggles. A prime example of this is often
 Development, QA, Product, Design, because they want to test a feature
 or a portion of a feature that is toggled off in code.
-
-*Note:* This rule conforms to the interface of the
-`default_boolean_rule_klass`. Therefore, it can be set as the default
-boolean rule class by doing the following.
-
-```ruby
-Togls.default_boolean_rule_klass = Togls::Rules::BooleanEnvOverride
-
-Togls.features do
-  feature(:pop_up_login_form, "use the pop up login instead of normal login").on 
-  feature(:send_follup_email, "send the follow up email").off
-end
-```
 
 The above would allow any of your features defined by using the simple
 `on` or `off` methods to be overridden by an environment variable
