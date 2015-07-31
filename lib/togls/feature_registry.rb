@@ -2,7 +2,7 @@ module Togls
   class FeatureRegistry
     def initialize
       @registry = {}
-      @default_feature = Feature.new(:default, "the official default feature").tap {|f| f.on(Rule.new { false }) }
+      @default_feature = Feature.new(:default, "the official default feature").on(Rule.new { false })
     end
 
     def self.create(&features)
