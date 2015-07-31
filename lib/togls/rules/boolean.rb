@@ -5,7 +5,7 @@ module Togls
         @bool = bool
       end
 
-      def run(target = nil)
+      def run(key, target = nil)
         return @bool
       end
     end

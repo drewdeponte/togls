@@ -4,8 +4,8 @@ module Togls
       @definition = rule  
     end
 
-    def run(target = nil)
-      @definition.call(target)
+    def run(key, target = nil)
+      @definition.call(key, target)
     end
   end
 end

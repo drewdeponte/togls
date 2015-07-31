@@ -45,6 +45,23 @@ describe "Togl feature creation" do
     expect(Togls.feature(:test).on?("someone_else")).to eq(false)
   end
 
+
+  context "environment variable feature override" do
+    after do
+      ENV.delete("TOGLS_TEST")
+    end
+
+    it "creates a new feature with a boolean env override rule as the base_rule_klass" do
+      Togls.features(Togls::Rules::BooleanEnvOverride) do
+        feature(:test, "some human readable description").on
+      end
+
+      ENV["TOGLS_TEST"] = "aeuaoeuaeouaoeuue"
+
+      expect(Togls.feature(:test).on?).to eq(false)
+    end
+  end
+
   it "outputs all the features" do
     Togls.features do
       feature(:test1, "test1 readable description").on

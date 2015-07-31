@@ -2,32 +2,33 @@ module Togls
   class Feature
     attr_reader :key, :description
 
-    def initialize(key, description)
+    def initialize(key, description, base_rule_klass)
       @key = key
       @description = description
+      @base_rule_klass = base_rule_klass
       off
     end
 
     def on(rule = nil)
       if rule.nil?
-        rule = Togls::Rules::Boolean.new(true)
+        rule = @base_rule_klass.new(true)
       end
       @rule = rule 
       self
     end
 
     def off
-      @rule = Togls::Rules::Boolean.new(false)
+      @rule = @base_rule_klass.new(false)
       self
     end
 
     def on?(target = nil)
-      @rule.run(target)
+      @rule.run(@key, target)
     end
 
     def to_s
-      if @rule.is_a?(Togls::Rules::Boolean)
-        display_value = @rule.run ? ' on' : 'off'
+      if @rule.is_a?(@base_rule_klass)
+        display_value = @rule.run(@key) ? ' on' : 'off'
       else
         display_value = '  ?'
       end

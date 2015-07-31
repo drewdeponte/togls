@@ -1,7 +1,8 @@
 require_relative '../../spec_helper'
 
 describe Togls::Feature do
-  subject { Togls::Feature.new(:key, "some description") }
+  subject { Togls::Feature.new(:key, "some description",
+                               Togls::Rules::Boolean) }
 
   describe "#initialize" do
     it "assigns the passed key" do
@@ -27,7 +28,7 @@ describe Togls::Feature do
 
     it "sets the feature rule to true" do
       subject.on
-      expect(subject.instance_variable_get(:@rule).run).to eq(true)
+      expect(subject.instance_variable_get(:@rule).run(double('feature key'))).to eq(true)
     end
 
     it "returns its associated feature object" do
@@ -46,7 +47,8 @@ describe Togls::Feature do
 
     it "sets the feature rule to false" do
       subject.off
-      expect(subject.instance_variable_get(:@rule).run).to eq(false)
+      expect(subject.instance_variable_get(:@rule).\
+             run(double('feature key'))).to eq(false)
     end
 
     it "returns its associated feature object" do
@@ -60,7 +62,7 @@ describe Togls::Feature do
       rule = double('rule')
       target = double('target')
       subject.instance_variable_set(:@rule, rule)
-      expect(rule).to receive(:run).with(target)
+      expect(rule).to receive(:run).with(subject.key, target)
       subject.on?(target)
     end
 
@@ -81,7 +83,8 @@ describe Togls::Feature do
   describe "#to_s" do
     context "when based on boolean rule" do
       it "returns a human readable string representation of the feature including value" do
-        feature = Togls::Feature.new(:key, "some description").on(Togls::Rules::Boolean.new(true))
+        feature = Togls::Feature.new(:key, "some description",
+                                     Togls::Rules::Boolean).on(Togls::Rules::Boolean.new(true))
         expect(feature.to_s).to eq(" on - :key - some description")
       end
     end
@@ -89,7 +92,7 @@ describe Togls::Feature do
     context "when NOT based on boolean rule" do
       it "returns a human readable string representation of the feature with an unknown value" do
         rule = Togls::Rule.new { |v| !v }
-        feature = Togls::Feature.new(:another_key, "another description").on(rule)
+        feature = Togls::Feature.new(:another_key, "another description", Togls::Rules::Boolean).on(rule)
         expect(feature.to_s).to eq("  ? - :another_key - another description")
       end
     end

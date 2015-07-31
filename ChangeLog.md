@@ -7,6 +7,10 @@ versions, as well as provide a rough history.
 #### Next Release
 
 * Rename var in `FeatureRegistry.create` avoid confusion with overloaded name
+* Make default boolean rule class configurable
+* Add `Togls::Rules::BooleanEnvOverride` to allow environment based overrides
+* Add Provided Rules Reference to README.md
+* Rule interface now requires feature key be first arg of run()
 
 #### v1.0.0
 

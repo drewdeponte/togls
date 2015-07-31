@@ -49,7 +49,7 @@ describe Togls do
   describe ".feature" do
     it "returns the feature identified by the key" do
       feature = double('feature')
-      feature_registry = Togls::FeatureRegistry.new
+      feature_registry = Togls::FeatureRegistry.new(Togls::Rules::Boolean)
       feature_registry.instance_variable_set(:@registry, {key: feature})
       allow(feature_registry).to receive(:get).with(:key).and_return(feature)
       Togls.instance_variable_set(:@feature_registry, feature_registry)
