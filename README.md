@@ -78,11 +78,6 @@ end
 **Note:** The default behaviour for any feature that has not been
 defined and is accessed is to default to **off**.
 
-## Advanced Usage
-
-Below is a breakdown of some of the more advanced features of `Togls`
-which aren't necessary in order to use it for basic feature toggles.
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
