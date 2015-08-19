@@ -83,24 +83,6 @@ defined and is accessed is to default to **off**.
 Below is a breakdown of some of the more advanced features of `Togls`
 which aren't necessary in order to use it for basic feature toggles.
 
-### Override Default Boolean Rule
-
-`Togls` allows you to override the Rule class that is used for default
-boolean values. This rule class is used when you use the convenience
-methods `on` and `off`. The default boolean rule class is
-`Togls::Rules::Boolean`.
-
-If you want to use a different default boolean rule, lets say,
-`Togls::Rules::BooleanEnvOverride`  you can override the default by
-doing the following:
-
-```ruby
-Togls.features(Togls::Rules::BooleanEnvOverride) do
-  feature(:some_feature, "some feature description").on
-  feature(:some_other_feature, "some other feature description").on
-end
-```
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
