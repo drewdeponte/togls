@@ -17,6 +17,8 @@ module Togls
       self
     end
 
+    alias_method :on_for, :on
+
     def off
       @rule = @base_rule_klass.new(false)
       self

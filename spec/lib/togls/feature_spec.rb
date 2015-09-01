@@ -18,22 +18,24 @@ describe Togls::Feature do
     end
   end
 
-  describe "#on" do
-    context "when the rule is nil" do
-      it "creates a new rule" do
-        expect(Togls::Rule).to receive(:new).twice
-        subject.on
+  %w[on on_for].each do |method_name|
+    describe "##{method_name}" do
+      context "when the rule is nil" do
+        it "creates a new rule" do
+          expect(Togls::Rule).to receive(:new).twice
+          subject.on
+        end
       end
-    end
 
-    it "sets the feature rule to true" do
-      subject.on
-      expect(subject.instance_variable_get(:@rule).run(double('feature key'))).to eq(true)
-    end
+      it "sets the feature rule to true" do
+        subject.on
+        expect(subject.instance_variable_get(:@rule).run(double('feature key'))).to eq(true)
+      end
 
-    it "returns its associated feature object" do
-      retval = subject.on
-      expect(retval).to eq(subject)
+      it "returns its associated feature object" do
+        retval = subject.on
+        expect(retval).to eq(subject)
+      end
     end
   end
 
