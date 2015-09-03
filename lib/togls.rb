@@ -7,9 +7,9 @@ require "togls/rules"
 require "logger"
 
 module Togls
-  def self.features(base_type_klass = Togls::Rules::Boolean, &features)
+  def self.features(base_rule_type_klass = Togls::Rules::Boolean, &features)
     if !features.nil?
-      @feature_registry = FeatureRegistry.create(base_type_klass, &features)
+      @feature_registry = FeatureRegistry.create(base_rule_type_klass, &features)
     else
       if @feature_registry.nil?
         raise Togls::NoFeaturesError, "Need to define features before you can get them"
