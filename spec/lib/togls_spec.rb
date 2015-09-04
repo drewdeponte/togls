@@ -4,9 +4,9 @@ describe Togls do
   describe ".features" do
     context "when features have NOT been defined" do
       context "when given a block" do
-        it "creates a new feature registry with passed block" do
+        it "creates a new feature toggle registry with passed block" do
           b = Proc.new {}
-          expect(Togls::FeatureRegistry).to receive(:create).and_yield(&b)
+          expect(Togls::FeatureToggleRegistry).to receive(:create).and_yield(&b)
           Togls.features(&b)
         end
       end
@@ -30,30 +30,28 @@ describe Togls do
       context "when given a block" do
         it "replaces the feature registry with a new feature registry" do
           b = Proc.new {}
-          expect(Togls::FeatureRegistry).to receive(:create).and_yield(&b)
+          expect(Togls::FeatureToggleRegistry).to receive(:create).and_yield(&b)
           Togls.features(&b)
         end
       end
 
       context "when NOT given a block" do
         it "returns hash of feature objects identified by their key" do
-          features = Togls.features
-          expect(features[:test1].description).to eq("test1 readable description")
-          expect(features[:test2].description).to eq("test2 readable description")
-          expect(features[:test3].description).to eq("test3 readable description")
+          feature_toggles = Togls.features
+          expect(feature_toggles["test1"].feature.description).to eq("test1 readable description")
+          expect(feature_toggles["test2"].feature.description).to eq("test2 readable description")
+          expect(feature_toggles["test3"].feature.description).to eq("test3 readable description")
         end
       end
     end
   end
 
   describe ".feature" do
-    it "returns the feature identified by the key" do
-      feature = double('feature')
-      feature_registry = Togls::FeatureRegistry.new(Togls::Rules::Boolean)
-      feature_registry.instance_variable_set(:@registry, {key: feature})
-      allow(feature_registry).to receive(:get).with(:key).and_return(feature)
-      Togls.instance_variable_set(:@feature_registry, feature_registry)
-      expect(Togls.feature(:key)).to eq(feature)
+    it "returns the feature toggle identified by the key" do
+      feature_registry = instance_double Togls::FeatureToggleRegistry 
+      Togls.instance_variable_set(:@feature_toggle_registry, feature_registry)
+      expect(feature_registry).to receive(:get).with("key")
+      Togls.feature("key")
     end
   end
 
