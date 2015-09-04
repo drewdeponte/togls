@@ -1,26 +1,27 @@
 require "togls/version"
 require "togls/errors"
-require "togls/feature_registry"
+require "togls/feature_toggle_registry"
 require "togls/feature"
+require "togls/toggle"
 require "togls/rule"
 require "togls/rules"
 require "logger"
 
 module Togls
-  def self.features(base_rule_type_klass = Togls::Rules::Boolean, &features)
-    if !features.nil?
-      @feature_registry = FeatureRegistry.create(base_rule_type_klass, &features)
+  def self.features(base_rule_type_klass = Togls::Rules::Boolean, &feature_toggles)
+    if !feature_toggles.nil?
+      @feature_toggle_registry = FeatureToggleRegistry.create(base_rule_type_klass, &feature_toggles)
     else
-      if @feature_registry.nil?
+      if @feature_toggle_registry.nil?
         raise Togls::NoFeaturesError, "Need to define features before you can get them"
       else
-        @feature_registry.registry
+        @feature_toggle_registry.registry
       end
     end
   end
   
   def self.feature(key)
-    @feature_registry.get(key)
+    @feature_toggle_registry.get(key)
   end
 
   def self.logger

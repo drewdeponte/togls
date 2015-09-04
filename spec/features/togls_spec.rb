@@ -73,10 +73,10 @@ describe "Togl feature creation" do
     require 'rake'
     load 'lib/tasks/togls.rake'
 
-    expect { Rake::Task["togls:features"].invoke }.to output(%q{ on - :test1 - test1 readable description
-off - :test2 - test2 readable description
-off - :test3 - test3 readable description
-  ? - :test4 - test4 readable description
+    expect { Rake::Task["togls:features"].invoke }.to output(%q{ on - test1 - test1 readable description
+off - test2 - test2 readable description
+off - test3 - test3 readable description
+  ? - test4 - test4 readable description
 }).to_stdout
   end
 end
