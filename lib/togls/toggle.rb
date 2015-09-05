@@ -1,6 +1,6 @@
 module Togls
   class Toggle
-    attr_reader :feature
+    attr_reader :feature, :rule
 
     def initialize(feature, base_rule_type_klass)
       @feature = feature

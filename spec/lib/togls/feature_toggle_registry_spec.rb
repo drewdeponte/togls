@@ -14,6 +14,39 @@ describe Togls::FeatureToggleRegistry do
       feature_reg = Togls::FeatureToggleRegistry.new(base_rule_type_klass)
       expect(feature_reg.instance_variable_get(:@base_rule_type_klass)).to eq(base_rule_type_klass)
     end
+
+    it "constructs the ToggleRepository InMemoryDriver" do
+      expect(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new)
+      subject
+    end
+
+    it "assigns the toggle repository drivers" do
+      driver = double('driver')
+      allow(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
+      expect(subject.instance_variable_get(:@toggle_repository_drivers)).to eq([driver])
+    end
+
+    it "constructs the FeatureRepository InMemoryDriver" do
+      expect(Togls::FeatureRepositoryDrivers::InMemoryDriver).to receive(:new)
+      subject
+    end
+
+    it "assigns the feature repository drivers" do
+      driver = double('driver')
+      allow(Togls::FeatureRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
+      expect(subject.instance_variable_get(:@feature_repository_drivers)).to eq([driver])
+    end
+
+    it "constructs the RuleRepository InMemoryDriver" do
+      expect(Togls::RuleRepositoryDrivers::InMemoryDriver).to receive(:new)
+      subject
+    end
+
+    it "assigns the rule repository drivers" do
+      driver = double('driver')
+      allow(Togls::RuleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
+      expect(subject.instance_variable_get(:@rule_repository_drivers)).to eq([driver])
+    end
   end
 
   describe ".create" do
@@ -42,7 +75,8 @@ describe Togls::FeatureToggleRegistry do
     it "creates a new feature object with the passed key" do
       desc = double('feature desc')
       key = "some_key"
-      expect(Togls::Feature).to receive(:new).with(key, desc)
+      feature = Togls::Feature.new('your_mom', "Your Moms Desc")
+      expect(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
       subject.feature(key, desc)
     end
     
@@ -54,16 +88,55 @@ describe Togls::FeatureToggleRegistry do
       expect(Togls::Toggle).to receive(:new).with(feature, base_rule_type_klass)
       subject.feature(key, desc)
     end
-    
-    it "adds the created toggle to the registry" do
+
+    it "constructs a feature repository" do
+      desc = double('feature desc')
+      key = "some_key"
+      drivers = double('drivers')
+      subject.instance_variable_set(:@feature_repository_drivers,
+                                                         drivers)
+      expect(Togls::FeatureRepository).to receive(:new).with(drivers)
+      subject.feature(key, desc)
+    end
+
+    it "constructs a rule repository" do
+      desc = double('feature desc')
+      key = "some_key"
+      drivers = double('drivers')
+      subject.instance_variable_set(:@rule_repository_drivers,
+                                                         drivers)
+      expect(Togls::RuleRepository).to receive(:new).with(drivers)
+      subject.feature(key, desc)
+    end
+
+    it "constructs a toggle repository" do
+      desc = double('feature desc')
+      key = "some_key"
+      drivers = double('drivers')
+      rule_repository = double('rule repository')
+      feature_repository = double('feature repository')
+      subject.instance_variable_set(:@toggle_repository_drivers,
+                                                         drivers)
+      allow(Togls::RuleRepository).to receive(:new).and_return(rule_repository)
+      allow(Togls::FeatureRepository).to receive(:new).and_return(feature_repository)
+      expect(Togls::ToggleRepository).to receive(:new).with(drivers,
+                                                            feature_repository,
+                                                            rule_repository).and_return(double.as_null_object)
+      subject.feature(key, desc)
+    end
+
+    it "stores the created toggle to the toggle repository" do
+      key = "some_key"
       desc = double('feature desc')
       feature = double('feature')
       toggle = double('toggle')
-      key = "some_key"
       allow(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
+      toggle_repository = instance_double(Togls::ToggleRepository)
+      allow(Togls::ToggleRepository)
+        .to receive(:new).and_return(toggle_repository)
+      expect(toggle_repository).to receive(:store).with(toggle)
       subject.feature(key, desc)
-      expect(subject.instance_variable_get(:@registry)[key]).to eq(toggle)
     end
   end
 

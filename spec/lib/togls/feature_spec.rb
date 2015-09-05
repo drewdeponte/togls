@@ -24,4 +24,10 @@ describe Togls::Feature do
       expect(subject.key).to eq("key")
     end
   end
+
+  describe "#id" do
+    it "returns the key of the feature" do
+      expect(subject.id).to eq("key")
+    end
+  end
 end

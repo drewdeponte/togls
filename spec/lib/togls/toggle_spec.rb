@@ -68,6 +68,14 @@ describe Togls::Toggle do
     end
   end
 
+  describe "#rule" do
+    it "returns the rule of the toggle" do
+      rule = double('rule')
+      subject.instance_variable_set(:@rule, rule)
+      expect(subject.rule).to eq(rule)      
+    end
+  end
+
   describe "#on?" do
     it "runs the associated rule" do
       rule = double('rule')

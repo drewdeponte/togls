@@ -15,4 +15,12 @@ describe Togls::Rule do
       expect(rule.run(double('feature key'))).to eq("test value")
     end
   end
+
+  describe "#id" do
+    it "return the hex sha1 of the rule klass with the initalizer data" do
+      rule = Togls::Rules::Boolean.new(true)
+      sha1 = Digest::SHA1.hexdigest("Togls::Rules::Booleantrue")
+      expect(rule.id).to eq(sha1)
+    end
+  end
 end
