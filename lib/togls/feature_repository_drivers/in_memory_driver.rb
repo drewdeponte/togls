@@ -5,12 +5,12 @@ module Togls
         @features = {}
       end
 
-      def store(feature)
-        @features[feature.id] = extract_storage_payload(feature)
+      def store(feature_id, feature_data)
+        @features[feature_id] = feature_data
       end
 
-      def extract_storage_payload(feature)
-        { "key" => feature.key, "description" => feature.description }
+      def get(feature_id)
+        @features[feature_id]
       end
     end
   end

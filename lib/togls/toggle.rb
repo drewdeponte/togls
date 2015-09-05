@@ -1,6 +1,7 @@
 module Togls
   class Toggle
-    attr_reader :feature, :rule
+    attr_reader :feature
+    attr_accessor :rule
 
     def initialize(feature, base_rule_type_klass)
       @feature = feature
@@ -8,17 +9,8 @@ module Togls
       @rule = Togls::Rules::Boolean.new(false)
     end
 
-    def on(rule = nil)
-      if rule.nil?
-        rule = @base_rule_type_klass.new(true)
-      end
-      @rule = rule
-      self
-    end
-
-    def off
-      @rule = @base_rule_type_klass.new(false)
-      self
+    def id
+      @feature.id
     end
 
     def on?(target = nil)

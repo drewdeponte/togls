@@ -6,8 +6,8 @@ require 'togls/version'
 Gem::Specification.new do |spec|
   spec.name          = "togls"
   spec.version       = Togls::VERSION
-  spec.authors       = ["Brian Miller", "Andrew DePonte"]
-  spec.email         = ["brimil01@gmail.com", "cyphactor@gmail.com"]
+  spec.authors       = ["Brian Miller", "Andrew DePonte", "Ryan Hedges"]
+  spec.email         = ["brimil01@gmail.com", "cyphactor@gmail.com", "ryanhedges@gmail.com"]
 
   spec.summary       = %q{An ultra light weight yet ridiculously powerful ruby feature toggle gem.}
   spec.description   = %q{An ultra light weight yet ridiculously powerful ruby feature toggle gem that supports the concept of release toggles and business toggles.}
@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.9"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.2"
+  spec.add_development_dependency "pry", "~> 0.10"
 end

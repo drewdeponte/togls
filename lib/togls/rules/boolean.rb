@@ -1,12 +1,8 @@
 module Togls
   module Rules
     class Boolean < Rule
-      def initialize(bool)
-        @bool = bool
-      end
-
       def run(key, target = nil)
-        return @bool
+        return @data
       end
     end
   end

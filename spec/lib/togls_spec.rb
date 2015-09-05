@@ -38,9 +38,8 @@ describe Togls do
       context "when NOT given a block" do
         it "returns hash of feature objects identified by their key" do
           feature_toggles = Togls.features
-          expect(feature_toggles["test1"].feature.description).to eq("test1 readable description")
-          expect(feature_toggles["test2"].feature.description).to eq("test2 readable description")
-          expect(feature_toggles["test3"].feature.description).to eq("test3 readable description")
+          expect(feature_toggles.length).to eq(3)
+          expect(feature_toggles).to be_a(Array)
         end
       end
     end

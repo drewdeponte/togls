@@ -5,12 +5,12 @@ module Togls
         @rules = {}
       end
 
-      def store(rule)
-        extract_storage_payload(rule)
+      def store(rule_id, rule_data)
+        @rules[rule_id] = rule_data
       end
-
-      def extract_storage_payload(rule)
-
+      
+      def get(rule_id)
+        @rules[rule_id]
       end
     end
   end
