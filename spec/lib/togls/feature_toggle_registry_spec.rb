@@ -16,10 +16,17 @@ describe Togls::FeatureToggleRegistry do
       subject
     end
 
+    it "constructs the ToggleRepository EnvOverrideDriver" do
+      expect(Togls::ToggleRepositoryDrivers::EnvOverrideDriver).to receive(:new)
+      subject
+    end
+
     it "assigns the toggle repository drivers" do
-      driver = double('driver')
-      allow(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
-      expect(subject.instance_variable_get(:@toggle_repository_drivers)).to eq([driver])
+      driver_one = double('driver in memory')
+      driver_two = double('driver env override')
+      allow(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver_one)
+      allow(Togls::ToggleRepositoryDrivers::EnvOverrideDriver).to receive(:new).and_return(driver_two)
+      expect(subject.instance_variable_get(:@toggle_repository_drivers)).to eq([driver_one, driver_two])
     end
 
     it "constructs the FeatureRepository InMemoryDriver" do
@@ -29,25 +36,22 @@ describe Togls::FeatureToggleRegistry do
 
     it "assigns the feature repository drivers" do
       driver = double('driver')
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       allow(Togls::FeatureRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
       expect(subject.instance_variable_get(:@feature_repository_drivers)).to eq([driver])
     end
 
     it "constructs the RuleRepository InMemoryDriver" do
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       expect(Togls::RuleRepositoryDrivers::InMemoryDriver).to receive(:new)
-      subject
-    end
-
-    xit "constructs the RuleRepository EnvDriver" do
-      expect(Togls::RuleRepositoryDrivers::EnvDriver).to receive(:new)
       subject
     end
 
     it "assigns the rule repository drivers" do
       driver_one = double('in memory driver')
       driver_two = double('env driver')
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       allow(Togls::RuleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver_one)
-      # allow(Togls::RuleRepositoryDrivers::EnvDriver).to receive(:new).and_return(driver_two)
       expect(subject.instance_variable_get(:@rule_repository_drivers)).to eq([driver_one])
     end
 
@@ -66,17 +70,16 @@ describe Togls::FeatureToggleRegistry do
     end
 
     it "constructs a rule repository" do
-      allow(Togls::RuleRepository).to receive(:new)
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       driver_one = double('driver in memory')
       driver_two = double('driver env')
       allow(Togls::RuleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver_one)
-      allow(Togls::RuleRepositoryDrivers::EnvDriver).to receive(:new).and_return(driver_two)
       subject
       expect(Togls::RuleRepository).to have_received(:new).with([driver_one])
     end
 
     it "assigns the constructed rule repository" do
-      rule_repository = double('rule repository')
+      rule_repository = double('rule repository').as_null_object
       allow(Togls::RuleRepository).to receive(:new).and_return(rule_repository)
       expect(subject.instance_variable_get(:@rule_repository)).to eq(rule_repository)
     end
@@ -85,18 +88,75 @@ describe Togls::FeatureToggleRegistry do
       allow(Togls::ToggleRepository).to receive(:new)
       feature_repository = double('feature repository')
       allow(Togls::FeatureRepository).to receive(:new).and_return(feature_repository)
-      rule_repository = double('rule repository')
+      rule_repository = double('rule repository').as_null_object
       allow(Togls::RuleRepository).to receive(:new).and_return(rule_repository)
-      driver = double('driver')
-      allow(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
+      driver_one = double('driver in memory')
+      driver_two = double('driver env override')
+      allow(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver_one)
+      allow(Togls::ToggleRepositoryDrivers::EnvOverrideDriver).to receive(:new).and_return(driver_two)
       subject
-      expect(Togls::ToggleRepository).to have_received(:new).with([driver], feature_repository, rule_repository)
+      expect(Togls::ToggleRepository).to have_received(:new).with([driver_one, driver_two], feature_repository, rule_repository)
     end
 
     it "assigns the constructed toggle repository" do
       toggle_repository = double('toggle repository')
       allow(Togls::ToggleRepository).to receive(:new).and_return(toggle_repository)
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       expect(subject.instance_variable_get(:@toggle_repository)).to eq(toggle_repository)
+    end
+
+    it "constructs boolean true rule" do
+      expect(Togls::Rules::Boolean).to receive(:new).with(true)
+      allow(Togls::Rules::Boolean).to receive(:new).with(false)
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
+      subject
+    end
+
+    it "assigns the boolean true rule" do
+      boolean_true_rule = double('boolean true rule')
+      allow(Togls::Rules::Boolean).to receive(:new).with(false)
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
+      allow(Togls::Rules::Boolean).to receive(:new).with(true).and_return(boolean_true_rule)
+      expect(subject.instance_variable_get(:@boolean_true_rule)).to eq(boolean_true_rule)
+    end
+
+    it "constructs boolean false rule" do
+      allow(Togls::Rules::Boolean).to receive(:new).with(true)
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
+      expect(Togls::Rules::Boolean).to receive(:new).with(false)
+      subject
+    end
+
+    it "assigns the boolean false rule" do
+      boolean_false_rule = double('boolean true rule')
+      allow(Togls::Rules::Boolean).to receive(:new).with(true)
+      allow(Togls::Rules::Boolean).to receive(:new).with(false).and_return(boolean_false_rule)
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
+      expect(subject.instance_variable_get(:@boolean_false_rule)).to eq(boolean_false_rule)
+    end
+
+    it "stores the boolean false rule" do
+      boolean_false_rule = double('boolean false rule')
+      boolean_true_rule = double('boolean true rule')
+      rule_repository = double('rule repository')
+      allow(Togls::RuleRepository).to receive(:new).and_return(rule_repository)
+      allow(Togls::Rules::Boolean).to receive(:new).with(false).and_return(boolean_false_rule)
+      allow(Togls::Rules::Boolean).to receive(:new).with(true).and_return(boolean_true_rule)
+      allow(rule_repository).to receive(:store).with(boolean_true_rule)
+      expect(rule_repository).to receive(:store).with(boolean_false_rule)
+      subject
+    end
+
+    it "stores the boolean true rule" do
+      boolean_false_rule = double('boolean false rule')
+      boolean_true_rule = double('boolean true rule')
+      rule_repository = double('rule repository')
+      allow(Togls::RuleRepository).to receive(:new).and_return(rule_repository)
+      allow(Togls::Rules::Boolean).to receive(:new).with(false).and_return(boolean_false_rule)
+      allow(Togls::Rules::Boolean).to receive(:new).with(true).and_return(boolean_true_rule)
+      allow(rule_repository).to receive(:store).with(boolean_false_rule)
+      expect(rule_repository).to receive(:store).with(boolean_true_rule)
+      subject
     end
   end
 

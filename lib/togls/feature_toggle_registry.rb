@@ -2,8 +2,9 @@ module Togls
   class FeatureToggleRegistry
     def initialize(base_rule_type_klass)
       @base_rule_type_klass = base_rule_type_klass
-      @toggle_repository_drivers =
-        [Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
+      @toggle_repository_drivers = [
+        Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
+        Togls::ToggleRepositoryDrivers::EnvOverrideDriver.new]
       @feature_repository_drivers =
         [Togls::FeatureRepositoryDrivers::InMemoryDriver.new]
       @rule_repository_drivers =
@@ -12,6 +13,10 @@ module Togls
       @rule_repository = Togls::RuleRepository.new(@rule_repository_drivers)
       @toggle_repository = Togls::ToggleRepository.new(@toggle_repository_drivers,
                                     @feature_repository, @rule_repository)
+      @boolean_true_rule = Togls::Rules::Boolean.new(true)
+      @boolean_false_rule = Togls::Rules::Boolean.new(false)
+      @rule_repository.store(@boolean_false_rule)
+      @rule_repository.store(@boolean_true_rule)
     end
 
     def self.create(base_rule_type_klass, &feature_toggles)
