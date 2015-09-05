@@ -2,10 +2,10 @@ module Togls
   class RuleRepository
     def initialize(drivers)
       if !drivers.is_a?(Array)
-        raise Togls::InvalidDriver.new("FeatureRepository requires a valid driver")
+        raise Togls::InvalidDriver.new("RuleRepository requires a valid driver")
       end
       if drivers.empty?
-        raise Togls::MissingDriver.new("FeatureRepository requires a driver")
+        raise Togls::MissingDriver.new("RuleRepository requires a driver")
       end
       @drivers = drivers
     end
