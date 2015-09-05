@@ -1,5 +1,6 @@
 module Togls
   class FeatureToggleRegistry
+    # TODO: remove the concept of base_rule_type_klass
     def initialize(base_rule_type_klass)
       @base_rule_type_klass = base_rule_type_klass
       @toggle_repository_drivers = [
