@@ -18,9 +18,16 @@ describe Togls::Rule do
   end
 
   describe "#id" do
-    it "return the hex sha1 of the rule klass with the initalizer data" do
+    it "gets the sha1 of the rule klass with the initializer data" do
       rule = Togls::Rules::Boolean.new(true)
-      sha1 = Digest::SHA1.hexdigest("Togls::Rules::Boolean:true")
+      expect(Togls::Helpers).to receive(:sha1).with(Togls::Rules::Boolean, true)
+      rule.id
+    end
+
+    it "returns the sha1 it obtained" do
+      rule = Togls::Rules::Boolean.new(true)
+      sha1 = double('sha1')
+      allow(Togls::Helpers).to receive(:sha1).and_return(sha1)
       expect(rule.id).to eq(sha1)
     end
   end

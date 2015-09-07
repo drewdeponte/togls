@@ -1,5 +1,6 @@
 require "togls/version"
 require "togls/errors"
+require "togls/helpers"
 require "togls/toggle_repository_drivers"
 require "togls/toggle_repository_drivers/in_memory_driver"
 require "togls/toggle_repository_drivers/env_override_driver"

@@ -13,7 +13,7 @@ module Togls
     end
 
     def id
-      Digest::SHA1.hexdigest("#{self.class}:#{@data.to_s}")
+      Togls::Helpers.sha1(self.class, @data)
     end
   end
 end

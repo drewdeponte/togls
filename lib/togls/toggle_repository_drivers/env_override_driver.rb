@@ -8,10 +8,10 @@ module Togls
         if ENV[toggle_env_key(toggle_id)]
           if ENV[toggle_env_key(toggle_id)] == "true"
             return { "feature_id" => toggle_id,
-                     "rule_id" => Digest::SHA1.hexdigest("Togls::Rules::Boolean:true") }
+                     "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, true) }
           else
             return { "feature_id" => toggle_id,
-                     "rule_id" => Digest::SHA1.hexdigest("Togls::Rules::Boolean:false") }
+                     "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, false) }
           end
         else
           return nil
