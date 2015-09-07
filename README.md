@@ -7,7 +7,10 @@ Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togls
 
 # Togls
 
-A lightweight feature toggle library for Ruby.
+A lightweight, simple, and yet extremely flexible feature toggle library
+for Ruby. It prides itself on being designed in such a manner that it is
+extremely flexible and yet still provides a simple, clear, and
+meaningful interface.
 
 ## Installation
 
@@ -27,27 +30,32 @@ Or install it yourself as:
 
 ## Basic Usage
 
-The basic usage of `Togls` is outlined below.
+At the core `togls` is primarily used by performing two distinct
+actions.
+
+1. Defining Feature Toggles
+2. Evaluating Feature Toggles
 
 ### Defining Feature Toggles
 
-The first thing to do to use `Togls` is to define your feature toggles.
-The following is an example of how you might define your feature
-toggles. It is recommended this live in its own file. In Rails projects
-we recommend putting it in `config/initializers/togls_features.rb`.
+In order to use `togls`, you first have to define some feature toggles.
+It is highly recommended that you define your feature toggles in their
+own file. If you are using `togls` in a Rails project we recommend
+putting it in `config/initializers/togls_features.rb`. If you are using
+`togls` in a generic Ruby project you can locate it wherever you like.
+However, the feature definitions **must** be loaded before they can be
+evaluated.
+
+The following, `config/initializers/togls_features.rb`, is an example of
+how one would define some basic feature toggles.
 
 ```ruby
 Togls.features do
   # Set this feature to always be on
-  feature(:pop_up_login_form, "use the pop up login instead of normal login").on 
+  feature(:pop_up_login_form, "use pop up login instead of normal login").on 
 
   # Set this feature to always be off
   feature(:send_follup_email, "send the follow up email").off
-
-  # Create a group rule so the feature is on if the user is a member of
-  # the group.
-  rule = Togls::Rules::Group.new(["user@email.com"])
-  feature(:new_contact_form, "use new contact form instead of old one").on(rule)
 end
 ```
 
@@ -55,7 +63,8 @@ end
 
 Once you have defined your feature toggles. The next thing you would
 likely want to do is conditionally control something based on them. The
-following are a few examples of how you would do this given the above.
+following are a few examples of how you would do this given the feature
+definitions provided above.
 
 ```ruby
 if Togls.feature(:pop_up_login_form).on?
@@ -64,10 +73,65 @@ else
   # Use normal non-pop up login form
 end
 
+...
+
 if Togls.feature(:send_follup_email).on?
   # send the follow up email
 end
+```
 
+**Note:** The default behaviour for any feature that has not been
+defined and is accessed is to default to **off**.
+
+### Toggle Features based on Group Membership  
+
+`togls` provides out of the box support for toggling features based on
+group membership. This basically allows you to have a feature **on** for
+members of a defined group and **off** for non-members. This can be
+extremely useful if you want to enable features for a small alpha test
+group for example.
+
+**Note:** This is implemented using `togls` extremely robust [custom
+rule]() system that we go into below. The following example is just one
+of the many powerful things you can do with `togls`.
+
+#### Defining Group based Feature Toggles
+
+The following is an example definition of a feature that toggles on
+based on group membership.
+
+```ruby
+# Create a group rule so the feature is on if the user is a member of
+# the group.
+alpha_testers = Togls::Rules::Group.new(["user1@email.com",
+                                         "user2@example.com"])
+
+Togls.features do
+  feature(:new_contact_form, "use new contact form").on(alpha_testers)
+end
+```
+
+The above is really broken down into two steps.
+
+1. Construct the [rule]() you want to use
+2. Define the feature toggle and pass the [rule]() to its `on()` method
+
+In the above example we construct an instance of the
+[Togls::Rules::Group]() rule, passing it the list of alpha tester email
+addresses. [Togls::Rules::Group]() is a rule that `togls` provides to
+make your life a bit simpler.
+
+Then we define a feature, `:new_contact_form`, that will be on for
+alpha testers and off for people that don't fall within that group.
+
+#### Evaluating Group based Feature Toggles
+
+Group based rules are evaluated by using the `on?` method. However, in
+this case we have to pass the `on?` method the `target`. The `target` in
+this case is the email address of the current user. The target is the
+identifier that you want to check if it belongs to the group or not.
+
+```ruby
 if Togls.feature(:new_contact_form).on?("user@email.com")
   # Use new contact form
 else
@@ -75,8 +139,33 @@ else
 end
 ```
 
-**Note:** The default behaviour for any feature that has not been
-defined and is accessed is to default to **off**.
+#### Groups of Anything
+
+You could just as easily used user ids instead of email addresses in the
+example above and it would look something like the following:
+
+```ruby
+# Create a group rule so the feature is on if the user is a member of
+# the group.
+alpha_testers = Togls::Rules::Group.new([1, 23, 42, 83])
+
+Togls.features do
+  feature(:new_contact_form, "use new contact form").on(alpha_testers)
+end
+```
+
+```ruby
+if Togls.feature(:new_contact_form).on?(222)
+  # Use new contact form
+else
+  # Use old contact form
+end
+```
+
+The key take away is that the `Togls::Rules::Group` rule can be used to
+define any group you like.
+
+### Custom Rules
 
 ## Development
 
