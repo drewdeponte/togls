@@ -79,8 +79,8 @@ if Togls.feature(:send_follup_email).on?
 end
 ```
 
-**Note:** The default behaviour for any feature that has not been
-defined and is accessed is to default to **off**.
+**Note:** Feature toggles that are evaluated but have **not** been
+defined will default to **off**.
 
 ### Toggle Features based on Group Membership  
 
@@ -91,8 +91,10 @@ extremely useful if you want to enable features for a small alpha test
 group for example.
 
 **Note:** This is implemented using `togls` extremely robust [custom
-rule]() system that we go into below. The following example is just one
-of the many powerful things you can do with `togls`.
+rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules) system.
+The following example is just one of the many powerful things you can do
+with `togls` and [custom
+rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules).
 
 #### Defining Group based Feature Toggles
 
@@ -112,13 +114,18 @@ end
 
 The above is really broken down into two steps.
 
-1. Construct the [rule]() you want to use
-2. Define the feature toggle and pass the [rule]() to its `on()` method
+1. Construct the
+   [rule](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference)
+   you want to use
+2. Define the feature toggle and pass the
+   [rule](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference)
+   to its `on()` method
 
 In the above example we construct an instance of the
-[Togls::Rules::Group]() rule, passing it the list of alpha tester email
-addresses. [Togls::Rules::Group]() is a rule that `togls` provides to
-make your life a bit simpler.
+[Togls::Rules::Group](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference#toglsrulesgroup)
+rule, passing it the list of alpha tester email addresses.
+[Togls::Rules::Group](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference#toglsrulesgroup)
+is a rule that `togls` provides to make your life a bit simpler.
 
 Then we define a feature, `:new_contact_form`, that will be on for
 alpha testers and off for people that don't fall within that group.
@@ -131,17 +138,21 @@ this case is the email address of the current user. The target is the
 identifier that you want to check if it belongs to the group or not.
 
 ```ruby
-if Togls.feature(:new_contact_form).on?("user@email.com")
+if Togls.feature(:new_contact_form).on?(current_user.email)
   # Use new contact form
 else
   # Use old contact form
 end
 ```
 
+**Note:** In the above example I reference `current_user.email`. This is
+not something that `togls` provides. It is simply a common way for
+Ruby/Rails applications to implement access to the concept of the current user.
+
 #### Groups of Anything
 
-You could just as easily used user ids instead of email addresses in the
-example above and it would look something like the following:
+You could just as easily have used user ids instead of email addresses
+in the example above and it would look something like the following:
 
 ```ruby
 # Create a group rule so the feature is on if the user is a member of
@@ -154,17 +165,31 @@ end
 ```
 
 ```ruby
-if Togls.feature(:new_contact_form).on?(222)
+if Togls.feature(:new_contact_form).on?(current_user.id)
   # Use new contact form
 else
   # Use old contact form
 end
 ```
 
-The key take away is that the `Togls::Rules::Group` rule can be used to
-define any group you like.
+The key take away is that the
+[Togls::Rules::Group](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference#toglsrulesgroup)
+rule can be used to define any group you like.
 
-### Custom Rules
+## Advanced Usage
+
+`togls` is capable of much, much more. We have strategically avoided
+including details of advanced usage in the `README.md` as to not
+overwhelm people on first impression. For more details on some of the
+more advanced features feel free to check out our
+[Wiki](https://github.com/codebreakdown/togls/wiki). Just a few of the
+many things it contains are [Provided Rules
+Reference](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference),
+[Custom
+Rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules),
+[Review Feature
+Toggles](https://github.com/codebreakdown/togls/wiki/Review-Feature-Toggles),
+etc.
 
 ## Development
 
