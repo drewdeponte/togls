@@ -21,9 +21,9 @@ require "togls/rules"
 require "logger"
 
 module Togls
-  def self.features(base_rule_type_klass = Togls::Rules::Boolean, &feature_toggles)
+  def self.features(&feature_toggles)
     if !feature_toggles.nil?
-      @feature_toggle_registry = FeatureToggleRegistry.create(base_rule_type_klass, &feature_toggles)
+      @feature_toggle_registry = FeatureToggleRegistry.create(&feature_toggles)
     else
       if @feature_toggle_registry.nil?
         raise Togls::NoFeaturesError, "Need to define features before you can get them"

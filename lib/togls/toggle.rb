@@ -3,9 +3,8 @@ module Togls
     attr_reader :feature
     attr_accessor :rule
 
-    def initialize(feature, base_rule_type_klass)
+    def initialize(feature)
       @feature = feature
-      @base_rule_type_klass = base_rule_type_klass
       @rule = Togls::Rules::Boolean.new(false)
     end
 
@@ -18,7 +17,7 @@ module Togls
     end
 
     def to_s
-      if @rule.is_a?(@base_rule_type_klass)
+      if @rule.is_a?(Togls::Rules::Boolean)
         display_value = @rule.run(@feature.key) ? ' on' : 'off'
       else
         display_value = '  ?'

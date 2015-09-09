@@ -51,8 +51,8 @@ describe "Togl feature creation" do
       ENV.delete("TOGLS_TEST")
     end
 
-    it "creates a new feature with a boolean env override rule as the base_rule_klass" do
-      Togls.features(Togls::Rules::BooleanEnvOverride) do
+    it "creates a new feature" do
+      Togls.features do
         feature(:test, "some human readable description").on
       end
 

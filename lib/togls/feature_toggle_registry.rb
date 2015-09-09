@@ -1,8 +1,6 @@
 module Togls
   class FeatureToggleRegistry
-    # TODO: remove the concept of base_rule_type_klass
-    def initialize(base_rule_type_klass)
-      @base_rule_type_klass = base_rule_type_klass
+    def initialize
       @toggle_repository_drivers = [
         Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
         Togls::ToggleRepositoryDrivers::EnvOverrideDriver.new]
@@ -20,15 +18,15 @@ module Togls
       @rule_repository.store(@boolean_true_rule)
     end
 
-    def self.create(base_rule_type_klass, &feature_toggles)
-      feature_toggle_registry = self.new(base_rule_type_klass)
+    def self.create(&feature_toggles)
+      feature_toggle_registry = self.new
       feature_toggle_registry.instance_eval(&feature_toggles)
       return feature_toggle_registry
     end
 
     def feature(key, desc)
       feature = Togls::Feature.new(key, desc)
-      toggle = Togls::Toggle.new(feature, @base_rule_type_klass)
+      toggle = Togls::Toggle.new(feature)
       @toggle_repository.store(toggle)
       Togls::Toggler.new(@toggle_repository, toggle)
     end
