@@ -1,8 +1,7 @@
-[![Version](https://img.shields.io/gem/v/togls.svg)](https://rubygems.org/gems/togls)
+[![Gem Version](https://badge.fury.io/rb/togls.svg)](http://badge.fury.io/rb/togls)
 [![Build Status](https://travis-ci.org/codebreakdown/togls.svg?branch=master)](https://travis-ci.org/codebreakdown/togls)
-[![Code Climate](https://img.shields.io/codeclimate/github/codebreakdown/togls.svg)](https://codeclimate.com/github/codebreakdown/togls)
-[![Code
-Coverage](https://img.shields.io/codeclimate/coverage/github/codebreakdown/togls.svg)](https://codeclimate.com/github/codebreakdown/togls)
+[![Code Climate](https://codeclimate.com/github/codebreakdown/togls/badges/gpa.svg)](https://codeclimate.com/github/codebreakdown/togls)
+[![Test Coverage](https://codeclimate.com/github/codebreakdown/togls/badges/coverage.svg)](https://codeclimate.com/github/codebreakdown/togls/coverage)
 [![Dependency Status](https://gemnasium.com/codebreakdown/togls.svg)](https://gemnasium.com/codebreakdown/togls)
 
 # Togls
