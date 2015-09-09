@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Togls::Toggle do
-  let(:feature) { double Togls::Feature }
+  let(:feature) { double(Togls::Feature) }
   let(:base_rule_type_klass) { Togls::Rules::Boolean }
   subject { Togls::Toggle.new(feature, base_rule_type_klass) }
 
@@ -23,48 +23,32 @@ describe Togls::Toggle do
     end
   end
 
-  describe "#on" do
-    context "when the rule is nil" do
-      it "creates a new rule" do
-        expect(Togls::Rule).to receive(:new).twice
-        subject.on
-      end
-    end
-
-    it "sets the feature toggle's rule to true" do
-      subject.on
-      expect(subject.instance_variable_get(:@rule).run(double('feature key'))).to eq(true)
-    end
-
-    it "returns its associated toggle object" do
-      return_val = subject.on
-      expect(return_val).to eq(subject)
-    end
-  end
-
-  describe "#off" do
-    context "when the rule is nil" do
-      it "creates a new rule" do
-        expect(Togls::Rule).to receive(:new).twice
-        subject.off
-      end
-    end
-
-    it "sets the feature rule to false" do
-      subject.off
-      expect(subject.instance_variable_get(:@rule).\
-             run(double('feature key'))).to eq(false)
-    end
-
-    it "returns its associated feature object" do
-      retval = subject.off
-      expect(retval).to eq(subject)
+  describe "#id" do
+    it "returns the associated features id as the toggles id" do
+      allow(feature).to receive(:id).and_return("foo")
+      expect(subject.id).to eq("foo")
     end
   end
 
   describe "#feature" do
     it "returns the feature of the toggle" do
       expect(subject.feature).to eq(feature)      
+    end
+  end
+
+  describe "#rule" do
+    it "returns the rule of the toggle" do
+      rule = double('rule')
+      subject.instance_variable_set(:@rule, rule)
+      expect(subject.rule).to eq(rule)      
+    end
+  end
+
+  describe "#rule=" do
+    it "sets the rule of the toggle" do
+      rule = double('rule')
+      subject.rule = rule
+      expect(subject.instance_variable_get(:@rule)).to eq(rule)
     end
   end
 
@@ -78,12 +62,14 @@ describe Togls::Toggle do
       subject.on?(target)
     end
 
-    context "when state is on" do
-      it "returns true" do
-        allow(feature).to receive(:key).and_return("key")
-        subject.on
-        expect(subject.on?).to eq(true)
-      end
+    it "returns the result of run" do
+      rule = double('rule')
+      target = double('target')
+      result = double('result')
+      subject.instance_variable_set(:@rule, rule)
+      allow(feature).to receive(:key).and_return("key")
+      allow(rule).to receive(:run).and_return(result)
+      expect(subject.on?(target)).to eq(result)
     end
   end
 
@@ -91,16 +77,18 @@ describe Togls::Toggle do
     context "when based on boolean rule" do
       it "returns a human readable string representation of the feature including value" do
         toggle = Togls::Toggle.new(Togls::Feature.new(:key, "some description"),
-                                     Togls::Rules::Boolean).on(Togls::Rules::Boolean.new(true))
+                                     Togls::Rules::Boolean)
+        toggle.rule = Togls::Rules::Boolean.new(true)
         expect(toggle.to_s).to eq(" on - key - some description")
       end
     end
 
     context "when NOT based on boolean rule" do
       it "returns a human readable string representation of the feature with an unknown value" do
-        rule = Togls::Rule.new { |v| !v }
+        rule = Togls::Rule.new(true)
         toggle = Togls::Toggle.new(Togls::Feature.new(:another_key, "another description"),
-                                     Togls::Rules::Boolean).on(rule)
+                                     Togls::Rules::Boolean)
+        toggle.rule = rule
         expect(toggle.to_s).to eq("  ? - another_key - another description")
       end
     end

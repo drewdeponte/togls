@@ -6,5 +6,9 @@ module Togls
       @key = key.to_s
       @description = description
     end
+
+    def id
+      @key
+    end
   end
 end

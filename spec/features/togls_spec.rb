@@ -28,7 +28,7 @@ describe "Togl feature creation" do
 
   it "creates a new feature with a rule" do
     Togls.features do
-      rule = Togls::Rule.new { |v| !v }
+      rule = Togls::Rules::Boolean.new(false)
       feature(:test, "some human readable description").on(rule)
     end
 
@@ -67,7 +67,7 @@ describe "Togl feature creation" do
       feature(:test1, "test1 readable description").on
       feature(:test2, "test2 readable description").off
       feature(:test3, "test3 readable description")
-      feature(:test4, "test4 readable description").on(Togls::Rule.new { true })
+      feature(:test4, "test4 readable description").on(Togls::Rules::Boolean.new(true))
     end
 
     require 'rake'
@@ -76,7 +76,7 @@ describe "Togl feature creation" do
     expect { Rake::Task["togls:features"].invoke }.to output(%q{ on - test1 - test1 readable description
 off - test2 - test2 readable description
 off - test3 - test3 readable description
-  ? - test4 - test4 readable description
+ on - test4 - test4 readable description
 }).to_stdout
   end
 end

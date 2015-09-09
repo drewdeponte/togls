@@ -11,7 +11,7 @@ module Togls
             return false
           end
         else
-          return @bool
+          return @data
         end
       end
 

@@ -1,11 +1,19 @@
 module Togls
   class Rule
-    def initialize(&rule)
-      @definition = rule  
+    attr_reader :data
+
+    def initialize(data=nil)
+      @data = data  
     end
 
     def run(key, target = nil)
-      @definition.call(key, target)
+      raise Togls::NotImplemented.new(
+        "Rule's #run method must be implemented"
+      )
+    end
+
+    def id
+      Togls::Helpers.sha1(self.class, @data)
     end
   end
 end

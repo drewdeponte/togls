@@ -1,14 +1,6 @@
 require_relative '../../../spec_helper'
 
 describe Togls::Rules::BooleanEnvOverride do
-  describe "#initialize" do
-    it "stores the passed boolean" do
-      bool = double('bool')
-      group = Togls::Rules::BooleanEnvOverride.new(bool)
-      expect(group.instance_variable_get(:@bool)).to eq(bool)
-    end
-  end
-
   describe "#run" do
     context "when environment variable is NOT present" do
       it "returns the provided boolean value" do
