@@ -77,7 +77,7 @@ describe Togls::ToggleRepository do
 
     it "gets the storage payload" do
       feature = Togls::Feature.new("your_mom", "Your Moms Desc")
-      toggle = Togls::Toggle.new(feature, Togls::Rules::Boolean)
+      toggle = Togls::Toggle.new(feature)
       allow(subject.instance_variable_get(:@feature_repository)).to receive(:store)
       allow(subject.instance_variable_get(:@rule_repository)).to receive(:store)
       allow(driver).to receive(:store)
@@ -114,7 +114,7 @@ describe Togls::ToggleRepository do
   describe "#extract_storage_payload" do
     it "returns the feature's extracted storage payload" do
       feature = Togls::Feature.new("your_mom", "Your Moms Desc")
-      toggle = Togls::Toggle.new(feature, Togls::Rules::Boolean)
+      toggle = Togls::Toggle.new(feature)
       expect(subject.extract_storage_payload(toggle))
         .to eq({ "feature_id" => "your_mom", "rule_id" => "4e4b466b49e148b5a58de1d666ca7c87c7765301" })
     end
@@ -188,7 +188,7 @@ describe Togls::ToggleRepository do
       rule_repository = subject.instance_variable_get(:@rule_repository)
       allow(rule_repository).to receive(:get)
       allow(feature_repository).to receive(:get).and_return(feature)
-      expect(Togls::Toggle).to receive(:new).with(feature, Togls::Rules::Boolean).and_return(double.as_null_object)
+      expect(Togls::Toggle).to receive(:new).with(feature).and_return(double.as_null_object)
       subject.reconstitute_toggle(toggle_data)
     end
 

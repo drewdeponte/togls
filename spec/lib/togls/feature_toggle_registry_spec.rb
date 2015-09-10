@@ -1,16 +1,9 @@
 require 'spec_helper'
 
 describe Togls::FeatureToggleRegistry do
-  let(:base_rule_type_klass) { Togls::Rules::Boolean }
-  subject { Togls::FeatureToggleRegistry.new(base_rule_type_klass) }
+  subject { Togls::FeatureToggleRegistry.new }
 
   describe "#initalize" do
-    it "stores the base rule type klass" do
-      base_rule_type_klass = double("rule_type_klass")
-      feature_reg = Togls::FeatureToggleRegistry.new(base_rule_type_klass)
-      expect(feature_reg.instance_variable_get(:@base_rule_type_klass)).to eq(base_rule_type_klass)
-    end
-
     it "constructs the ToggleRepository InMemoryDriver" do
       expect(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new)
       subject
@@ -165,7 +158,7 @@ describe Togls::FeatureToggleRegistry do
       registry = double('registry')
       expect(Togls::FeatureToggleRegistry).to receive(:new).and_return(registry)
       b = Proc.new {}
-      Togls::FeatureToggleRegistry.create(double, &b)
+      Togls::FeatureToggleRegistry.create(&b)
     end
 
     it "calls instance eval with the passed block" do
@@ -173,12 +166,12 @@ describe Togls::FeatureToggleRegistry do
       allow(Togls::FeatureToggleRegistry).to receive(:new).and_return(registry)
       b = Proc.new {}
       expect(registry).to receive(:instance_eval).and_yield(&b)
-      Togls::FeatureToggleRegistry.create(double, &b)
+      Togls::FeatureToggleRegistry.create(&b)
     end
 
     it "returns a configured feature registry object" do
       b = Proc.new {}
-      expect(Togls::FeatureToggleRegistry.create(Togls::Rules::Boolean, &b)).to be_a(Togls::FeatureToggleRegistry)
+      expect(Togls::FeatureToggleRegistry.create(&b)).to be_a(Togls::FeatureToggleRegistry)
     end
   end
 
@@ -196,7 +189,7 @@ describe Togls::FeatureToggleRegistry do
       key = "some_key"
       feature = double(Togls::Feature)
       allow(Togls::Feature).to receive(:new).and_return(feature)
-      expect(Togls::Toggle).to receive(:new).with(feature, base_rule_type_klass).and_return(double.as_null_object)
+      expect(Togls::Toggle).to receive(:new).with(feature).and_return(double.as_null_object)
       subject.feature(key, desc)
     end
 

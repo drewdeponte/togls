@@ -38,7 +38,7 @@ module Togls
     def reconstitute_toggle(toggle_data)
       feature = @feature_repository.get(toggle_data["feature_id"])
       rule = @rule_repository.get(toggle_data["rule_id"])
-      toggle = Togls::Toggle.new(feature, Togls::Rules::Boolean)
+      toggle = Togls::Toggle.new(feature)
       toggle.rule = rule
       return toggle
     end

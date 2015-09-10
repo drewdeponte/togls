@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Togls::Toggle do
   let(:feature) { double(Togls::Feature) }
-  let(:base_rule_type_klass) { Togls::Rules::Boolean }
-  subject { Togls::Toggle.new(feature, base_rule_type_klass) }
+  subject { Togls::Toggle.new(feature) }
 
   describe "#initalize" do
     it "creats a instance of Toggle" do
@@ -12,10 +11,6 @@ describe Togls::Toggle do
 
     it "assigns the given feature" do
       expect(subject.instance_variable_get(:@feature)).to eq(feature)
-    end
-
-    it "assigns the base rule type klass" do
-      expect(subject.instance_variable_get(:@base_rule_type_klass)).to eq(base_rule_type_klass)
     end
 
     it "assigns a new falsey rule" do
@@ -76,8 +71,7 @@ describe Togls::Toggle do
   describe "#to_s" do
     context "when based on boolean rule" do
       it "returns a human readable string representation of the feature including value" do
-        toggle = Togls::Toggle.new(Togls::Feature.new(:key, "some description"),
-                                     Togls::Rules::Boolean)
+        toggle = Togls::Toggle.new(Togls::Feature.new(:key, "some description"))
         toggle.rule = Togls::Rules::Boolean.new(true)
         expect(toggle.to_s).to eq(" on - key - some description")
       end
@@ -86,8 +80,7 @@ describe Togls::Toggle do
     context "when NOT based on boolean rule" do
       it "returns a human readable string representation of the feature with an unknown value" do
         rule = Togls::Rule.new(true)
-        toggle = Togls::Toggle.new(Togls::Feature.new(:another_key, "another description"),
-                                     Togls::Rules::Boolean)
+        toggle = Togls::Toggle.new(Togls::Feature.new(:another_key, "another description"))
         toggle.rule = rule
         expect(toggle.to_s).to eq("  ? - another_key - another description")
       end
