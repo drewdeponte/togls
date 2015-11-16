@@ -68,6 +68,27 @@ describe Togls::Toggle do
     end
   end
 
+  describe "#off?" do
+    it "runs the associated rule" do
+      rule = double('rule')
+      target = double('target')
+      subject.instance_variable_set(:@rule, rule)
+      allow(feature).to receive(:key).and_return("key")
+      expect(rule).to receive(:run).with(subject.feature.key, target)
+      subject.off?(target)
+    end
+
+    it "returns the opposite boolean of the result of run" do
+      rule = double('rule')
+      target = double('target')
+      result = false
+      subject.instance_variable_set(:@rule, rule)
+      allow(feature).to receive(:key).and_return("key")
+      allow(rule).to receive(:run).and_return(result)
+      expect(subject.off?(target)).to eq(true)
+    end
+  end
+
   describe "#to_s" do
     context "when based on boolean rule" do
       it "returns a human readable string representation of the feature including value" do
