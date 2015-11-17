@@ -45,7 +45,6 @@ describe "Togl feature creation" do
     expect(Togls.feature(:test).on?("someone_else")).to eq(false)
   end
 
-
   context "environment variable feature override" do
     after do
       ENV.delete("TOGLS_TEST")
@@ -61,7 +60,27 @@ describe "Togl feature creation" do
       expect(Togls.feature(:test).on?).to eq(false)
     end
   end
+end
 
+describe "Togl inspection" do
+  it "asks a feature if it is on" do
+    Togls.features do
+      feature(:test, "some human readable description").on
+    end
+
+    expect(Togls.feature(:test).on?).to eq(true)
+  end
+
+  it "asks a feature if it is off" do
+    Togls.features do
+      feature(:test, "some human readable description").on
+    end
+
+    expect(Togls.feature(:test).off?).to eq(false)
+  end
+end
+
+describe "Togl reporting" do
   it "outputs all the features" do
     Togls.features do
       feature(:test1, "test1 readable description").on
