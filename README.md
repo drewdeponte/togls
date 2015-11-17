@@ -82,6 +82,29 @@ end
 **Note:** Feature toggles that are evaluated but have **not** been
 defined will default to **off**.
 
+### Override Feature Toggles
+
+Toggles can be overriden using environment variables following the
+naming scheme provided below. This is especially useful when wanting to
+change state of toggles within your development environment, without
+altering the codified default state.
+
+The naming scheme for overriding toggles is simply the key of the
+feature toggle in all caps with `TOGLS_` prefixed to it. For example if
+we had the following feature toggle defined.
+
+```ruby
+Togls.features do
+  # Set this feature to always be on
+  feature(:pop_up_login_form, "use pop up login instead of normal login").on
+end
+```
+
+We could override this by setting the value of the
+`TOGLS_POP_UP_LOGIN_FORM` environment variable to `"false"`. If you want
+to override a feature toggle to an on state you can set the
+`TOGLS_POP_UP_LOGIN_FORM` environment variable to `"true"`.
+
 ### Toggle Features based on Group Membership  
 
 `togls` provides out of the box support for toggling features based on
