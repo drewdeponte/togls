@@ -7,13 +7,9 @@ versions, as well as provide a rough history.
 #### Next Release
 
 * Add `off?` method for asking if a defined feature is off
-* Add and rearchitect to support concept of repositories and datastores
-* Split Feature model into Feature & Toggle models
-* Rename var in `FeatureRegistry.create` avoid confusion with overloaded name
-* Make default boolean rule class configurable
-* Add `Togls::Rules::BooleanEnvOverride` to allow environment based overrides
-* Add Provided Rules Reference to README.md
-* Rule interface now requires feature key be first arg of run()
+* Add feature toggle overrides
+* Rearchitect to support concept of repositories and datastores allowing
+  further growth in the future
 
 #### v1.0.0
 
