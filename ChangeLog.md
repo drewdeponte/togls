@@ -13,6 +13,7 @@ versions, as well as provide a rough history.
 * Add `Togls::Rules::BooleanEnvOverride` to allow environment based overrides
 * Add Provided Rules Reference to README.md
 * Rule interface now requires feature key be first arg of run()
+* Add `off?` method for asking if a defined feature is off
 
 #### v1.0.0
 
