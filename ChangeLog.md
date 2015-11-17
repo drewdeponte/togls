@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+#### v1.1.0
+
 * Add `off?` method for asking if a defined feature is off
 * Add feature toggle overrides
 * Rearchitect to support concept of repositories and datastores allowing
