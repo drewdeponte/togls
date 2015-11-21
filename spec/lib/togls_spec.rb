@@ -36,10 +36,11 @@ describe Togls do
       end
 
       context "when NOT given a block" do
-        it "returns hash of feature objects identified by their key" do
-          feature_toggles = Togls.features
-          expect(feature_toggles.length).to eq(3)
-          expect(feature_toggles).to be_a(Array)
+        it "returns the feature toggle registry" do
+          feature_toggle_registry = double('feature toggle registry')
+          allow(Togls::FeatureToggleRegistry).to receive(:create).and_return(feature_toggle_registry)
+          feature_toggles = Togls.features do; end
+          expect(Togls.features).to eq(feature_toggle_registry)
         end
       end
     end

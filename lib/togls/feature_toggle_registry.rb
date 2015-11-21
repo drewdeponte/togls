@@ -39,7 +39,7 @@ module Togls
       return toggle
     end
 
-    def registry
+    def all
       @toggle_repository.all
     end
   end

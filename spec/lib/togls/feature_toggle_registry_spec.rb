@@ -260,11 +260,11 @@ describe Togls::FeatureToggleRegistry do
     end
   end
 
-  describe "#registry" do
+  describe "#all" do
     it "fetches all toggles" do
       toggle_repository = subject.instance_variable_get(:@toggle_repository)
       expect(toggle_repository).to receive(:all)
-      subject.registry
+      subject.all
     end
   end
 end

@@ -6,6 +6,9 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Change `Togls.features` to return FeatureToggleRegistry instance
+  rather than an Array of Toggle objects.
+
 #### v1.1.0
 
 * Add `off?` method for asking if a defined feature is off

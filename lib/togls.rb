@@ -28,7 +28,7 @@ module Togls
       if @feature_toggle_registry.nil?
         raise Togls::NoFeaturesError, "Need to define features before you can get them"
       else
-        @feature_toggle_registry.registry
+        @feature_toggle_registry
       end
     end
   end
