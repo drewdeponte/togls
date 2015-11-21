@@ -17,15 +17,6 @@ describe "Togl feature creation" do
     expect(Togls.feature(:test).on?).to eq(false)
   end
 
-  it "defaults to false when a feature is not defined" do
-    allow(Togls.logger).to receive(:warn)
-    Togls.features do
-      feature(:test, "some human readable description").on
-    end
-
-    expect(Togls.feature(:not_defined).on?).to eq(false)
-  end
-
   it "creates a new feature with a rule" do
     Togls.features do
       rule = Togls::Rules::Boolean.new(false)
@@ -44,22 +35,6 @@ describe "Togl feature creation" do
     expect(Togls.feature(:test).on?("someone")).to eq(true)
     expect(Togls.feature(:test).on?("someone_else")).to eq(false)
   end
-
-  context "environment variable feature override" do
-    after do
-      ENV.delete("TOGLS_TEST")
-    end
-
-    it "creates a new feature" do
-      Togls.features do
-        feature(:test, "some human readable description").on
-      end
-
-      ENV["TOGLS_TEST"] = "aeuaoeuaeouaoeuue"
-
-      expect(Togls.feature(:test).on?).to eq(false)
-    end
-  end
 end
 
 describe "Togl inspection" do
@@ -77,6 +52,47 @@ describe "Togl inspection" do
     end
 
     expect(Togls.feature(:test).off?).to eq(false)
+  end
+
+  it "defaults to false when a feature is not defined" do
+    allow(Togls.logger).to receive(:warn)
+    Togls.features do
+      feature(:test, "some human readable description").on
+    end
+
+    expect(Togls.feature(:not_defined).on?).to eq(false)
+  end
+
+  context "when environment variable feature override is false" do
+    after do
+      ENV.delete("TOGLS_TEST")
+    end
+
+    it "feature reports being off" do
+      Togls.features do
+        feature(:test, "some human readable description").on
+      end
+
+      ENV["TOGLS_TEST"] = "false"
+
+      expect(Togls.feature(:test).on?).to eq(false)
+    end
+  end
+
+  context "when environment variable feature override is true" do
+    after do
+      ENV.delete("TOGLS_TEST")
+    end
+
+    it "feature reports being on" do
+      Togls.features do
+        feature(:test, "some human readable description").off
+      end
+
+      ENV["TOGLS_TEST"] = "true"
+
+      expect(Togls.feature(:test).on?).to eq(true)
+    end
   end
 end
 
