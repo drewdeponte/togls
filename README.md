@@ -212,6 +212,8 @@ Reference](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference)
 Rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules),
 [Review Feature
 Toggles](https://github.com/codebreakdown/togls/wiki/Review-Feature-Toggles),
+[Testing with
+Toggles](https://github.com/codebreakdown/togls/wiki/Testing-with-Toggles)
 etc.
 
 ## Development
