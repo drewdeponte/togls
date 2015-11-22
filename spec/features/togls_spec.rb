@@ -38,6 +38,21 @@ describe "Togl" do
     end
   end
 
+  describe "expanding feature toggles" do
+    it "creates a new feature toggled on while keeping the previously defined features" do
+      Togls.features do
+        feature(:test, "some human readable description").on
+      end
+
+      Togls.features do
+        feature(:bar, "some fooo").on
+      end
+
+      expect(Togls.feature(:test).on?).to eq(true)
+      expect(Togls.feature(:bar).on?).to eq(true)
+    end
+  end
+
   describe "set the feature toggle registry" do
     it "uses the specified feature toggle registry" do
       Togls.features = Togls::FeatureToggleRegistry.create do

@@ -20,7 +20,7 @@ describe Togls do
 
     context "when features HAVE been defined" do
       before do
-        Togls.features do
+        @registry = Togls.features do
           feature(:test1, "test1 readable description").on
           feature(:test2, "test2 readable description").off
           feature(:test3, "test3 readable description")
@@ -28,18 +28,17 @@ describe Togls do
       end
 
       context "when given a block" do
-        it "replaces the feature registry with a new feature registry" do
+        it "expands the feature registry with a new block" do
           b = Proc.new {}
-          expect(Togls::FeatureToggleRegistry).to receive(:create).and_yield(&b)
+          expect(@registry).to receive(:expand)
           Togls.features(&b)
         end
       end
 
       context "when NOT given a block" do
         it "returns the feature toggle registry" do
-          feature_toggle_registry = double('feature toggle registry')
-          allow(Togls::FeatureToggleRegistry).to receive(:create).and_return(feature_toggle_registry)
-          feature_toggles = Togls.features do; end
+          block = Proc.new {}
+          feature_toggle_registry = Togls.features(&block)
           expect(Togls.features).to eq(feature_toggle_registry)
         end
       end

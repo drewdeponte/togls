@@ -22,13 +22,17 @@ require "logger"
 
 module Togls
   def self.features(&block)
-    if !block.nil?
-      @feature_toggle_registry = FeatureToggleRegistry.create(&block)
+    if @feature_toggle_registry
+      if block.nil?
+        return @feature_toggle_registry
+      else
+        @feature_toggle_registry.expand(&block)
+      end
     else
-      if @feature_toggle_registry.nil?
+      if block.nil?
         raise Togls::NoFeaturesError, "Need to define features before you can get them"
       else
-        @feature_toggle_registry
+        @feature_toggle_registry = FeatureToggleRegistry.create(&block)
       end
     end
   end
