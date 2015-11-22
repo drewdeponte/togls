@@ -32,6 +32,10 @@ module Togls
       end
     end
   end
+
+  def self.features=(feature_toggle_registry)
+    @feature_toggle_registry = feature_toggle_registry
+  end
   
   def self.feature(key)
     return @feature_toggle_registry.get(key)

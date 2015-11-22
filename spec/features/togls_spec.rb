@@ -38,6 +38,16 @@ describe "Togl" do
     end
   end
 
+  describe "set the feature toggle registry" do
+    it "uses the specified feature toggle registry" do
+      Togls.features = Togls::FeatureToggleRegistry.create do
+        feature(:foo, "some magic foo").on
+      end
+
+      expect(Togls.feature(:foo).on?).to eq(true)
+    end
+  end
+
   describe "evaluating feature toggles" do
     it "asks a feature if it is on" do
       Togls.features do

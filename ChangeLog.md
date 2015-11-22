@@ -6,6 +6,7 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Add set FeatureToggleRegistry instance, `Togls.features = toggle_registry`
 * Change `Togls.features` to return FeatureToggleRegistry instance
   rather than an Array of Toggle objects.
 

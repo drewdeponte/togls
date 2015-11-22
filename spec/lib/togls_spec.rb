@@ -46,6 +46,14 @@ describe Togls do
     end
   end
 
+  describe ".features=" do
+    it "assigns the given feature toggle registry to @feature_toggle_registry" do
+      feature_toggle_registry = double('feature toggle registry')
+      Togls.features = feature_toggle_registry
+      expect(Togls.features).to eq(feature_toggle_registry)
+    end
+  end
+
   describe ".feature" do
     it "returns the feature toggle identified by the key" do
       feature_registry = instance_double Togls::FeatureToggleRegistry 
