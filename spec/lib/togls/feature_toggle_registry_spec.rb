@@ -175,6 +175,28 @@ describe Togls::FeatureToggleRegistry do
     end
   end
 
+  describe "#expand" do
+    it "instance evals the provided block" do
+      registry = Togls::FeatureToggleRegistry.create do
+        feature(:foo, "some description").on
+      end
+
+      expect(registry).to receive(:instance_eval)
+      registry.expand do
+        feature(:bar, "some other desc").on
+      end
+    end
+
+    it "returns the feature toggle repository" do
+      registry = Togls::FeatureToggleRegistry.create do
+        feature(:foo, "some description").on
+      end
+
+      block = Proc.new {}
+      expect(registry.expand(&block)).to eq(registry)
+    end
+  end
+
   describe "#feature" do
     it "creates a new feature object with the passed key" do
       desc = double('feature desc')

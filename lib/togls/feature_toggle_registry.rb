@@ -24,6 +24,11 @@ module Togls
       return feature_toggle_registry
     end
 
+    def expand(&block)
+      self.instance_eval(&block)
+      return self
+    end
+
     def feature(key, desc)
       feature = Togls::Feature.new(key, desc)
       toggle = Togls::Toggle.new(feature)
