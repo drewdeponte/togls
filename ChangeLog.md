@@ -6,6 +6,9 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Fixed #19, exceptions happened on evaluation after setting
+  `Togls.features = nil`
+
 ### v2.0.0
 
 * Add ability to create empty feature toggle set via `Togls.features`
