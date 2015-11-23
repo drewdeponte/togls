@@ -161,17 +161,41 @@ describe Togls::FeatureToggleRegistry do
       Togls::FeatureToggleRegistry.create(&b)
     end
 
-    it "calls instance eval with the passed block" do
-      registry = double('registry')
-      allow(Togls::FeatureToggleRegistry).to receive(:new).and_return(registry)
-      b = Proc.new {}
-      expect(registry).to receive(:instance_eval).and_yield(&b)
-      Togls::FeatureToggleRegistry.create(&b)
+    context "when block given" do
+      it "calls instance eval with the passed block" do
+        registry = double('registry')
+        allow(Togls::FeatureToggleRegistry).to receive(:new).and_return(registry)
+        b = Proc.new {}
+        expect(registry).to receive(:instance_eval).and_yield(&b)
+        Togls::FeatureToggleRegistry.create(&b)
+      end
     end
 
     it "returns a configured feature registry object" do
       b = Proc.new {}
       expect(Togls::FeatureToggleRegistry.create(&b)).to be_a(Togls::FeatureToggleRegistry)
+    end
+  end
+
+  describe "#expand" do
+    it "instance evals the provided block" do
+      registry = Togls::FeatureToggleRegistry.create do
+        feature(:foo, "some description").on
+      end
+
+      expect(registry).to receive(:instance_eval)
+      registry.expand do
+        feature(:bar, "some other desc").on
+      end
+    end
+
+    it "returns the feature toggle repository" do
+      registry = Togls::FeatureToggleRegistry.create do
+        feature(:foo, "some description").on
+      end
+
+      block = Proc.new {}
+      expect(registry.expand(&block)).to eq(registry)
     end
   end
 
@@ -260,11 +284,11 @@ describe Togls::FeatureToggleRegistry do
     end
   end
 
-  describe "#registry" do
+  describe "#all" do
     it "fetches all toggles" do
       toggle_repository = subject.instance_variable_get(:@toggle_repository)
       expect(toggle_repository).to receive(:all)
-      subject.registry
+      subject.all
     end
   end
 end

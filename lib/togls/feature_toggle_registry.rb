@@ -18,10 +18,15 @@ module Togls
       @rule_repository.store(@boolean_true_rule)
     end
 
-    def self.create(&feature_toggles)
+    def self.create(&block)
       feature_toggle_registry = self.new
-      feature_toggle_registry.instance_eval(&feature_toggles)
+      feature_toggle_registry.instance_eval(&block)
       return feature_toggle_registry
+    end
+
+    def expand(&block)
+      self.instance_eval(&block)
+      return self
     end
 
     def feature(key, desc)
@@ -39,7 +44,7 @@ module Togls
       return toggle
     end
 
-    def registry
+    def all
       @toggle_repository.all
     end
   end

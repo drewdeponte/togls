@@ -21,16 +21,20 @@ require "togls/rules"
 require "logger"
 
 module Togls
-  def self.features(&feature_toggles)
-    if !feature_toggles.nil?
-      @feature_toggle_registry = FeatureToggleRegistry.create(&feature_toggles)
-    else
-      if @feature_toggle_registry.nil?
-        raise Togls::NoFeaturesError, "Need to define features before you can get them"
-      else
-        @feature_toggle_registry.registry
-      end
+  def self.features(&block)
+    if @feature_toggle_registry.nil?
+      @feature_toggle_registry = FeatureToggleRegistry.new
     end
+
+    if block
+      @feature_toggle_registry.expand(&block)
+    end
+
+    return @feature_toggle_registry
+  end
+
+  def self.features=(feature_toggle_registry)
+    @feature_toggle_registry = feature_toggle_registry
   end
   
   def self.feature(key)
