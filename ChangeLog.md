@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+### v2.0.0
+
 * Add ability to create empty feature toggle set via `Togls.features`
 * Add toggle definition expansion with multiple `Togls.features` blocks
 * Add set FeatureToggleRegistry instance, `Togls.features = toggle_registry`
