@@ -161,12 +161,14 @@ describe Togls::FeatureToggleRegistry do
       Togls::FeatureToggleRegistry.create(&b)
     end
 
-    it "calls instance eval with the passed block" do
-      registry = double('registry')
-      allow(Togls::FeatureToggleRegistry).to receive(:new).and_return(registry)
-      b = Proc.new {}
-      expect(registry).to receive(:instance_eval).and_yield(&b)
-      Togls::FeatureToggleRegistry.create(&b)
+    context "when block given" do
+      it "calls instance eval with the passed block" do
+        registry = double('registry')
+        allow(Togls::FeatureToggleRegistry).to receive(:new).and_return(registry)
+        b = Proc.new {}
+        expect(registry).to receive(:instance_eval).and_yield(&b)
+        Togls::FeatureToggleRegistry.create(&b)
+      end
     end
 
     it "returns a configured feature registry object" do
