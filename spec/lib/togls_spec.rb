@@ -34,6 +34,14 @@ describe Togls do
   end
 
   describe ".feature" do
+    context "when features have NOT been defined" do
+      it "creates a new empty feature toggle registry" do
+        Togls.features = nil
+        expect(Togls::FeatureToggleRegistry).to receive(:new).and_call_original
+        Togls.feature("key")
+      end
+    end
+
     it "returns the feature toggle identified by the key" do
       feature_registry = instance_double Togls::FeatureToggleRegistry 
       Togls.instance_variable_set(:@feature_toggle_registry, feature_registry)

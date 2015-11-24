@@ -38,6 +38,10 @@ module Togls
   end
   
   def self.feature(key)
+    if @feature_toggle_registry.nil?
+      @feature_toggle_registry = FeatureToggleRegistry.new
+    end
+
     return @feature_toggle_registry.get(key)
   end
 
