@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+### v2.1.0
+
 * Fixed #19, exceptions happened on evaluation after setting
   `Togls.features = nil`
 
