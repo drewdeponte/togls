@@ -9,9 +9,11 @@ module Togls
           if ENV[toggle_env_key(toggle_id)] == "true"
             return { "feature_id" => toggle_id,
                      "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, true) }
-          else
+          elsif ENV[toggle_env_key(toggle_id)] == "false"
             return { "feature_id" => toggle_id,
                      "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, false) }
+          else
+            return nil
           end
         else
           return nil

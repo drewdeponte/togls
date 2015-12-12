@@ -120,6 +120,22 @@ describe "Togl" do
         expect(Togls.feature(:test).on?).to eq(true)
       end
     end
+
+    context "when env variable feature override is other than true/false" do
+      after do
+        ENV.delete("TOGLS_TEST")
+      end
+
+      it "feature falls back to in memory store value" do
+        Togls.features do
+          feature(:test, "some human readable description").on
+        end
+
+        ENV["TOGLS_TEST"] = "aeuaoeuaoeuauaueoauaauoe"
+
+        expect(Togls.feature(:test).on?).to eq(true)
+      end
+    end
   end
 
   describe "reviewing feature toggle" do
