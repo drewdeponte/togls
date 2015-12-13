@@ -18,7 +18,7 @@ describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
   describe "#get" do
     context "when environment toggle isn't set" do
       before do
-        ENV["TOGLS_SOME_TOGGLE_ID"] = nil
+        ENV.delete("TOGLS_SOME_TOGGLE_ID")
       end
 
       it "returns nil" do
@@ -38,7 +38,7 @@ describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
         end
       end
 
-      context "when it is not true" do
+      context "when it is false" do
         before do
           ENV["TOGLS_SOME_TOGGLE_ID"] = "false"
         end
@@ -46,6 +46,16 @@ describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
         it "returns Togls::Rules::Boolean false toggle data" do
           expect(subject.get("some_toggle_id")).to eq({ "feature_id" => "some_toggle_id",
                      "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, false) })
+        end
+      end
+
+      context "when it is not true/false" do
+        before do
+          ENV["TOGLS_SOME_TOGGLE_ID"] = "aeuaeouaoeuaeuaou"
+        end
+
+        it "returns nil" do
+          expect(subject.get("some_toggle_id")).to be_nil
         end
       end
     end

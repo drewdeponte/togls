@@ -6,6 +6,9 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Fixed issue #21, env variable override wasn't falling through to in
+  code defined memory value.
+
 ### v2.1.0
 
 * Fixed #19, exceptions happened on evaluation after setting
