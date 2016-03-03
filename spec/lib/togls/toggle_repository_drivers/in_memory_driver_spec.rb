@@ -14,7 +14,7 @@ describe Togls::ToggleRepositoryDrivers::InMemoryDriver do
 
   describe "#store" do
     it "saves the storage payload" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       toggle = Togls::Toggle.new(feature)
       toggle_data = double("toggle data")
       subject.store(toggle.id, toggle_data)

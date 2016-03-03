@@ -203,7 +203,7 @@ describe Togls::FeatureToggleRegistry do
     it "creates a new feature object with the passed key" do
       desc = double('feature desc')
       key = "some_key"
-      feature = Togls::Feature.new('your_mom', "Your Moms Desc")
+      feature = Togls::Feature.new('some_feature_key', "Some Feature Desc")
       expect(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
       subject.feature(key, desc)
     end

@@ -14,9 +14,9 @@ describe Togls::FeatureRepositoryDrivers::InMemoryDriver do
 
   describe "#store" do
     it "saves the storage payload" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
-      subject.store(feature.id, { "key" => "your_mom", "description" => "Your Moms Desc" })
-      expect(subject.instance_variable_get(:@features)["your_mom"]).to eq({ "key" => "your_mom", "description" => "Your Moms Desc" })
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      subject.store(feature.id, { "key" => "some_feature_key", "description" => "Some Feature Desc" })
+      expect(subject.instance_variable_get(:@features)["some_feature_key"]).to eq({ "key" => "some_feature_key", "description" => "Some Feature Desc" })
     end
   end
 
