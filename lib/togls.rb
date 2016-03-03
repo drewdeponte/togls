@@ -19,33 +19,8 @@ require "togls/null_toggle"
 require "togls/rule"
 require "togls/rules"
 require "logger"
+require "togls/release_toggle_registry_manager"
 
 module Togls
-  def self.features(&block)
-    if @feature_toggle_registry.nil?
-      @feature_toggle_registry = FeatureToggleRegistry.new
-    end
-
-    if block
-      @feature_toggle_registry.expand(&block)
-    end
-
-    return @feature_toggle_registry
-  end
-
-  def self.features=(feature_toggle_registry)
-    @feature_toggle_registry = feature_toggle_registry
-  end
-  
-  def self.feature(key)
-    if @feature_toggle_registry.nil?
-      @feature_toggle_registry = FeatureToggleRegistry.new
-    end
-
-    return @feature_toggle_registry.get(key)
-  end
-
-  def self.logger
-    @logger ||= Logger.new(STDOUT)
-  end
+  include ReleaseToggleRegistryManager
 end

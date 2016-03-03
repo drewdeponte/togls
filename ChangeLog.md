@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Added ability to create additional toggle registries
+
 ### v2.1.1
 
 * Fixed issue #21, env variable override wasn't falling through to in
