@@ -157,4 +157,25 @@ off - test3 - test3 readable description
 }).to_stdout
     end
   end
+
+  describe "creating additional toggle registries" do
+    describe "defining feature toggles in additional registry" do
+      it "creates a new feature toggled on" do
+        Togls.features do
+          feature(:test, "some human readable description").on
+        end
+
+        klass = Class.new do
+          include Togls::ReleaseToggleRegistryManager
+        end
+
+        klass.features do
+          feature(:test, "some human readable description").off
+        end
+
+        expect(Togls.feature(:test).on?).to eq(true)
+        expect(klass.feature(:test).on?).to eq(false)
+      end
+    end
+  end
 end
