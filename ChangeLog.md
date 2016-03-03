@@ -6,6 +6,7 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Added Togls::TestToggleRegistry class for initializing test state
 * Added ability to create additional toggle registries
 
 ### v2.1.1

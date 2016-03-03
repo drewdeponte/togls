@@ -76,7 +76,7 @@ describe Togls::ToggleRepository do
     end
 
     it "gets the storage payload" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       toggle = Togls::Toggle.new(feature)
       allow(subject.instance_variable_get(:@feature_repository)).to receive(:store)
       allow(subject.instance_variable_get(:@rule_repository)).to receive(:store)
@@ -113,10 +113,10 @@ describe Togls::ToggleRepository do
 
   describe "#extract_storage_payload" do
     it "returns the feature's extracted storage payload" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       toggle = Togls::Toggle.new(feature)
       expect(subject.extract_storage_payload(toggle))
-        .to eq({ "feature_id" => "your_mom", "rule_id" => "4e4b466b49e148b5a58de1d666ca7c87c7765301" })
+        .to eq({ "feature_id" => "some_feature_key", "rule_id" => "4e4b466b49e148b5a58de1d666ca7c87c7765301" })
     end
   end
 

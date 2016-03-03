@@ -34,20 +34,20 @@ describe Togls::FeatureRepository do
 
   describe "#store" do
     it "extracts the feature data" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       expect(subject).to receive(:extract_feature_data).with(feature)
       allow(driver).to receive(:store)
       subject.store(feature)
     end
 
     it "iterate over each driver" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       expect(subject.instance_variable_get(:@drivers)).to receive(:each)
       subject.store(feature)
     end
 
     it "store the toggle in each driver" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       feature_data = double('feature data')
       allow(subject).to receive(:extract_feature_data).and_return(feature_data)
       allow(subject.instance_variable_get(:@drivers)).to receive(:each).and_yield(driver)
@@ -58,9 +58,9 @@ describe Togls::FeatureRepository do
 
   describe "#extract_feature_data" do
     it "returns the feature's extracted feature data" do
-      feature = Togls::Feature.new("your_mom", "Your Moms Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       expect(subject.extract_feature_data(feature))
-        .to eq({ "key" => "your_mom", "description" => "Your Moms Desc" })
+        .to eq({ "key" => "some_feature_key", "description" => "Some Feature Desc" })
     end
   end
 
