@@ -2,6 +2,10 @@ require 'thread'
 
 module Togls
   module RuleRepositoryDrivers
+    # Rule Repository In-Memory Driver
+    #
+    # The Rule Repository In-Memory Driver provides the interface to store and
+    # retrieve rules. This is intended to be used by a Rule Repository instance.
     class InMemoryDriver
       def initialize
         @rules = {}
@@ -13,7 +17,7 @@ module Togls
           @rules[rule_id] = rule_data
         end
       end
-      
+
       def get(rule_id)
         @rules_lock.synchronize do
           @rules[rule_id]

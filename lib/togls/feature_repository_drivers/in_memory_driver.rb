@@ -2,6 +2,10 @@ require 'thread'
 
 module Togls
   module FeatureRepositoryDrivers
+    # Feature Repository In-Memory Driver
+    #
+    # The Feature Repository In-Memory Driver provides the facility to store and
+    # retrieve features to and from the in-memory store.
     class InMemoryDriver
       def initialize
         @features = {}

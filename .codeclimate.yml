@@ -1,2 +1,18 @@
-languages:
-  Ruby: true
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+  rubocop:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - lib/**
+    - exe/**
+exclude_paths:
+  - spec/**/*
+  - docs/**/*

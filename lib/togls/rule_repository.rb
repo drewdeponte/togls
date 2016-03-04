@@ -1,11 +1,16 @@
 module Togls
+  # Rule Repository
+  #
+  # The Rule Repository is the intended interface to store and retrieve rules.
+  # It does these by interfacing with Rule Repository Drivers which are passed
+  # in during construction as an Array.
   class RuleRepository
     def initialize(drivers)
-      if !drivers.is_a?(Array)
-        raise Togls::InvalidDriver.new("RuleRepository requires a valid driver")
+      unless drivers.is_a?(Array)
+        raise Togls::InvalidDriver, 'RuleRepository requires a valid driver'
       end
       if drivers.empty?
-        raise Togls::MissingDriver.new("RuleRepository requires a driver")
+        raise Togls::MissingDriver, 'RuleRepository requires a driver'
       end
       @drivers = drivers
     end
@@ -16,9 +21,9 @@ module Togls
         driver.store(rule.id, rule_data)
       end
     end
- 
+
     def extract_storage_payload(rule)
-      return { "klass" => rule.class, "data" => rule.data }
+      { 'klass' => rule.class, 'data' => rule.data }
     end
 
     def fetch_rule_data(id)
@@ -36,7 +41,7 @@ module Togls
     end
 
     def reconstitute_rule(rule_data)
-      rule_data["klass"].new(rule_data["data"])
+      rule_data['klass'].new(rule_data['data'])
     end
   end
 end

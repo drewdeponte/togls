@@ -1,11 +1,15 @@
 module Togls
+  # Feature Repository
+  #
+  # The Feature Repository is the primary interface for storing and retrieving
+  # feature entities using the initialized prioritized drivers Array.
   class FeatureRepository
     def initialize(drivers)
-      if !drivers.is_a?(Array)
-        raise Togls::InvalidDriver.new("FeatureRepository requires a valid driver")
+      unless drivers.is_a?(Array)
+        raise Togls::InvalidDriver, 'FeatureRepository requires a valid driver'
       end
       if drivers.empty?
-        raise Togls::MissingDriver.new("FeatureRepository requires a driver")
+        raise Togls::MissingDriver, 'FeatureRepository requires a driver'
       end
       @drivers = drivers
     end
@@ -18,7 +22,7 @@ module Togls
     end
 
     def extract_feature_data(feature)
-      { "key" => feature.key, "description" => feature.description }
+      { 'key' => feature.key, 'description' => feature.description }
     end
 
     def fetch_feature_data(id)
@@ -36,8 +40,8 @@ module Togls
     end
 
     def reconstitute_feature(feature_data)
-      Togls::Feature.new(feature_data["key"],
-                         feature_data["description"])
+      Togls::Feature.new(feature_data['key'],
+                         feature_data['description'])
     end
   end
 end

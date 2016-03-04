@@ -2,6 +2,10 @@ require 'thread'
 
 module Togls
   module ToggleRepositoryDrivers
+    # Toggle Repositoy In-Memory Driver
+    #
+    # The Toggle Repository In-Memory Driver provides the interface to store and
+    # retrieve toggles from the in-memory store.
     class InMemoryDriver
       def initialize
         @toggles = {}
