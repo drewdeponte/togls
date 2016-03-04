@@ -105,27 +105,11 @@ describe Togls::FeatureToggleRegistry do
       subject
     end
 
-    it "assigns the boolean true rule" do
-      boolean_true_rule = double('boolean true rule')
-      allow(Togls::Rules::Boolean).to receive(:new).with(false)
-      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
-      allow(Togls::Rules::Boolean).to receive(:new).with(true).and_return(boolean_true_rule)
-      expect(subject.instance_variable_get(:@boolean_true_rule)).to eq(boolean_true_rule)
-    end
-
     it "constructs boolean false rule" do
       allow(Togls::Rules::Boolean).to receive(:new).with(true)
       allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       expect(Togls::Rules::Boolean).to receive(:new).with(false)
       subject
-    end
-
-    it "assigns the boolean false rule" do
-      boolean_false_rule = double('boolean true rule')
-      allow(Togls::Rules::Boolean).to receive(:new).with(true)
-      allow(Togls::Rules::Boolean).to receive(:new).with(false).and_return(boolean_false_rule)
-      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
-      expect(subject.instance_variable_get(:@boolean_false_rule)).to eq(boolean_false_rule)
     end
 
     it "stores the boolean false rule" do
