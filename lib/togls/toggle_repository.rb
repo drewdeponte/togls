@@ -1,11 +1,14 @@
 module Togls
+  # Toggle Repository
+  #
+  # Repository interface for storing and retrieving toggles.
   class ToggleRepository
     def initialize(drivers, feature_repository, rule_repository)
-      if !drivers.is_a?(Array)
-        raise Togls::InvalidDriver.new("ToggleRepository requires a valid driver")
+      unless drivers.is_a?(Array)
+        raise Togls::InvalidDriver, 'ToggleRepository requires a valid driver'
       end
       if drivers.empty?
-        raise Togls::MissingDriver.new("ToggleRepository requires a driver")
+        raise Togls::MissingDriver, 'ToggleRepository requires a driver'
       end
       @drivers = drivers
       @feature_repository = feature_repository
@@ -23,24 +26,21 @@ module Togls
     end
 
     def extract_storage_payload(toggle)
-      { "feature_id" => toggle.feature.id, "rule_id" => toggle.rule.id }
+      { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
     end
 
     def get(id)
       toggle_data = fetch_toggle_data(id)
-      if toggle_data
-        return reconstitute_toggle(toggle_data)
-      else
-        return Togls::NullToggle.new
-      end
+      return reconstitute_toggle(toggle_data) if toggle_data
+      Togls::NullToggle.new
     end
 
     def reconstitute_toggle(toggle_data)
-      feature = @feature_repository.get(toggle_data["feature_id"])
-      rule = @rule_repository.get(toggle_data["rule_id"])
+      feature = @feature_repository.get(toggle_data['feature_id'])
+      rule = @rule_repository.get(toggle_data['rule_id'])
       toggle = Togls::Toggle.new(feature)
       toggle.rule = rule
-      return toggle
+      toggle
     end
 
     def fetch_toggle_data(id)

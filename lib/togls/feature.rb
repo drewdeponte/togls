@@ -1,4 +1,8 @@
 module Togls
+  # Feature
+  #
+  # The Feature model is the business representation of a feature. It is how
+  # Togls primarily interfaces with the concept of a feature.
   class Feature
     attr_reader :key, :description
 

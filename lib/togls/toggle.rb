@@ -1,4 +1,9 @@
 module Togls
+  # Toggle
+  #
+  # The model representing a Toggle within the world of Togls. A Toggle's
+  # responsibility is binding a specific rule to a specific feature. Toggle's by
+  # default are associated with a boolean rule initialized to false.
   class Toggle
     attr_reader :feature
     attr_accessor :rule
@@ -17,15 +22,15 @@ module Togls
     end
 
     def off?(target = nil)
-      return !@rule.run(@feature.key, target)
+      !@rule.run(@feature.key, target)
     end
 
     def to_s
-      if @rule.is_a?(Togls::Rules::Boolean)
-        display_value = @rule.run(@feature.key) ? ' on' : 'off'
-      else
-        display_value = '  ?'
-      end
+      display_value = if @rule.is_a?(Togls::Rules::Boolean)
+                        @rule.run(@feature.key) ? ' on' : 'off'
+                      else
+                        '  ?'
+                      end
 
       "#{display_value} - #{@feature.key} - #{@feature.description}"
     end

@@ -1,5 +1,6 @@
 namespace :togls do
-  desc "Output all features including status (on, off, ? - unknown due to complex rule), key, description"
+  desc 'Output all features including status (on, off, ? - unknown due to' \
+   ' complex rule), key, description'
   task :features do
     Togls.features.all.each do |toggle|
       puts toggle.to_s
