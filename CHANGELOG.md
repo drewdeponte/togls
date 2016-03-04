@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+### v2.2.0
+
 * Changed Togls to be thread-safe
 * Added Togls::TestToggleRegistry class for initializing test state
 * Added ability to create additional toggle registries
