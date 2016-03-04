@@ -1,4 +1,4 @@
-require_relative '../../spec_helper'
+require 'spec_helper'
 
 describe Togls::ReleaseToggleRegistryManager do
   let(:klass) { Class.new { include Togls::ReleaseToggleRegistryManager } }
