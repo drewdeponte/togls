@@ -25,7 +25,7 @@ Toggle.
 
 #### Feature
 
-A Feature is the code that provides some functionality coupled  with a
+A Feature is the code that provides some functionality coupled with a
 unique identifier.
 
 #### Rule
