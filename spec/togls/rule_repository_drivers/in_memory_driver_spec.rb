@@ -12,18 +12,16 @@ describe Togls::RuleRepositoryDrivers::InMemoryDriver do
     end
   end
 
-  describe "#store" do
-    it "saves the storage payload" do
+  describe "storing and retrieving" do
+    it "saves the storage payload and retrieves it" do
       subject.store('aeuaoeuoa2342eau', { "klass" => Togls::Rule, "data" => true })
-      expect(subject.instance_variable_get(:@rules)['aeuaoeuoa2342eau']).to eq({ "klass" => Togls::Rule, "data" => true })
+      expect(subject.get('aeuaoeuoa2342eau')).to eq({ "klass" => Togls::Rule, "data" => true })
     end
-  end
 
-  describe "#get" do
-    it "return rule data identified by an id" do
-      rules = subject.instance_variable_get(:@rules)
-      rules["some_id"] = 'hoopty doopty'
-      expect(subject.get("some_id")).to eq('hoopty doopty')
+    context 'when attempting to retrieve a non stored value' do
+      it 'returns nil' do
+        expect(subject.get('non_existent_key')).to be_nil
+      end
     end
   end
 end
