@@ -3,6 +3,7 @@
 [![Code Climate](https://codeclimate.com/github/codebreakdown/togls/badges/gpa.svg)](https://codeclimate.com/github/codebreakdown/togls)
 [![Test Coverage](https://codeclimate.com/github/codebreakdown/togls/badges/coverage.svg)](https://codeclimate.com/github/codebreakdown/togls/coverage)
 [![Dependency Status](https://gemnasium.com/codebreakdown/togls.svg)](https://gemnasium.com/codebreakdown/togls)
+[![Inline docs](http://inch-ci.org/github/codebreakdown/togls.svg?branch=master)](http://inch-ci.org/github/codebreakdown/togls)
 
 # Togls
 
