@@ -6,6 +6,8 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+### v2.2.1
+
 * Added: in-memory driver `set`, `get`, `all` Marshaling to correct a threading
   reference based collision. Fixes issue #35
 
