@@ -14,13 +14,17 @@ module Togls
 
       def store(rule_id, rule_data)
         @rules_lock.synchronize do
-          @rules[rule_id] = rule_data
+          @rules[rule_id] = Marshal.dump(rule_data)
         end
       end
 
       def get(rule_id)
         @rules_lock.synchronize do
-          @rules[rule_id]
+          if @rules.has_key?(rule_id)
+            Marshal.load(@rules[rule_id])
+          else
+            nil
+          end
         end
       end
     end

@@ -6,6 +6,9 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Added: in-memory driver `set`, `get`, `all` Marshaling to correct a threading
+  reference based collision. Fixes issue #35
+
 ### v2.2.0
 
 * Changed Togls to be thread-safe

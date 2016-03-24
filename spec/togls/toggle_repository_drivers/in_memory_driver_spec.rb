@@ -12,29 +12,29 @@ describe Togls::ToggleRepositoryDrivers::InMemoryDriver do
     end
   end
 
-  describe "#store" do
-    it "saves the storage payload" do
+  describe "storing and retrieving" do
+    it "saves the storage payload and retrieves it" do
       feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
       toggle = Togls::Toggle.new(feature)
-      toggle_data = double("toggle data")
+      toggle_data = { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
       subject.store(toggle.id, toggle_data)
-      expect(subject.instance_variable_get(:@toggles)[toggle.id])
-        .to eq(toggle_data)
+      expect(subject.get(toggle.id)).to eq({ 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id })
     end
-  end
 
-  describe "#get" do
-    it "return toggle data identified by an id" do
-      toggles = subject.instance_variable_get(:@toggles)
-      toggles["some_id"] = 'hoopty doopty'
-      expect(subject.get("some_id")).to eq('hoopty doopty')
+    context 'when attempting to retrieve a non stored value' do
+      it 'returns nil' do
+        expect(subject.get('non_existent_key')).to be_nil
+      end
     end
   end
 
   describe "#all" do
     it "returns the collection of toggles" do
-      toggles = subject.instance_variable_get(:@toggles)
-      expect(subject.all).to eq(toggles)
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      toggle = Togls::Toggle.new(feature)
+      toggle_data = { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
+      subject.store(toggle.id, toggle_data)
+      expect(subject.all).to eq({"some_feature_key"=>{"feature_id"=>toggle.feature.id, "rule_id"=>toggle.rule.id}})
     end
   end
 end

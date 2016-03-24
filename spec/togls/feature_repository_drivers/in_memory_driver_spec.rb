@@ -12,19 +12,17 @@ describe Togls::FeatureRepositoryDrivers::InMemoryDriver do
     end
   end
 
-  describe "#store" do
-    it "saves the storage payload" do
+  describe "storing and retrieving" do
+    it "saves and retrieves the storage payload" do
       feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
-      subject.store(feature.id, { "key" => "some_feature_key", "description" => "Some Feature Desc" })
-      expect(subject.instance_variable_get(:@features)["some_feature_key"]).to eq({ "key" => "some_feature_key", "description" => "Some Feature Desc" })
+      subject.store(feature.id, { "key" => feature.key, "description" => feature.description })
+      expect(subject.get(feature.id)).to eq({ "key" => feature.key, "description" => feature.description })
     end
-  end
 
-  describe "#get" do
-    it "return feature data identified by an id" do
-      features = subject.instance_variable_get(:@features)
-      features["some_id"] = 'hoopty doopty'
-      expect(subject.get("some_id")).to eq('hoopty doopty')
+    context 'when attempting to retrieve a non stored value' do
+      it 'returns nil' do
+        expect(subject.get('non_existent_key')).to be_nil
+      end
     end
   end
 end

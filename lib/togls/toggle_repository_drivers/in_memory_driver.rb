@@ -14,20 +14,26 @@ module Togls
 
       def store(toggle_id, toggle_data)
         @toggles_lock.synchronize do
-          @toggles[toggle_id] = toggle_data
+          @toggles[toggle_id] = Marshal.dump(toggle_data)
         end
       end
 
       def get(toggle_id)
         @toggles_lock.synchronize do
-          @toggles[toggle_id]
+          if @toggles.has_key?(toggle_id)
+            Marshal.load(@toggles[toggle_id])
+          else
+            nil
+          end
         end
       end
 
       def all
+        result = {}
         @toggles_lock.synchronize do
-          @toggles
+          @toggles.each_pair { |k, v| result[k] = Marshal.load(v) }
         end
+        result
       end
     end
   end
