@@ -14,13 +14,8 @@ module Togls
     # FeatureToggleRegistryManager is included.
     module ClassMethods
       def features(&block)
-        if @feature_toggle_registry.nil?
-          @feature_toggle_registry = FeatureToggleRegistry.new
-        end
-
-        @feature_toggle_registry.expand(&block) if block
-
-        @feature_toggle_registry
+        feature_toggle_registry.expand(&block) if block
+        feature_toggle_registry
       end
 
       def features=(feature_toggle_registry)
@@ -28,15 +23,20 @@ module Togls
       end
 
       def feature(key)
-        if @feature_toggle_registry.nil?
-          @feature_toggle_registry = FeatureToggleRegistry.new
-        end
-
-        @feature_toggle_registry.get(key)
+        feature_toggle_registry.get(key)
       end
 
       def logger
         @logger ||= Logger.new(STDOUT)
+      end
+
+      private
+
+      def feature_toggle_registry
+        if @feature_toggle_registry.nil?
+          @feature_toggle_registry = FeatureToggleRegistry.new
+        end
+        @feature_toggle_registry
       end
     end
   end
