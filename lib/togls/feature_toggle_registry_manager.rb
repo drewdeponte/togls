@@ -1,17 +1,17 @@
 module Togls
-  # Release Toggle Registry Manager
+  # Feature Toggle Registry Manager
   #
   # This is the primary DSL interface. It provides a DSL to facilitate housing
   # and managing a toggle registry.
-  module ReleaseToggleRegistryManager
+  module FeatureToggleRegistryManager
     def self.included(mod)
       mod.extend(ClassMethods)
     end
 
-    # Release Toggle Registry Manager Class Methods
+    # Feature Toggle Registry Manager Class Methods
     #
     # The class methods that should be extended onto the module/class when
-    # ReleaseToggleRegistryManager is included.
+    # FeatureToggleRegistryManager is included.
     module ClassMethods
       def features(&block)
         if @feature_toggle_registry.nil?

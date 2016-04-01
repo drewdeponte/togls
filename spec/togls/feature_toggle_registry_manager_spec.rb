@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Togls::ReleaseToggleRegistryManager do
-  let(:klass) { Class.new { include Togls::ReleaseToggleRegistryManager } }
+describe Togls::FeatureToggleRegistryManager do
+  let(:klass) { Class.new { include Togls::FeatureToggleRegistryManager } }
 
   describe ".features" do
     context "when features have NOT been defined" do

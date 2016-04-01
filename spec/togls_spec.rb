@@ -165,7 +165,7 @@ off - test3 - test3 readable description
       end
 
       klass = Class.new do
-        include Togls::ReleaseToggleRegistryManager
+        include Togls::FeatureToggleRegistryManager
       end
 
       klass.features do
