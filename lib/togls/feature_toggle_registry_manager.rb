@@ -34,9 +34,17 @@ module Togls
 
       def feature_toggle_registry
         if @feature_toggle_registry.nil?
-          @feature_toggle_registry = FeatureToggleRegistry.new
+          @feature_toggle_registry = FeatureToggleRegistry.new(feature_repository)
         end
         @feature_toggle_registry
+      end
+
+      def feature_repository
+        if @feature_repository.nil?
+          feature_repository_drivers = [Togls::FeatureRepositoryDrivers::InMemoryDriver.new]
+          @feature_repository = Togls::FeatureRepository.new(feature_repository_drivers)
+        end
+        @feature_repository
       end
     end
   end

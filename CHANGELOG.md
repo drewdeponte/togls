@@ -6,6 +6,7 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Changed: FeatureRepository moved from Registry to Registry Manager 
 * Changed: `TestToggleRegistry.new` to accept optional block
 * Changed: `FeatureToggleRegistry.new` to accept optional block
 * Removed: `FeatureToggleRegistry.create` and `TestToggleRegistry.create`
