@@ -6,6 +6,10 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Changed: `TestToggleRegistry.new` to accept optional block
+* Changed: `FeatureToggleRegistry.new` to accept optional block
+* Removed: `FeatureToggleRegistry.create` and `TestToggleRegistry.create`
+
 ### v2.2.1
 
 * Added: in-memory driver `set`, `get`, `all` Marshaling to correct a threading

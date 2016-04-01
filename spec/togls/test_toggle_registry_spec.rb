@@ -126,37 +126,25 @@ describe Togls::TestToggleRegistry do
       expect(rule_repository).to receive(:store).with(boolean_true_rule)
       subject
     end
-  end
 
-  describe ".create" do
-    subject { Togls::TestToggleRegistry }
+    context 'when given a block' do
+      subject { Togls::TestToggleRegistry }
 
-    it "creates a new instance of a feature toggle registry" do
-      registry = double('registry')
-      expect(subject).to receive(:new).and_return(registry)
-      b = Proc.new {}
-      subject.create(&b)
-    end
-
-    context "when block given" do
-      it "calls instance eval with the passed block" do
-        registry = double('registry')
-        allow(subject).to receive(:new).and_return(registry)
+      it "creates a new instance of a feature toggle registry" do
         b = Proc.new {}
-        expect(registry).to receive(:instance_eval).and_yield(&b)
-        subject.create(&b)
+        subject.new(&b)
       end
-    end
 
-    it "returns a configured feature registry object" do
-      b = Proc.new {}
-      expect(subject.create(&b)).to be_a(subject)
+      it "returns a configured feature registry object" do
+        b = Proc.new {}
+        expect(subject.new(&b)).to be_a(subject)
+      end
     end
   end
 
   describe "#expand" do
     it "instance evals the provided block" do
-      registry = Togls::TestToggleRegistry.create do
+      registry = Togls::TestToggleRegistry.new do
         feature(:foo, "some description").on
       end
 
@@ -167,7 +155,7 @@ describe Togls::TestToggleRegistry do
     end
 
     it "returns the feature toggle repository" do
-      registry = Togls::TestToggleRegistry.create do
+      registry = Togls::TestToggleRegistry.new do
         feature(:foo, "some description").on
       end
 
