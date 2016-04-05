@@ -18,10 +18,6 @@ module Togls
         feature_toggle_registry
       end
 
-      def features=(feature_toggle_registry)
-        @feature_toggle_registry = feature_toggle_registry
-      end
-
       def feature(key)
         feature_toggle_registry.get(key)
       end
@@ -30,7 +26,20 @@ module Togls
         @logger ||= Logger.new(STDOUT)
       end
 
+      def enable_test_mode
+        @previous_feature_toggle_registry = @feature_toggle_registry
+        @feature_toggle_registry = test_toggle_registry
+      end
+
+      def disable_test_mode
+        @feature_toggle_registry = @previous_feature_toggle_registry
+      end
+
       private
+
+      def test_toggle_registry
+        TestToggleRegistry.new(feature_repository)
+      end
 
       def feature_toggle_registry
         if @feature_toggle_registry.nil?

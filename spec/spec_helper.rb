@@ -7,7 +7,7 @@ require 'togls'
 require 'pry'
 
 RSpec.configure do |c|
-  c.before(:example) do
-    Togls.features = nil
+  c.before(:each) do
+    Togls.instance_variable_set(:@feature_toggle_registry, nil)
   end
 end
