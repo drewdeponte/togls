@@ -108,18 +108,6 @@ describe Togls::FeatureToggleRegistry do
       expect(rule_repository).to receive(:store).with(boolean_true_rule)
       subject
     end
-
-    context 'when given a block' do
-      it "creates a new instance of a feature toggle registry" do
-        b = Proc.new {}
-        Togls::FeatureToggleRegistry.new(feature_repository, &b)
-      end
-
-      it "returns a configured feature registry object" do
-        b = Proc.new {}
-        expect(Togls::FeatureToggleRegistry.new(feature_repository, &b)).to be_a(Togls::FeatureToggleRegistry)
-      end
-    end
   end
 
   describe "#expand" do
