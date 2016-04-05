@@ -38,7 +38,7 @@ module Togls
       private
 
       def test_toggle_registry
-        TestToggleRegistry.new(feature_repository)
+        TestToggleRegistry.new
       end
 
       def feature_toggle_registry

@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe Togls::TestToggleRegistry do
-  let!(:feature_repository) { Togls::FeatureRepository.new([Togls::FeatureRepositoryDrivers::InMemoryDriver.new]) }
-  subject { Togls::TestToggleRegistry.new(feature_repository) }
+  subject { Togls::TestToggleRegistry.new }
 
   describe "#initalize" do
     it "constructs the ToggleRepository InMemoryDriver" do
@@ -14,6 +13,18 @@ describe Togls::TestToggleRegistry do
       driver_one = double('driver in memory')
       allow(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver_one)
       expect(subject.instance_variable_get(:@toggle_repository_drivers)).to eq([driver_one])
+    end
+
+    it "constructs the FeatureRepository InMemoryDriver" do
+      expect(Togls::FeatureRepositoryDrivers::InMemoryDriver).to receive(:new)
+      subject
+    end
+
+    it "assigns the feature repository drivers" do
+      driver = double('driver')
+      allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
+      allow(Togls::FeatureRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
+      expect(subject.instance_variable_get(:@feature_repository_drivers)).to eq([driver])
     end
 
     it "constructs the RuleRepository InMemoryDriver" do
@@ -28,6 +39,20 @@ describe Togls::TestToggleRegistry do
       allow(Togls::RuleRepository).to receive(:new).and_return(double.as_null_object)
       allow(Togls::RuleRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver_one)
       expect(subject.instance_variable_get(:@rule_repository_drivers)).to eq([driver_one])
+    end
+
+    it "constructs a feature repository" do
+      allow(Togls::FeatureRepository).to receive(:new)
+      driver = double('driver')
+      allow(Togls::FeatureRepositoryDrivers::InMemoryDriver).to receive(:new).and_return(driver)
+      subject
+      expect(Togls::FeatureRepository).to have_received(:new).with([driver])
+    end
+
+    it "assigns the constructed feature repository" do
+      feature_repository = double('feature repository')
+      allow(Togls::FeatureRepository).to receive(:new).and_return(feature_repository)
+      expect(subject.instance_variable_get(:@feature_repository)).to eq(feature_repository)
     end
 
     it "constructs a rule repository" do
@@ -47,6 +72,8 @@ describe Togls::TestToggleRegistry do
 
     it "constructs a toggle repository" do
       allow(Togls::ToggleRepository).to receive(:new)
+      feature_repository = double('feature repository')
+      allow(Togls::FeatureRepository).to receive(:new).and_return(feature_repository)
       rule_repository = double('rule repository').as_null_object
       allow(Togls::RuleRepository).to receive(:new).and_return(rule_repository)
       driver_one = double('driver in memory')
@@ -99,11 +126,25 @@ describe Togls::TestToggleRegistry do
       expect(rule_repository).to receive(:store).with(boolean_true_rule)
       subject
     end
+
+    context 'when given a block' do
+      subject { Togls::TestToggleRegistry }
+
+      it "creates a new instance of a feature toggle registry" do
+        b = Proc.new {}
+        subject.new(&b)
+      end
+
+      it "returns a configured feature registry object" do
+        b = Proc.new {}
+        expect(subject.new(&b)).to be_a(subject)
+      end
+    end
   end
 
   describe "#expand" do
     it "instance evals the provided block" do
-      registry = Togls::TestToggleRegistry.new(feature_repository)
+      registry = Togls::TestToggleRegistry.new
       registry.expand do
         feature(:foo, "some description").on
       end
@@ -115,7 +156,7 @@ describe Togls::TestToggleRegistry do
     end
 
     it "returns the feature toggle repository" do
-      registry = Togls::TestToggleRegistry.new(feature_repository)
+      registry = Togls::TestToggleRegistry.new
       registry.expand do
         feature(:foo, "some description").on
       end
