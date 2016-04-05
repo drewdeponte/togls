@@ -11,6 +11,7 @@ versions, as well as provide a rough history.
 * Removed: `features=` setter
 * Changed: `FeatureRepository` moved from `Registry` to `RegistryManager` 
 * Removed: `FeatureToggleRegistry.create` and `TestToggleRegistry.create`
+* Changed: `ReleaseToggleRegistryManager` to `FeatureToggleRegistryManager`
 
 ### v2.2.1
 
