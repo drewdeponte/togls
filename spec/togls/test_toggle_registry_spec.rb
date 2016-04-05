@@ -144,7 +144,8 @@ describe Togls::TestToggleRegistry do
 
   describe "#expand" do
     it "instance evals the provided block" do
-      registry = Togls::TestToggleRegistry.new do
+      registry = Togls::TestToggleRegistry.new
+      registry.expand do
         feature(:foo, "some description").on
       end
 
@@ -155,7 +156,8 @@ describe Togls::TestToggleRegistry do
     end
 
     it "returns the feature toggle repository" do
-      registry = Togls::TestToggleRegistry.new do
+      registry = Togls::TestToggleRegistry.new
+      registry.expand do
         feature(:foo, "some description").on
       end
 

@@ -55,7 +55,8 @@ describe "Togl" do
 
   describe "set the feature toggle registry" do
     it "uses the specified feature toggle registry" do
-      Togls.features = Togls::TestToggleRegistry.new do
+      Togls.features = Togls::TestToggleRegistry.new
+      Togls.features do
         feature(:foo, "some magic foo").on
       end
 

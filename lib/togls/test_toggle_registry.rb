@@ -7,7 +7,7 @@ module Togls
   # this registry only uses in-memory drivers and the FeatureToggleRegistry uses
   # in-memory drivers as well as the environment override drivers.
   class TestToggleRegistry < FeatureToggleRegistry
-    def initialize(&block)
+    def initialize
       @toggle_repository_drivers = [
         Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
       @feature_repository_drivers =
@@ -21,7 +21,6 @@ module Togls
         @toggle_repository_drivers, @feature_repository, @rule_repository)
       @rule_repository.store(Togls::Rules::Boolean.new(true))
       @rule_repository.store(Togls::Rules::Boolean.new(false))
-      self.instance_eval(&block) if block_given?
     end
   end
 end
