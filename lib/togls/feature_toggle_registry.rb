@@ -8,7 +8,6 @@ module Togls
   # well.
   class FeatureToggleRegistry
     def initialize(feature_repository, &block)
-      @feature_repository = feature_repository
       @toggle_repository_drivers = [
         Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
         Togls::ToggleRepositoryDrivers::EnvOverrideDriver.new]
@@ -16,7 +15,7 @@ module Togls
         [Togls::RuleRepositoryDrivers::InMemoryDriver.new]
       @rule_repository = Togls::RuleRepository.new(@rule_repository_drivers)
       @toggle_repository = Togls::ToggleRepository.new(
-        @toggle_repository_drivers, @feature_repository, @rule_repository)
+        @toggle_repository_drivers, feature_repository, @rule_repository)
       @rule_repository.store(Togls::Rules::Boolean.new(true))
       @rule_repository.store(Togls::Rules::Boolean.new(false))
       self.instance_eval(&block) if block_given?
