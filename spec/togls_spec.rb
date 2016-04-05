@@ -139,6 +139,19 @@ describe "Togl" do
     end
   end
 
+  describe "handeling errors" do
+    it "has a base error for all Togl errors for rescuing" do
+      foo = Class.new do
+        def self.bar
+          raise Togls::NoFeaturesError
+        rescue Togls::Error => e
+          return "it was rescued"
+        end
+      end
+      expect(foo.bar).to eql "it was rescued"
+    end
+  end
+
   describe "reviewing feature toggle" do
     it "outputs all the features" do
       Togls.features do

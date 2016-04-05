@@ -12,6 +12,7 @@ versions, as well as provide a rough history.
 * Changed: `FeatureRepository` moved from `Registry` to `RegistryManager` 
 * Removed: `FeatureToggleRegistry.create` and `TestToggleRegistry.create`
 * Changed: `ReleaseToggleRegistryManager` to `FeatureToggleRegistryManager`
+* Added: Base Error class for Togls exceptions
 
 ### v2.2.1
 
