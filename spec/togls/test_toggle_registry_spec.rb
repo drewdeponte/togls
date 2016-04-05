@@ -131,9 +131,6 @@ describe Togls::TestToggleRegistry do
   describe "#expand" do
     it "instance evals the provided block" do
       registry = Togls::TestToggleRegistry.new
-      registry.expand do
-        feature(:foo, "some description").on
-      end
 
       expect(registry).to receive(:instance_eval)
       registry.expand do
@@ -143,9 +140,6 @@ describe Togls::TestToggleRegistry do
 
     it "returns the feature toggle repository" do
       registry = Togls::TestToggleRegistry.new
-      registry.expand do
-        feature(:foo, "some description").on
-      end
 
       block = Proc.new {}
       expect(registry.expand(&block)).to eq(registry)
