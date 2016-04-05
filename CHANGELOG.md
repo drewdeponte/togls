@@ -6,6 +6,13 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Added: `FeatureToggleRegistryManager` methods, `enable_test_mode` &
+  `disable_test_mode`
+* Removed: `features=` setter
+* Changed: `FeatureRepository` moved from `Registry` to `RegistryManager` 
+* Removed: `FeatureToggleRegistry.create` and `TestToggleRegistry.create`
+* Changed: `ReleaseToggleRegistryManager` to `FeatureToggleRegistryManager`
+
 ### v2.2.1
 
 * Added: in-memory driver `set`, `get`, `all` Marshaling to correct a threading

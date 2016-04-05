@@ -55,7 +55,8 @@ describe "Togl" do
 
   describe "set the feature toggle registry" do
     it "uses the specified feature toggle registry" do
-      Togls.features = Togls::FeatureToggleRegistry.create do
+      Togls.enable_test_mode
+      Togls.features do
         feature(:foo, "some magic foo").on
       end
 
@@ -165,7 +166,7 @@ off - test3 - test3 readable description
       end
 
       klass = Class.new do
-        include Togls::ReleaseToggleRegistryManager
+        include Togls::FeatureToggleRegistryManager
       end
 
       klass.features do
