@@ -11,6 +11,7 @@ that you can set version constraints properly.
 #### [Unreleased] - now
 
 * `Removed`: `features` rake task
+  ([#48](https://github.com/codebreakdown/togls/issues/48))
 * `Added`: `test_mode` block style method
   ([#44](https://github.com/codebreakdown/togls/issues/44))
 * `Changed`: `Togls.features` to `Togls.release`
