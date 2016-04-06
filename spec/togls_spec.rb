@@ -66,12 +66,12 @@ describe "Togl" do
 
   describe 'isolating toggles using test mode' do
     it 'stores, isolates, and recovers the toggles' do
-      Togls.features do
+      Togls.release do
         feature(:foo, 'some foo feature').on
       end
 
       Togls.test_mode do
-        Togls.features do
+        Togls.release do
           feature(:zar, 'some zar feature').on
         end
 
