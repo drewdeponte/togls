@@ -6,6 +6,7 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Romeved: `features` rake task
 * Added: `test_mode` block style method
 * Changed: `Togls.features` to `Togls.release`
 * Changed: Renamed `FeatureToggleRegistry` to `ReleaseToggleRegistry`
