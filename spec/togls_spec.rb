@@ -171,26 +171,6 @@ describe "Togl" do
     end
   end
 
-  describe "reviewing feature toggle" do
-    it "outputs all the features" do
-      Togls.release do
-        feature(:test1, "test1 readable description").on
-        feature(:test2, "test2 readable description").off
-        feature(:test3, "test3 readable description")
-        feature(:test4, "test4 readable description").on(Togls::Rules::Boolean.new(true))
-      end
-
-      require 'rake'
-      load 'lib/tasks/togls.rake'
-
-      expect { Rake::Task["togls:features"].invoke }.to output(%q{ on - test1 - test1 readable description
-off - test2 - test2 readable description
-off - test3 - test3 readable description
- on - test4 - test4 readable description
-}).to_stdout
-    end
-  end
-
   describe "defining feature toggles in additional registry" do
     it "creates an isolated registred with a feature toggled off" do
       Togls.release do
