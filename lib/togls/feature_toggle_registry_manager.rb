@@ -14,12 +14,12 @@ module Togls
     # FeatureToggleRegistryManager is included.
     module ClassMethods
       def features(&block)
-        feature_toggle_registry.expand(&block) if block
-        feature_toggle_registry
+        release_toggle_registry.expand(&block) if block
+        release_toggle_registry
       end
 
       def feature(key)
-        feature_toggle_registry.get(key)
+        release_toggle_registry.get(key)
       end
 
       def logger
@@ -27,12 +27,12 @@ module Togls
       end
 
       def enable_test_mode
-        @previous_feature_toggle_registry = @feature_toggle_registry
-        @feature_toggle_registry = test_toggle_registry
+        @previous_release_toggle_registry = @release_toggle_registry
+        @release_toggle_registry = test_toggle_registry
       end
 
       def disable_test_mode
-        @feature_toggle_registry = @previous_feature_toggle_registry
+        @release_toggle_registry = @previous_release_toggle_registry
       end
 
       private
@@ -41,11 +41,11 @@ module Togls
         TestToggleRegistry.new
       end
 
-      def feature_toggle_registry
-        if @feature_toggle_registry.nil?
-          @feature_toggle_registry = FeatureToggleRegistry.new(feature_repository)
+      def release_toggle_registry
+        if @release_toggle_registry.nil?
+          @release_toggle_registry = ReleaseToggleRegistry.new(feature_repository)
         end
-        @feature_toggle_registry
+        @release_toggle_registry
       end
 
       def feature_repository

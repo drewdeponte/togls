@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Togls::FeatureToggleRegistry do
+describe Togls::ReleaseToggleRegistry do
   let!(:feature_repository) { Togls::FeatureRepository.new([Togls::FeatureRepositoryDrivers::InMemoryDriver.new]) }
-  subject { Togls::FeatureToggleRegistry.new(feature_repository) }
+  subject { Togls::ReleaseToggleRegistry.new(feature_repository) }
 
   describe "#initalize" do
     it "constructs the ToggleRepository InMemoryDriver" do
@@ -112,7 +112,7 @@ describe Togls::FeatureToggleRegistry do
 
   describe "#expand" do
     it "instance evals the provided block" do
-      registry = Togls::FeatureToggleRegistry.new(feature_repository)
+      registry = Togls::ReleaseToggleRegistry.new(feature_repository)
 
       expect(registry).to receive(:instance_eval)
       registry.expand do
@@ -121,7 +121,7 @@ describe Togls::FeatureToggleRegistry do
     end
 
     it "returns the feature toggle repository" do
-      registry = Togls::FeatureToggleRegistry.new(feature_repository)
+      registry = Togls::ReleaseToggleRegistry.new(feature_repository)
 
       block = Proc.new {}
       expect(registry.expand(&block)).to eq(registry)
