@@ -34,7 +34,7 @@ module Togls
     end
 
     def verify_uniqueness_of_feature(key)
-      if @feature_repository.exist?(key.to_s)
+      if @feature_repository.include?(key.to_s)
         raise FeatureAlreadyDefined, "Feature identified by '#{key}' has already been defined"
       end
     end

@@ -45,7 +45,6 @@ describe "Togl" do
 
         expect {
           Togls.release do
-            puts 'defining again'
             feature(:foo, 'previously defined')
           end
         }.to raise_error Togls::FeatureAlreadyDefined

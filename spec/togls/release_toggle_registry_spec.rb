@@ -192,7 +192,7 @@ describe Togls::ReleaseToggleRegistry do
   describe "#verify_uniqueness_of_feature" do
     context "when the feature exists" do
       it "raises a feature has already been defined error" do
-        allow(feature_repository).to receive(:exist?).and_return true
+        allow(feature_repository).to receive(:include?).and_return true
         expect { subject.verify_uniqueness_of_feature(:some_key) }
           .to raise_error Togls::FeatureAlreadyDefined, "Feature identified by 'some_key' has already been defined"
       end
@@ -200,7 +200,7 @@ describe Togls::ReleaseToggleRegistry do
 
     context "when the feature doesn't exist" do
       it "does NOT raise a exception" do
-        allow(feature_repository).to receive(:exist?).and_return false
+        allow(feature_repository).to receive(:include?).and_return false
         expect { subject.verify_uniqueness_of_feature(:some_key) }.not_to raise_error
       end
     end

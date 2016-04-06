@@ -132,23 +132,23 @@ describe Togls::FeatureRepository do
     end
   end
 
-  describe "#exist?" do
+  describe "#include?" do
     it "fetches the feature data from the drivers" do
       expect(subject).to receive(:fetch_feature_data).with("some_id")
-      subject.exist?("some_id")
+      subject.include?("some_id")
     end
 
     context "when feature data is fetched" do
       it "returns true" do
         allow(subject).to receive(:fetch_feature_data).and_return({ "some": "data" })
-        expect(subject.exist?("some_id")).to be_truthy
+        expect(subject.include?("some_id")).to be_truthy
       end
     end
 
     context "when feature data can't be found" do
       it "returns false" do
         allow(subject).to receive(:fetch_feature_data).and_return(nil)
-        expect(subject.exist?("some_id")).to be_falsey
+        expect(subject.include?("some_id")).to be_falsey
       end
     end
   end

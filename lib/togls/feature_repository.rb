@@ -34,7 +34,7 @@ module Togls
       feature_data
     end
 
-    def exist?(feature_id)
+    def include?(feature_id)
       result = fetch_feature_data(feature_id)
       result.nil? ? false : true
     end
