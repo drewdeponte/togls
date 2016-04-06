@@ -80,4 +80,24 @@ describe Togls::FeatureToggleRegistryManager do
         eq(test_registry)
     end
   end
+
+  describe '.test_mode' do
+    it 'enables test mode' do
+      allow(klass).to receive(:disable_test_mode)
+      expect(klass).to receive(:enable_test_mode)
+      klass.test_mode {}
+    end
+
+    it 'yields the provided block' do
+      allow(klass).to receive(:enable_test_mode)
+      allow(klass).to receive(:disable_test_mode)
+      expect { |b| klass.test_mode(&b) }.to yield_control
+    end
+
+    it 'disables test mode' do
+      allow(klass).to receive(:enable_test_mode)
+      expect(klass).to receive(:disable_test_mode)
+      klass.test_mode {}
+    end
+  end
 end
