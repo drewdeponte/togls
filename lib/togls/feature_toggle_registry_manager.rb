@@ -35,6 +35,12 @@ module Togls
         @release_toggle_registry = @previous_release_toggle_registry
       end
 
+      def test_mode
+        enable_test_mode
+        yield
+        disable_test_mode
+      end
+
       private
 
       def test_toggle_registry

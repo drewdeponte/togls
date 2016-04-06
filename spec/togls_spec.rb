@@ -64,6 +64,25 @@ describe "Togl" do
     end
   end
 
+  describe 'isolating toggles using test mode' do
+    it 'stores, isolates, and recovers the toggles' do
+      Togls.features do
+        feature(:foo, 'some foo feature').on
+      end
+
+      Togls.test_mode do
+        Togls.features do
+          feature(:zar, 'some zar feature').on
+        end
+
+        expect(Togls.feature(:foo).on?).to eq(false)
+        expect(Togls.feature(:zar).on?).to eq(true)
+      end
+
+      expect(Togls.feature(:foo).on?).to eq(true)
+    end
+  end
+
   describe "evaluating feature toggles" do
     it "asks a feature if it is on" do
       Togls.release do
