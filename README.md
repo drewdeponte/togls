@@ -50,7 +50,7 @@ The following, `config/initializers/togls_features.rb`, is an example of
 how one would define some basic feature toggles.
 
 ```ruby
-Togls.features do
+Togls.release do
   # Set this feature to always be on
   feature(:pop_up_login_form, "use pop up login instead of normal login").on 
 
@@ -95,7 +95,7 @@ feature toggle in all caps with `TOGLS_` prefixed to it. For example if
 we had the following feature toggle defined.
 
 ```ruby
-Togls.features do
+Togls.release do
   # Set this feature to always be on
   feature(:pop_up_login_form, "use pop up login instead of normal login").on
 end
@@ -131,7 +131,7 @@ based on group membership.
 alpha_testers = Togls::Rules::Group.new(["user1@email.com",
                                          "user2@example.com"])
 
-Togls.features do
+Togls.release do
   feature(:new_contact_form, "use new contact form").on(alpha_testers)
 end
 ```
@@ -183,7 +183,7 @@ in the example above and it would look something like the following:
 # the group.
 alpha_testers = Togls::Rules::Group.new([1, 23, 42, 83])
 
-Togls.features do
+Togls.release do
   feature(:new_contact_form, "use new contact form").on(alpha_testers)
 end
 ```
@@ -207,14 +207,17 @@ including details of advanced usage in the `README.md` as to not
 overwhelm people on first impression. For more details on some of the
 more advanced features feel free to check out our
 [Wiki](https://github.com/codebreakdown/togls/wiki). Just a few of the
-many things it contains are [Provided Rules
+many things it contains are
+[Testing with
+Toggles](https://github.com/codebreakdown/togls/wiki/Testing-with-Toggles),
+[Provided Rules
 Reference](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference),
 [Custom
 Rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules),
-[Review Feature
-Toggles](https://github.com/codebreakdown/togls/wiki/Review-Feature-Toggles),
-[Testing with
-Toggles](https://github.com/codebreakdown/togls/wiki/Testing-with-Toggles)
+[Organize Toggle
+Definitions](https://github.com/codebreakdown/togls/wiki/Organize-Toggle-Definitions),
+[Creating Additional Toggle
+Registries](https://github.com/codebreakdown/togls/wiki/Create-Additional-Toggle-Registries),
 etc.
 
 ## Development
