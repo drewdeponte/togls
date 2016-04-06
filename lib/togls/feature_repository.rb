@@ -34,6 +34,11 @@ module Togls
       feature_data
     end
 
+    def include?(feature_id)
+      result = fetch_feature_data(feature_id)
+      result.nil? ? false : true
+    end
+
     def get(feature_id)
       feature_data = fetch_feature_data(feature_id)
       reconstitute_feature(feature_data)

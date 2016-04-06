@@ -27,6 +27,9 @@ that you can set version constraints properly.
 * `Changed`: `ReleaseToggleRegistryManager` to `FeatureToggleRegistryManager`
 * `Added`: Base Error class for Togls exceptions
   ([#39](https://github.com/codebreakdown/togls/issues/39))
+* `Added`: Exception for when a feature has already been defined in the feature
+  repository
+  ([#42](https://github.com/codebreakdown/togls/issues/42))
 
 #### [v2.2.1] - 2016-03-24
 

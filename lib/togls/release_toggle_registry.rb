@@ -7,6 +7,7 @@ module Togls
   # entities. This plays a significant portion in the primary DSL as well.
   class ReleaseToggleRegistry
     def initialize(feature_repository)
+      @feature_repository = feature_repository
       @toggle_repository_drivers = [
         Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
         Togls::ToggleRepositoryDrivers::EnvOverrideDriver.new]
@@ -14,7 +15,7 @@ module Togls
         [Togls::RuleRepositoryDrivers::InMemoryDriver.new]
       @rule_repository = Togls::RuleRepository.new(@rule_repository_drivers)
       @toggle_repository = Togls::ToggleRepository.new(
-        @toggle_repository_drivers, feature_repository, @rule_repository)
+        @toggle_repository_drivers, @feature_repository, @rule_repository)
       @rule_repository.store(Togls::Rules::Boolean.new(true))
       @rule_repository.store(Togls::Rules::Boolean.new(false))
     end
@@ -25,10 +26,17 @@ module Togls
     end
 
     def feature(key, desc)
+      verify_uniqueness_of_feature(key)
       feature = Togls::Feature.new(key, desc)
       toggle = Togls::Toggle.new(feature)
       @toggle_repository.store(toggle)
       Togls::Toggler.new(@toggle_repository, toggle)
+    end
+
+    def verify_uniqueness_of_feature(key)
+      if @feature_repository.include?(key.to_s)
+        raise FeatureAlreadyDefined, "Feature identified by '#{key}' has already been defined"
+      end
     end
 
     def get(key)

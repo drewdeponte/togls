@@ -4,4 +4,5 @@ module Togls
   class MissingDriver < Error; end
   class InvalidDriver < Error; end
   class NotImplemented < Error; end
+  class FeatureAlreadyDefined < Error; end
 end
