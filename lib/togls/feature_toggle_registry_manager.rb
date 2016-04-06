@@ -13,7 +13,7 @@ module Togls
     # The class methods that should be extended onto the module/class when
     # FeatureToggleRegistryManager is included.
     module ClassMethods
-      def features(&block)
+      def release(&block)
         release_toggle_registry.expand(&block) if block
         release_toggle_registry
       end
