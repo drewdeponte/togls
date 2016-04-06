@@ -1,12 +1,11 @@
 module Togls
-  # Feature Toggle Registry
+  # Release Toggle Registry
   #
-  # The Feature Toggle Registry conceptually houses a registry of toggles. It
-  # accomplishes this by technically housing a toggle repository, rule
-  # repository, and feature repository which is uses to store and retrieve the
-  # respective entities. This plays a significant portion in the primary DSL as
-  # well.
-  class FeatureToggleRegistry
+  # The Release Toggle Registry conceptually houses a registry of toggles. It
+  # accomplishes this by technically housing a toggle repository, and a rule
+  # repository which it uses to store and retrieve the respective
+  # entities. This plays a significant portion in the primary DSL as well.
+  class ReleaseToggleRegistry
     def initialize(feature_repository)
       @toggle_repository_drivers = [
         Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
