@@ -5,6 +5,11 @@ describe Togls::ReleaseToggleRegistry do
   subject { Togls::ReleaseToggleRegistry.new(feature_repository) }
 
   describe "#initalize" do
+    it "saves the given feature repository" do
+      repository = subject.instance_variable_get(:@feature_repository)
+      expect(repository).to eql feature_repository
+    end
+
     it "constructs the ToggleRepository InMemoryDriver" do
       expect(Togls::ToggleRepositoryDrivers::InMemoryDriver).to receive(:new)
       subject
@@ -129,6 +134,11 @@ describe Togls::ReleaseToggleRegistry do
   end
 
   describe "#feature" do
+    it "verifies that the feature is unique" do
+      expect(subject).to receive(:verify_uniqueness_of_feature).with(:some_key)
+      subject.feature(:some_key, "description")
+    end
+
     it "creates a new feature object with the passed key" do
       desc = double('feature desc')
       key = "some_key"
@@ -176,6 +186,23 @@ describe Togls::ReleaseToggleRegistry do
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
       allow(Togls::Toggler).to receive(:new).and_return(toggler)
       expect(subject.feature(key, desc)).to eq(toggler)
+    end
+  end
+
+  describe "#verify_uniqueness_of_feature" do
+    context "when the feature exists" do
+      it "raises a feature has already been defined error" do
+        allow(feature_repository).to receive(:exist?).and_return true
+        expect { subject.verify_uniqueness_of_feature(:some_key) }
+          .to raise_error Togls::FeatureAlreadyDefined, "Feature identified by 'some_key' has already been defined"
+      end
+    end
+
+    context "when the feature doesn't exist" do
+      it "does NOT raise a exception" do
+        allow(feature_repository).to receive(:exist?).and_return false
+        expect { subject.verify_uniqueness_of_feature(:some_key) }.not_to raise_error
+      end
     end
   end
 

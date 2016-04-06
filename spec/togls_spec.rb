@@ -36,6 +36,21 @@ describe "Togl" do
       expect(Togls.feature(:test).on?("someone")).to eq(true)
       expect(Togls.feature(:test).on?("someone_else")).to eq(false)
     end
+
+    context 'when redefining an existing feature' do
+      it 'raises an already defined error' do
+        Togls.release do
+          feature(:foo, 'some decription')
+        end
+
+        expect {
+          Togls.release do
+            puts 'defining again'
+            feature(:foo, 'previously defined')
+          end
+        }.to raise_error Togls::FeatureAlreadyDefined
+      end
+    end
   end
 
   describe "expanding feature toggles" do
