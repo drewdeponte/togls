@@ -6,6 +6,7 @@ versions, as well as provide a rough history.
 
 #### Next Release
 
+* Changed: `Togls.features` to `Togls.release`
 * Changed: Renamed `FeatureToggleRegistry` to `ReleaseToggleRegistry`
 * Added: `FeatureToggleRegistryManager` methods, `enable_test_mode` &
   `disable_test_mode`

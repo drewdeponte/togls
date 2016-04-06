@@ -7,23 +7,23 @@ describe Togls::FeatureToggleRegistryManager do
     context "when features have NOT been defined" do
       it "creates a new empty release toggle registry" do
         expect(Togls::ReleaseToggleRegistry).to receive(:new)
-        klass.features
+        klass.release
       end
     end
 
     context "when given a block" do
       it "expands the feature registry with a new block" do
-        registry = klass.features
+        registry = klass.release
         b = Proc.new {}
         expect(registry).to receive(:expand).and_yield(&b)
-        klass.features(&b)
+        klass.release(&b)
       end
     end
 
     it "returns the release toggle registry" do
       release_toggle_registry = double('release toggle registry')
       allow(Togls::ReleaseToggleRegistry).to receive(:new).and_return(release_toggle_registry)
-      expect(klass.features).to eq(release_toggle_registry)
+      expect(klass.release).to eq(release_toggle_registry)
     end
   end
 

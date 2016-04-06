@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe "Togl" do
-  describe "defining feature toggles" do
+  describe "defining release toggles" do
     it "creates a new feature toggled on" do
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").on
       end
 
@@ -11,7 +11,7 @@ describe "Togl" do
     end
 
     it "creates a new feature toggled off" do
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").off
       end
 
@@ -19,7 +19,7 @@ describe "Togl" do
     end
 
     it "creates a new feature with a rule" do
-      Togls.features do
+      Togls.release do
         rule = Togls::Rules::Boolean.new(false)
         feature(:test, "some human readable description").on(rule)
       end
@@ -28,7 +28,7 @@ describe "Togl" do
     end
 
     it "creates a new feature with a group" do
-      Togls.features do
+      Togls.release do
         rule = Togls::Rules::Group.new(["someone"])
         feature(:test, "some human readable description").on(rule)
       end
@@ -40,11 +40,11 @@ describe "Togl" do
 
   describe "expanding feature toggles" do
     it "creates a new feature toggled on while keeping the previously defined features" do
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").on
       end
 
-      Togls.features do
+      Togls.release do
         feature(:bar, "some fooo").on
       end
 
@@ -56,7 +56,7 @@ describe "Togl" do
   describe "set the feature toggle registry" do
     it "uses the specified feature toggle registry" do
       Togls.enable_test_mode
-      Togls.features do
+      Togls.release do
         feature(:foo, "some magic foo").on
       end
 
@@ -66,7 +66,7 @@ describe "Togl" do
 
   describe "evaluating feature toggles" do
     it "asks a feature if it is on" do
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").on
       end
 
@@ -74,7 +74,7 @@ describe "Togl" do
     end
 
     it "asks a feature if it is off" do
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").on
       end
 
@@ -83,7 +83,7 @@ describe "Togl" do
 
     it "defaults to false when a feature is not defined" do
       allow(Togls.logger).to receive(:warn)
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").on
       end
 
@@ -96,7 +96,7 @@ describe "Togl" do
       end
 
       it "feature reports being off" do
-        Togls.features do
+        Togls.release do
           feature(:test, "some human readable description").on
         end
 
@@ -112,7 +112,7 @@ describe "Togl" do
       end
 
       it "feature reports being on" do
-        Togls.features do
+        Togls.release do
           feature(:test, "some human readable description").off
         end
 
@@ -128,7 +128,7 @@ describe "Togl" do
       end
 
       it "feature falls back to in memory store value" do
-        Togls.features do
+        Togls.release do
           feature(:test, "some human readable description").on
         end
 
@@ -154,7 +154,7 @@ describe "Togl" do
 
   describe "reviewing feature toggle" do
     it "outputs all the features" do
-      Togls.features do
+      Togls.release do
         feature(:test1, "test1 readable description").on
         feature(:test2, "test2 readable description").off
         feature(:test3, "test3 readable description")
@@ -174,7 +174,7 @@ off - test3 - test3 readable description
 
   describe "defining feature toggles in additional registry" do
     it "creates an isolated registred with a feature toggled off" do
-      Togls.features do
+      Togls.release do
         feature(:test, "some human readable description").on
       end
 
@@ -182,7 +182,7 @@ off - test3 - test3 readable description
         include Togls::FeatureToggleRegistryManager
       end
 
-      klass.features do
+      klass.release do
         feature(:test, "some human readable description").off
       end
 
