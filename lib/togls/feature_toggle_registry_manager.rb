@@ -46,7 +46,7 @@ module Togls
       def test_toggle_registry
         feature_repository_drivers =
           [Togls::FeatureRepositoryDrivers::InMemoryDriver.new]
-        feature_repository = Togls::FeatureRepository.new(
+        test_feature_repository = Togls::FeatureRepository.new(
           feature_repository_drivers)
 
         rule_repository_drivers =
@@ -59,9 +59,9 @@ module Togls
           Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
 
         toggle_repository = Togls::ToggleRepository.new(
-          toggle_repository_drivers, feature_repository, rule_repository)
+          toggle_repository_drivers, test_feature_repository, rule_repository)
 
-        return ToggleRegistry.new(feature_repository, toggle_repository)
+        return ToggleRegistry.new(test_feature_repository, toggle_repository)
       end
 
       def release_toggle_registry
