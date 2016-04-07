@@ -44,12 +44,46 @@ module Togls
       private
 
       def test_toggle_registry
-        TestToggleRegistry.new
+        feature_repository_drivers =
+          [Togls::FeatureRepositoryDrivers::InMemoryDriver.new]
+        feature_repository = Togls::FeatureRepository.new(
+          feature_repository_drivers)
+
+        rule_repository_drivers =
+          [Togls::RuleRepositoryDrivers::InMemoryDriver.new]
+        rule_repository = Togls::RuleRepository.new(rule_repository_drivers)
+        rule_repository.store(Togls::Rules::Boolean.new(true))
+        rule_repository.store(Togls::Rules::Boolean.new(false))
+
+        toggle_repository_drivers = [
+          Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
+
+        toggle_repository = Togls::ToggleRepository.new(
+          toggle_repository_drivers, feature_repository, rule_repository)
+
+        return ToggleRegistry.new(feature_repository, toggle_repository)
       end
 
       def release_toggle_registry
         if @release_toggle_registry.nil?
-          @release_toggle_registry = ReleaseToggleRegistry.new(feature_repository)
+          rule_repository_drivers = [
+            Togls::RuleRepositoryDrivers::InMemoryDriver.new
+          ]
+
+          rule_repository = Togls::RuleRepository.new(rule_repository_drivers)
+          rule_repository.store(Togls::Rules::Boolean.new(true))
+          rule_repository.store(Togls::Rules::Boolean.new(false))
+
+          toggle_repository_drivers = [
+            Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
+            Togls::ToggleRepositoryDrivers::EnvOverrideDriver.new
+          ]
+
+          toggle_repository = Togls::ToggleRepository.new(
+            toggle_repository_drivers, feature_repository, rule_repository)
+
+          @release_toggle_registry = ToggleRegistry.new(feature_repository,
+                                                        toggle_repository)
         end
         @release_toggle_registry
       end

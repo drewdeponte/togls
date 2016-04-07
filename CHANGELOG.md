@@ -10,6 +10,12 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Changed`: driver construction to RegistryManager
+  ([#56](https://github.com/codebreakdown/togls/issues/56))
+* `Removed`: `TestToggleRegistry`
+  ([#56](https://github.com/codebreakdown/togls/issues/56))
+* `Changed`: `ReleaseToggleRegistry` to `ToggleRegistry`
+  ([#56](https://github.com/codebreakdown/togls/issues/56))
 * `Removed`: `features` rake task
   ([#48](https://github.com/codebreakdown/togls/issues/48))
 * `Added`: `test_mode` block style method

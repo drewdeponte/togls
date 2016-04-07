@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Togls::FeatureToggleRegistryManager do
   let(:klass) { Class.new { include Togls::FeatureToggleRegistryManager } }
 
-  describe ".features" do
+  describe ".release" do
     context "when features have NOT been defined" do
       it "creates a new empty release toggle registry" do
-        expect(Togls::ReleaseToggleRegistry).to receive(:new)
+        expect(Togls::ToggleRegistry).to receive(:new)
         klass.release
       end
     end
@@ -22,22 +22,22 @@ describe Togls::FeatureToggleRegistryManager do
 
     it "returns the release toggle registry" do
       release_toggle_registry = double('release toggle registry')
-      allow(Togls::ReleaseToggleRegistry).to receive(:new).and_return(release_toggle_registry)
+      allow(Togls::ToggleRegistry).to receive(:new).and_return(release_toggle_registry)
       expect(klass.release).to eq(release_toggle_registry)
     end
   end
 
-  describe ".feature" do
+  describe ".release" do
     context "when features have NOT been defined" do
       it "creates a new empty release toggle registry" do
         klass.instance_variable_set(:@release_toggle_registry, nil)
-        expect(Togls::ReleaseToggleRegistry).to receive(:new).and_call_original
+        expect(Togls::ToggleRegistry).to receive(:new).and_call_original
         klass.feature("key")
       end
     end
 
     it "returns the release toggle identified by the key" do
-      feature_registry = instance_double Togls::ReleaseToggleRegistry 
+      feature_registry = instance_double Togls::ToggleRegistry 
       klass.instance_variable_set(:@release_toggle_registry, feature_registry)
       expect(feature_registry).to receive(:get).with("key")
       klass.feature("key")
