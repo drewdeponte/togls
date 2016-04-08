@@ -52,8 +52,6 @@ module Togls
         rule_repository_drivers =
           [Togls::RuleRepositoryDrivers::InMemoryDriver.new]
         rule_repository = Togls::RuleRepository.new(rule_repository_drivers)
-        rule_repository.store(Togls::Rules::Boolean.new(true))
-        rule_repository.store(Togls::Rules::Boolean.new(false))
 
         toggle_repository_drivers = [
           Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
@@ -67,12 +65,11 @@ module Togls
       def release_toggle_registry
         if @release_toggle_registry.nil?
           rule_repository_drivers = [
-            Togls::RuleRepositoryDrivers::InMemoryDriver.new
+            Togls::RuleRepositoryDrivers::InMemoryDriver.new,
+            Togls::RuleRepositoryDrivers::EnvOverrideDriver.new
           ]
 
           rule_repository = Togls::RuleRepository.new(rule_repository_drivers)
-          rule_repository.store(Togls::Rules::Boolean.new(true))
-          rule_repository.store(Togls::Rules::Boolean.new(false))
 
           toggle_repository_drivers = [
             Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
