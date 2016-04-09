@@ -5,8 +5,12 @@ describe Togls::ToggleRegistry do
     Togls::FeatureRepository.new([Togls::FeatureRepositoryDrivers::InMemoryDriver.new])
   end
 
+  let!(:rule_type_repository) do
+    Togls::RuleTypeRepository.new([Togls::RuleTypeRepositoryDrivers::InMemoryDriver.new])
+  end
+
   let!(:rule_repository) do
-    Togls::RuleRepository.new([Togls::RuleRepositoryDrivers::InMemoryDriver.new])
+    Togls::RuleRepository.new(rule_type_repository, [Togls::RuleRepositoryDrivers::InMemoryDriver.new])
   end
 
   let!(:toggle_repository) do

@@ -1,6 +1,36 @@
 require 'spec_helper'
 
 describe "Togl" do
+  describe 'registering rule types' do
+    it 'registers the rule type' do
+      rule_klass = Class.new(Togls::Rule)
+      Togls.rule_types do
+        register(:some_rule_type, rule_klass)
+      end
+    end
+  end
+
+  describe 'get registered rule type class' do
+    it 'returns the associated rule type class' do
+      Togls.rule_types do
+        register(:test_rule_one, Togls::Rules::Boolean)
+      end
+
+      expect(Togls.rule_type(:test_rule_one)).to eq(Togls::Rules::Boolean)
+    end
+  end
+
+  describe 'default rule types registered' do
+    it 'makes the default rule types available' do
+      klass = Class.new do
+        include Togls::FeatureToggleRegistryManager
+      end
+
+      expect(klass.rule_type(:boolean)).to eq(Togls::Rules::Boolean)
+      expect(klass.rule_type('group')).to eq(Togls::Rules::Group)
+    end
+  end
+
   describe "defining release toggles" do
     it "creates a new feature toggled on" do
       Togls.release do
