@@ -14,8 +14,8 @@ describe Togls::RuleRepositoryDrivers::InMemoryDriver do
 
   describe "storing and retrieving" do
     it "saves the storage payload and retrieves it" do
-      subject.store('aeuaoeuoa2342eau', { "klass" => Togls::Rule, "data" => true })
-      expect(subject.get('aeuaoeuoa2342eau')).to eq({ "klass" => Togls::Rule, "data" => true })
+      subject.store('aeuaoeuoa2342eau', { 'type_id' => 'boolean', 'data' => true })
+      expect(subject.get('aeuaoeuoa2342eau')).to eq({ 'type_id' => 'boolean', 'data' => true })
     end
 
     context 'when attempting to retrieve a non stored value' do

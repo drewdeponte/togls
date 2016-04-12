@@ -10,9 +10,9 @@ module Togls
 
       def get(rule_id)
         if rule_id == Togls::Helpers.sha1(Togls::Rules::Boolean, true) 
-          return { 'klass' => Togls::Rules::Boolean, 'data' => true }
+          return { 'type_id' => 'boolean', 'data' => true }
         elsif rule_id == Togls::Helpers.sha1(Togls::Rules::Boolean, false)
-          return { 'klass' => Togls::Rules::Boolean, 'data' => false }
+          return { 'type_id' => 'boolean', 'data' => false }
         else
           nil
         end
