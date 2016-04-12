@@ -10,6 +10,10 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Changed`: rule repository to use rule type repository
+  ([#59](https://github.com/codebreakdown/togls/issues/59))
+* `Added`: rule type registration
+  ([#59](https://github.com/codebreakdown/togls/issues/59))
 * `Changed`: driver construction to RegistryManager
   ([#56](https://github.com/codebreakdown/togls/issues/56))
 * `Removed`: `TestToggleRegistry`
