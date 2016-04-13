@@ -16,6 +16,11 @@ module Togls
       klass_string
     end
 
+    def include?(type_id)
+      type = get_klass(type_id)
+      type ? true : false
+    end
+
     def get_type_id(klass)
       fetch_type_id(klass.to_s)
     end

@@ -35,11 +35,40 @@ RSpec.describe Togls::RuleTypeRegistry do
   end
 
   describe '#register' do
+    let(:rule_klass) { Class.new(Togls::Rule) }
+
+    it 'verifies the uniqueness of the rule' do
+      allow(rule_type_repository).to receive(:store)
+      expect(subject).to receive(:verify_uniqueness_of_rule_type).with(:some_type_id)
+      subject.register(:some_type_id, rule_klass)
+    end
+
     it 'stores a rule type in a the rule type repository' do
-      rule_klass = Class.new(Togls::Rule)
+      allow(subject).to receive(:verify_uniqueness_of_rule_type)
       expect(rule_type_repository).to receive(:store).
         with(:some_rule_type, rule_klass)
       subject.register(:some_rule_type, rule_klass)
+    end
+  end
+
+  describe '#verify_uniqueness_of_rule_type' do
+    context 'when the rule type exists in the registry' do
+      it 'raises an error' do
+        allow(rule_type_repository).to receive(:include?).and_return(true)
+        expect {
+          subject.verify_uniqueness_of_rule_type(:type_id)
+        }.to raise_error Togls::RuleTypeAlreadyDefined,
+          "Rule Type identified by 'type_id' has already been registered"
+      end
+    end
+
+    context 'when the rule type does NOT exist in the registry' do
+      it 'does not raise an error' do
+        allow(rule_type_repository).to receive(:include?).and_return(false)
+        expect {
+          subject.verify_uniqueness_of_rule_type(:type_id)
+        }.not_to raise_error
+      end
     end
   end
 

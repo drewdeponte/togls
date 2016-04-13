@@ -18,6 +18,20 @@ describe "Togl" do
 
       expect(Togls.rule_type(:test_rule_one)).to eq(Togls::Rules::Boolean)
     end
+
+    context 'when registering the same rule type' do
+      it 'raises an uniqness error' do
+        Togls.rule_types do
+          register(:test_rule, Togls::Rules::Boolean)
+        end
+
+        expect {
+          Togls.rule_types do
+            register('test_rule', Togls::Rules::Boolean)
+          end
+        }.to raise_error Togls::RuleTypeAlreadyDefined, "Rule Type identified by 'test_rule' has already been registered"
+      end
+    end
   end
 
   describe 'default rule types registered' do
