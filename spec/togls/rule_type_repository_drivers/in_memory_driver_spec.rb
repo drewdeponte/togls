@@ -24,7 +24,7 @@ RSpec.describe Togls::RuleTypeRepositoryDrivers::InMemoryDriver do
   describe 'storing and retrieving' do
     it 'saves the storage payload and retrieves the klass and type_id' do
       klass = Class.new
-      subject.store('some_key', klass.to_s)
+      subject.store('some_key', klass.to_s, 'some-title', 'some-desc')
       expect(subject.get_klass('some_key')).to eq(klass.to_s)
       expect(subject.get_type_id(klass.to_s)).to eq('some_key')
     end

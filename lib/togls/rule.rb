@@ -6,6 +6,14 @@ module Togls
   class Rule
     attr_reader :data
 
+    def self.title
+      raise Togls::NotImplemented, "Rule type title not implemented"
+    end
+
+    def self.description
+      raise Togls::NotImplemented, "Rule type description not implemented"
+    end
+
     def initialize(data = nil)
       @data = data
     end

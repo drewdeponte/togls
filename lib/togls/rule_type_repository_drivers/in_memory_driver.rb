@@ -7,7 +7,7 @@ module Togls
         @rule_types_lock = Mutex.new
       end
 
-      def store(type_id, klass_str)
+      def store(type_id, klass_str, title, description)
         @rule_types_lock.synchronize do
           @rule_types[type_id] = klass_str
           @type_ids[klass_str] = type_id

@@ -3,6 +3,15 @@ require 'spec_helper'
 describe "Togl" do
   describe 'registering rule types' do
     it 'registers the rule type' do
+      rule_klass = Class.new(Togls::Rule)
+      def rule_klass.title
+        'some title'
+      end
+
+      def rule_klass.description
+        'some desc'
+      end
+
       Togls.rule_types do
         register(:some_rule_type, Class.new)
       end

@@ -6,7 +6,7 @@ module Togls
 
     def store(type_id, klass)
       @drivers.each do |driver|
-        driver.store(type_id.to_s, klass.to_s)
+        driver.store(type_id.to_s, klass.to_s, klass.title, klass.description)
       end
     end
 

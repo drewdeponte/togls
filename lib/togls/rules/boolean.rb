@@ -15,6 +15,22 @@ module Togls
     #   ...
     # end
     class Boolean < Rule
+      def self.title
+        "Boolean"
+      end
+
+      def self.description
+        %Q{
+The Boolean rule type is the base line rule for Togls. It allows you to
+flag a feature on/off by specifing a boolean value as the initialization
+data. For example:
+
+Togls::Rules::Boolean.new(true) # rule that always evaluates to on
+
+Togls::Rules::Boolean.new(false) # rule that always evaluates to false
+        }
+      end
+
       def run(_key, _target = nil)
         @data
       end

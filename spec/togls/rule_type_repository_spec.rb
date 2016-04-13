@@ -25,9 +25,12 @@ RSpec.describe Togls::RuleTypeRepository do
 
   describe '#store' do
     it 'stores the given key and klass in the drivers' do
-      klass = double('some rule class')
-      expect(driver_one).to receive(:store).with('some_key', klass.to_s)
-      expect(driver_two).to receive(:store).with('some_key', klass.to_s)
+      klass = double('some rule class', title: 'some-title',
+                     description: 'some-desc')
+      expect(driver_one).to receive(:store).with('some_key', klass.to_s,
+                                                anything, anything)
+      expect(driver_two).to receive(:store).with('some_key', klass.to_s,
+                                                anything, anything)
       subject.store('some_key', klass)
     end
   end

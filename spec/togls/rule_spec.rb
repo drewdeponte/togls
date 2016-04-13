@@ -1,6 +1,20 @@
 require 'spec_helper'
 
 describe Togls::Rule do
+  describe '.title' do
+    it 'raises NotImplemented exception' do
+      klass = Class.new(Togls::Rule)
+      expect { klass.title }.to raise_error(Togls::NotImplemented)
+    end
+  end
+
+  describe '.description' do
+    it 'raises NotImplemented exception' do
+      klass = Class.new(Togls::Rule)
+      expect { klass.description }.to raise_error(Togls::NotImplemented)
+    end
+  end
+
   describe "#initialize" do
     it "assigns the given data to an instance variable" do
       data = double('data')

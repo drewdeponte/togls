@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Changed`: rule type repository to store meta data
+  ([#62](https://github.com/codebreakdown/togls/issues/62))
 * `Added`: uniqueness check for rule types
   ([#61](https://github.com/codebreakdown/togls/issues/61)
 * `Changed`: rule repository to use rule type repository
