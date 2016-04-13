@@ -37,26 +37,35 @@ RSpec.describe Togls::RuleTypeRegistry do
   describe '#register' do
     let(:rule_klass) { Class.new(Togls::Rule) }
 
-    it 'verifies the uniqueness of the rule' do
+    it 'verifies the uniqueness of the rule type id' do
       allow(rule_type_repository).to receive(:store)
-      expect(subject).to receive(:verify_uniqueness_of_rule_type).with(:some_type_id)
+      allow(subject).to receive(:verify_uniqueness_of_rule_type_klass)
+      expect(subject).to receive(:verify_uniqueness_of_type_id).with(:some_type_id)
       subject.register(:some_type_id, rule_klass)
     end
 
+    it 'verifies the uniqueness of the rule type class' do
+      allow(rule_type_repository).to receive(:store)
+      allow(subject).to receive(:verify_uniqueness_of_type_id)
+      expect(subject).to receive(:verify_uniqueness_of_rule_type_klass).with(Class)
+      subject.register(:some_type_id, rule_klass.class)
+    end
+
     it 'stores a rule type in a the rule type repository' do
-      allow(subject).to receive(:verify_uniqueness_of_rule_type)
+      allow(subject).to receive(:verify_uniqueness_of_type_id)
+      allow(subject).to receive(:verify_uniqueness_of_rule_type_klass)
       expect(rule_type_repository).to receive(:store).
         with(:some_rule_type, rule_klass)
       subject.register(:some_rule_type, rule_klass)
     end
   end
 
-  describe '#verify_uniqueness_of_rule_type' do
+  describe '#verify_uniqueness_of_type_id' do
     context 'when the rule type exists in the registry' do
       it 'raises an error' do
         allow(rule_type_repository).to receive(:include?).and_return(true)
         expect {
-          subject.verify_uniqueness_of_rule_type(:type_id)
+          subject.verify_uniqueness_of_type_id(:type_id)
         }.to raise_error Togls::RuleTypeAlreadyDefined,
           "Rule Type identified by 'type_id' has already been registered"
       end
@@ -66,7 +75,29 @@ RSpec.describe Togls::RuleTypeRegistry do
       it 'does not raise an error' do
         allow(rule_type_repository).to receive(:include?).and_return(false)
         expect {
-          subject.verify_uniqueness_of_rule_type(:type_id)
+          subject.verify_uniqueness_of_type_id(:type_id)
+        }.not_to raise_error
+      end
+    end
+  end
+
+  describe '#verify_uniqueness_of_rule_type_klass' do
+    let(:rule_klass) { Class.new(Togls::Rule) }
+
+    context 'when the rule type klass exists in the registry' do
+      it 'raises an error' do
+        allow(rule_type_repository).to receive(:include_klass?).and_return(true)
+        expect {
+          subject.verify_uniqueness_of_rule_type_klass(rule_klass.class)
+        }.to raise_error Togls::RuleTypeAlreadyDefined, "Rule Type with class 'Class' has already been registered"
+      end
+    end
+
+    context 'when the rule type klass does NOT exist in the registry' do
+      it 'does not raise an error' do
+        allow(rule_type_repository).to receive(:include_klass?).and_return(false)
+        expect {
+          subject.verify_uniqueness_of_rule_type_klass(rule_klass.class)
         }.not_to raise_error
       end
     end

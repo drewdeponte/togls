@@ -10,15 +10,20 @@ module Togls
       end
     end
 
+    def include?(type_id)
+      type = get_klass(type_id)
+      type ? true : false
+    end
+
+    def include_klass?(klass)
+      type = get_type_id(klass)
+      type ? true : false
+    end
+
     def get_klass(type_id)
       klass_string = fetch_klass_string(type_id.to_s)
       return Object.const_get(klass_string) if klass_string
       klass_string
-    end
-
-    def include?(type_id)
-      type = get_klass(type_id)
-      type ? true : false
     end
 
     def get_type_id(klass)

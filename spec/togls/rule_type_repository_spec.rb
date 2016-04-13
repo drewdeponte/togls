@@ -55,6 +55,29 @@ RSpec.describe Togls::RuleTypeRepository do
     end
   end
 
+  describe '#include_klass?' do
+    it 'gets the type id for the given class' do
+      expect(subject).to receive(:get_type_id).with(Class)
+      subject.include_klass?(Class)
+    end
+
+    context 'when the type id can be found in the repository' do
+      it 'returns true' do
+        allow(subject).to receive(:get_type_id).with(Class).and_return('type_id')
+        result = subject.include_klass?(Class)
+        expect(result).to eql true
+      end
+    end
+
+    context 'when the type id CANNOT be found in the repository' do
+      it 'returns false' do
+        allow(subject).to receive(:get_type_id).with(Class).and_return(nil)
+        result = subject.include_klass?(Class)
+        expect(result).to eql false
+      end
+    end
+  end
+
   describe '#get_klass' do
     it 'gets the class identified by given key from drivers' do
       klass = double('some rule class')
