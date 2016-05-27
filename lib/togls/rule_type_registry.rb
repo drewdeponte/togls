@@ -30,5 +30,9 @@ module Togls
     def get(type_id)
       @rule_type_repository.get_klass(type_id)
     end
+
+    def get_type_id(klass_string)
+      @rule_type_repository.get_type_id(klass_string)
+    end
   end
 end

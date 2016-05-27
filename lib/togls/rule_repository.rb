@@ -5,7 +5,7 @@ module Togls
   # It does these by interfacing with Rule Repository Drivers which are passed
   # in during construction as an Array.
   class RuleRepository
-    def initialize(rule_type_repository, drivers)
+    def initialize(rule_type_registry, drivers)
       unless drivers.is_a?(Array)
         raise Togls::InvalidDriver, 'RuleRepository requires a valid driver'
       end
@@ -13,7 +13,7 @@ module Togls
         raise Togls::MissingDriver, 'RuleRepository requires a driver'
       end
       @drivers = drivers
-      @rule_type_repository = rule_type_repository
+      @rule_type_registry = rule_type_registry
     end
 
     def store(rule)
@@ -24,7 +24,7 @@ module Togls
     end
 
     def extract_storage_payload(rule)
-      { 'type_id' => @rule_type_repository.get_type_id(rule.class.to_s), 'data' => rule.data }
+      { 'type_id' => @rule_type_registry.get_type_id(rule.class.to_s), 'data' => rule.data }
     end
 
     def fetch_rule_data(id)
@@ -42,7 +42,7 @@ module Togls
     end
 
     def reconstitute_rule(rule_data)
-      @rule_type_repository.get_klass(rule_data['type_id']).new(rule_data['data'])
+      @rule_type_registry.get(rule_data['type_id']).new(rule_data['data'])
     end
   end
 end

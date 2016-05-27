@@ -118,4 +118,13 @@ RSpec.describe Togls::RuleTypeRegistry do
       expect(subject.get(:some_rule_type)).to eq(rule_klass)
     end
   end
+
+  describe '#get_type_id' do
+    it 'gets a rule type identifier from a class string' do
+      type_id = double('some type id')
+      rule_klass = Class.new(Togls::Rule)
+      allow(rule_type_repository).to receive(:get_type_id).and_return(type_id)
+      expect(subject.get_type_id(rule_klass.to_s)).to eq(type_id)
+    end
+  end
 end

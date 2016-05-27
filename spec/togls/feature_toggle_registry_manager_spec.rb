@@ -12,25 +12,26 @@ describe Togls::FeatureToggleRegistryManager do
 
       it 'creates a new rule type regesitory in memory driver' do
         expect(Togls::RuleTypeRepositoryDrivers::InMemoryDriver).
-          to receive(:new)
+          to receive(:new).and_return(Togls::RuleTypeRepositoryDrivers::InMemoryDriver.new)
         klass.rule_types
       end
 
       it 'creates a new rule type repository' do
-        in_memory_driver = double('rule type repo in memory driver')
+        in_memory_driver = Togls::RuleTypeRepositoryDrivers::InMemoryDriver.new
         allow(Togls::RuleTypeRepositoryDrivers::InMemoryDriver).
           to receive(:new).and_return(in_memory_driver)
         expect(Togls::RuleTypeRepository).to receive(:new).
-          with([in_memory_driver])
+          with([in_memory_driver]).and_return(Togls::RuleTypeRepository.new([in_memory_driver]))
         klass.rule_types
       end
 
       it 'creates a new empty rule type registry' do
         rule_type_repository = double('rule type repository')
+        rule_type_registry = double('rule type registry', register: nil)
         allow(Togls::RuleTypeRepository).to receive(:new).
           and_return(rule_type_repository)
         expect(Togls::RuleTypeRegistry).to receive(:new).
-          with(rule_type_repository)
+          with(rule_type_repository).and_return(rule_type_registry)
         klass.rule_types
       end
 
@@ -44,7 +45,7 @@ describe Togls::FeatureToggleRegistryManager do
       end
 
       it 'returns the rule type registry' do
-        rule_type_registry = double('rule type registry')
+        rule_type_registry = double('rule type registry', register: nil)
         allow(Togls::RuleTypeRegistry).to receive(:new).
           and_return(rule_type_registry)
         expect(klass.rule_types).to eq(rule_type_registry)
