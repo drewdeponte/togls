@@ -6,10 +6,6 @@ module Togls
   module FeatureToggleRegistryManager
     def self.included(mod)
       mod.extend(ClassMethods)
-      mod.rule_types do
-        register(:boolean, Togls::Rules::Boolean)
-        register(:group, Togls::Rules::Group)
-      end
     end
 
     # Feature Toggle Registry Manager Class Methods
@@ -67,6 +63,8 @@ module Togls
       def rule_type_registry
         if @rule_type_registry.nil?
           @rule_type_registry = RuleTypeRegistry.new(rule_type_repository)
+          @rule_type_registry.register(:boolean, Togls::Rules::Boolean)
+          @rule_type_registry.register(:group, Togls::Rules::Group)
         end
         @rule_type_registry
       end
@@ -79,7 +77,7 @@ module Togls
 
         rule_repository_drivers =
           [Togls::RuleRepositoryDrivers::InMemoryDriver.new]
-        rule_repository = Togls::RuleRepository.new(rule_type_repository, rule_repository_drivers)
+        rule_repository = Togls::RuleRepository.new(rule_type_registry, rule_repository_drivers)
 
         toggle_repository_drivers = [
           Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
@@ -97,7 +95,7 @@ module Togls
             Togls::RuleRepositoryDrivers::EnvOverrideDriver.new
           ]
 
-          rule_repository = Togls::RuleRepository.new(rule_type_repository, rule_repository_drivers)
+          rule_repository = Togls::RuleRepository.new(rule_type_registry, rule_repository_drivers)
 
           toggle_repository_drivers = [
             Togls::ToggleRepositoryDrivers::InMemoryDriver.new,

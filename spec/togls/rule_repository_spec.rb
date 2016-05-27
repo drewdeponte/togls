@@ -2,40 +2,40 @@ require 'spec_helper'
 
 describe Togls::RuleRepository do
   let(:driver) { double('driver') }
-  let(:rule_type_repository) { double('rule_type_repository') }
-  subject { Togls::RuleRepository.new(rule_type_repository, [driver]) }
+  let(:rule_type_registry) { double('rule_type_registry') }
+  subject { Togls::RuleRepository.new(rule_type_registry, [driver]) }
 
   describe "#initialize" do
     context "when given an array of 1 or more drivers" do
       it "constructs a toggle repository" do
         driver = double('driver')
-        repository = Togls::RuleRepository.new(rule_type_repository, [driver])
+        repository = Togls::RuleRepository.new(rule_type_registry, [driver])
         expect(repository).to be_a(Togls::RuleRepository)
       end
 
       it "assigns the given drivers" do
         driver = double('driver')
-        repository = Togls::RuleRepository.new(rule_type_repository, [driver])
+        repository = Togls::RuleRepository.new(rule_type_registry, [driver])
         expect(repository.instance_variable_get(:@drivers)).to eq([driver])
       end
 
       it 'assigns the given rule type repository' do
         driver = double('driver')
-        rule_type_repository = double('rule type repository')
-        repository = Togls::RuleRepository.new(rule_type_repository, [driver])
-        expect(repository.instance_variable_get(:@rule_type_repository)).to eq(rule_type_repository)
+        rule_type_registry = double('rule type repository')
+        repository = Togls::RuleRepository.new(rule_type_registry, [driver])
+        expect(repository.instance_variable_get(:@rule_type_registry)).to eq(rule_type_registry)
       end
     end
 
     context "when given an empty array of drivers" do
       it "raises an exception" do
-        expect { Togls::RuleRepository.new(rule_type_repository, []) }.to raise_error(Togls::MissingDriver)
+        expect { Togls::RuleRepository.new(rule_type_registry, []) }.to raise_error(Togls::MissingDriver)
       end
     end
 
     context "when not given an array" do
       it "raises an exception" do
-        expect { Togls::RuleRepository.new(rule_type_repository, "something else") }.to raise_error(Togls::InvalidDriver)
+        expect { Togls::RuleRepository.new(rule_type_registry, "something else") }.to raise_error(Togls::InvalidDriver)
       end
     end
   end
@@ -68,13 +68,13 @@ describe Togls::RuleRepository do
   describe "#extract_storage_payload" do
     it 'gets the rule_type_id from rule type repository' do
       rule = Togls::Rule.new(true)
-      expect(rule_type_repository).to receive(:get_type_id).with('Togls::Rule')
+      expect(rule_type_registry).to receive(:get_type_id).with('Togls::Rule')
       subject.extract_storage_payload(rule)
     end
 
     it "returns the rule's extracted storage payload" do
       rule = Togls::Rule.new(true)
-      allow(rule_type_repository).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
+      allow(rule_type_registry).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
       expect(subject.extract_storage_payload(rule))
         .to eq({ 'type_id' => 'hoopty', 'data' => true })
     end
@@ -172,14 +172,14 @@ describe Togls::RuleRepository do
 
   describe '#reconstitute_rule' do
     it 'constructs a rule from the rule data' do
-      allow(rule_type_repository).to receive(:get_klass).with('boolean').and_return(Togls::Rules::Boolean)
+      allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
       expect(Togls::Rules::Boolean).to receive(:new).with(true)
       subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })
     end
 
     it 'returns the rule' do
       rule = double('rule')
-      allow(rule_type_repository).to receive(:get_klass).with('boolean').and_return(Togls::Rules::Boolean)
+      allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
       allow(Togls::Rules::Boolean).to receive(:new).with(true).and_return(rule)
       expect(subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })).to eq(rule)
     end

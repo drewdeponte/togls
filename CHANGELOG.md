@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: uniqueness check for rule types
+  ([#61](https://github.com/codebreakdown/togls/issues/61)
 * `Changed`: rule repository to use rule type repository
   ([#59](https://github.com/codebreakdown/togls/issues/59))
 * `Added`: rule type registration

@@ -3,9 +3,8 @@ require 'spec_helper'
 describe "Togl" do
   describe 'registering rule types' do
     it 'registers the rule type' do
-      rule_klass = Class.new(Togls::Rule)
       Togls.rule_types do
-        register(:some_rule_type, rule_klass)
+        register(:some_rule_type, Class.new)
       end
     end
   end
@@ -13,10 +12,38 @@ describe "Togl" do
   describe 'get registered rule type class' do
     it 'returns the associated rule type class' do
       Togls.rule_types do
-        register(:test_rule_one, Togls::Rules::Boolean)
+        register(:test_rule_one, String)
       end
 
-      expect(Togls.rule_type(:test_rule_one)).to eq(Togls::Rules::Boolean)
+      expect(Togls.rule_type(:test_rule_one)).to eq(String)
+    end
+
+    context 'when registering the same rule type' do
+      it 'raises an rule type uniqueness error' do
+        Togls.rule_types do
+          register(:test_rule, String)
+        end
+
+        expect {
+          Togls.rule_types do
+            register('test_rule', Integer)
+          end
+        }.to raise_error Togls::RuleTypeAlreadyDefined, "Rule Type identified by 'test_rule' has already been registered"
+      end
+    end
+
+    context 'when the rule class has already been used in a type' do
+      it 'raises an uniqueness error' do
+        Togls.rule_types do
+          register(:rule_id, String)
+        end
+
+        expect {
+          Togls.rule_types do
+            register('different_id', String)
+          end
+        }.to raise_error Togls::RuleTypeAlreadyDefined, "Rule Type with class 'String' has already been registered"
+      end
     end
   end
 

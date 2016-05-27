@@ -5,4 +5,5 @@ module Togls
   class InvalidDriver < Error; end
   class NotImplemented < Error; end
   class FeatureAlreadyDefined < Error; end
+  class RuleTypeAlreadyDefined < Error; end
 end
