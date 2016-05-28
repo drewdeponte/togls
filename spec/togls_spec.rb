@@ -13,24 +13,42 @@ describe "Togl" do
       end
 
       Togls.rule_types do
-        register(:some_rule_type, Class.new)
+        register(:some_rule_type, rule_klass)
       end
     end
   end
 
   describe 'get registered rule type class' do
     it 'returns the associated rule type class' do
-      Togls.rule_types do
-        register(:test_rule_one, String)
+      FooBarRule = Class.new(Togls::Rule)
+      def FooBarRule.title
+        'some title'
       end
 
-      expect(Togls.rule_type(:test_rule_one)).to eq(String)
+      def FooBarRule.description
+        'some desc'
+      end
+
+      Togls.rule_types do
+        register(:test_rule_one, FooBarRule)
+      end
+
+      expect(Togls.rule_type(:test_rule_one)).to eq(FooBarRule)
     end
 
     context 'when registering the same rule type' do
       it 'raises an rule type uniqueness error' do
+        FooBarRule = Class.new(Togls::Rule)
+        def FooBarRule.title
+          'some title'
+        end
+
+        def FooBarRule.description
+          'some desc'
+        end
+
         Togls.rule_types do
-          register(:test_rule, String)
+          register(:test_rule, FooBarRule)
         end
 
         expect {
@@ -43,15 +61,24 @@ describe "Togl" do
 
     context 'when the rule class has already been used in a type' do
       it 'raises an uniqueness error' do
+        FooBarRule = Class.new(Togls::Rule)
+        def FooBarRule.title
+          'some title'
+        end
+
+        def FooBarRule.description
+          'some desc'
+        end
+
         Togls.rule_types do
-          register(:rule_id, String)
+          register(:rule_id, FooBarRule)
         end
 
         expect {
           Togls.rule_types do
-            register('different_id', String)
+            register('different_id', FooBarRule)
           end
-        }.to raise_error Togls::RuleTypeAlreadyDefined, "Rule Type with class 'String' has already been registered"
+        }.to raise_error Togls::RuleTypeAlreadyDefined, "Rule Type with class 'FooBarRule' has already been registered"
       end
     end
   end
