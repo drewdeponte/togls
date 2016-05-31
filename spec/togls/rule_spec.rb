@@ -15,6 +15,13 @@ describe Togls::Rule do
     end
   end
 
+  describe '.target_type' do
+    it 'returns the default of :any' do
+      klass = Class.new(Togls::Rule)
+      expect(klass.target_type).to eq(:any)
+    end
+  end
+
   describe "#initialize" do
     it "assigns the given data to an instance variable" do
       data = double('data')

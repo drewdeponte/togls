@@ -3,13 +3,19 @@ require 'spec_helper'
 describe Togls::Rules::Group do
   describe '.title' do
     it 'does not raise an error' do
-      Togls::Rules::Boolean.title
+      Togls::Rules::Group.title
     end
   end
 
   describe '.description' do
     it 'does not raise an error' do
-      Togls::Rules::Boolean.description
+      Togls::Rules::Group.description
+    end
+  end
+
+  describe '.target_type' do
+    it 'returns :any' do
+      expect(Togls::Rules::Group.target_type).to eq(:any)
     end
   end
 

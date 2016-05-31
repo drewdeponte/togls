@@ -13,6 +13,12 @@ describe Togls::Rules::Boolean do
     end
   end
 
+  describe '.target_type' do
+    it 'returns :any' do
+      expect(Togls::Rules::Boolean.target_type).to eq(:any)
+    end
+  end
+
   describe "#run" do
     it "returns the provided boolean value" do
       bool_rule = Togls::Rules::Boolean.new(true)

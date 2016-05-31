@@ -14,6 +14,10 @@ module Togls
       raise Togls::NotImplemented, "Rule type description not implemented"
     end
 
+    def self.target_type
+      :any
+    end
+
     def initialize(data = nil)
       @data = data
     end
