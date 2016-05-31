@@ -27,7 +27,7 @@ data. For example:
 
 Togls::Rules::Boolean.new(true) # rule that always evaluates to on
 
-Togls::Rules::Boolean.new(false) # rule that always evaluates to false
+Togls::Rules::Boolean.new(false) # rule that always evaluates to off
         }
       end
 
