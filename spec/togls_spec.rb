@@ -3,13 +3,14 @@ require 'spec_helper'
 describe "Togl" do
   describe 'registering rule types' do
     it 'registers the rule type' do
-      rule_klass = Class.new(Togls::Rule)
-      def rule_klass.title
-        'some title'
-      end
+      rule_klass = Class.new(Togls::Rule) do
+        def self.title
+          'some title'
+        end
 
-      def rule_klass.description
-        'some desc'
+        def self.description
+          'some desc'
+        end
       end
 
       Togls.rule_types do
@@ -20,13 +21,14 @@ describe "Togl" do
 
   describe 'get registered rule type class' do
     it 'returns the associated rule type class' do
-      FooBarRule = Class.new(Togls::Rule)
-      def FooBarRule.title
-        'some title'
-      end
+      FooBarRule = Class.new(Togls::Rule) do
+        def self.title
+          'some title'
+        end
 
-      def FooBarRule.description
-        'some desc'
+        def self.description
+          'some desc'
+        end
       end
 
       Togls.rule_types do
@@ -38,13 +40,14 @@ describe "Togl" do
 
     context 'when registering the same rule type' do
       it 'raises an rule type uniqueness error' do
-        FooBarRule = Class.new(Togls::Rule)
-        def FooBarRule.title
-          'some title'
-        end
+        FooBarRule = Class.new(Togls::Rule) do
+          def self.title
+            'some title'
+          end
 
-        def FooBarRule.description
-          'some desc'
+          def self.description
+            'some desc'
+          end
         end
 
         Togls.rule_types do
@@ -61,13 +64,14 @@ describe "Togl" do
 
     context 'when the rule class has already been used in a type' do
       it 'raises an uniqueness error' do
-        FooBarRule = Class.new(Togls::Rule)
-        def FooBarRule.title
-          'some title'
-        end
+        FooBarRule = Class.new(Togls::Rule) do
+          def self.title
+            'some title'
+          end
 
-        def FooBarRule.description
-          'some desc'
+          def self.description
+            'some desc'
+          end
         end
 
         Togls.rule_types do
