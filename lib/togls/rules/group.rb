@@ -23,18 +23,23 @@ module Togls
 
       def self.description
         %Q{
-The Group rule type allows you to define arbitrary groups. The way it
-works is that you specify the initialization data as the array of
-identifiers inclusively included in the group. Then when the feature
-toggle is evaluated you would pass the target and if that target exists
-in the inclusive list then it would evaluate to on. If not, it would
-evaluate to off. Examples:
+The Group rule allows you to define an arbitrary collection of objects to be
+used in evaluating against the target. Specify the initialization data as an
+array of inclusive identifiers for the group. When the feature toggle is
+evaluated if the passed in target is included in the group then it is evaluated
+to on. If not, it evaluates to off. Examples:
 
 # Group defined by user ids
 alpha_testers = Togls::Rules::Group.new([23, 343, 222, 123])
 
 # Group defined by email addresses
 beta_testers = Togls::Rules::Group.new(['bob@example.com', 'cindy@example.com'])
+
+Togls.release do
+  feature(:foo, 'some foo desc').on(beta_testers)
+end
+
+Togls.feature(:foo).on?('jack@example.com') # evalutes to false (a.k.a. off)
         }
       end
 
