@@ -28,7 +28,7 @@ works is that you specify the initialization data as the array of
 identifiers inclusively included in the group. Then when the feature
 toggle is evaluated you would pass the target and if that target exists
 in the inclusive list then it would evaluate to on. If not, it would
-evaluate to false. Examples:
+evaluate to off. Examples:
 
 # Group defined by user ids
 alpha_testers = Togls::Rules::Group.new([23, 343, 222, 123])
