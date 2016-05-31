@@ -16,9 +16,9 @@ module Togls
       self
     end
 
-    def feature(key, desc)
+    def feature(key, desc, target_type: :any)
       verify_uniqueness_of_feature(key)
-      feature = Togls::Feature.new(key, desc)
+      feature = Togls::Feature.new(key, desc, target_type)
       toggle = Togls::Toggle.new(feature)
       @toggle_repository.store(toggle)
       Togls::Toggler.new(@toggle_repository, toggle)
@@ -32,8 +32,10 @@ module Togls
 
     def get(key)
       toggle = @toggle_repository.get(key.to_s)
-      if toggle.is_a?(Togls::NullToggle)
+      if toggle.is_a?(Togls::ToggleMissingToggle)
         Togls.logger.warn("Feature identified by '#{key}' has not been defined")
+      elsif toggle.is_a?(Togls::RuleFeatureMissMatchToggle)
+        Togls.logger.warn("Feature identified by '#{key}' has a rule miss-match")
       end
       toggle
     end

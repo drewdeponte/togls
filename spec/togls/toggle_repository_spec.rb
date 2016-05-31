@@ -150,13 +150,13 @@ describe Togls::ToggleRepository do
       end
 
       it "constructs a null toggle" do
-        expect(Togls::NullToggle).to receive(:new)
+        expect(Togls::ToggleMissingToggle).to receive(:new)
         subject.get("some id")
       end
 
       it "returns the null toggle" do
         null_toggle = double('null toggle')
-        allow(Togls::NullToggle).to receive(:new).and_return(null_toggle)
+        allow(Togls::ToggleMissingToggle).to receive(:new).and_return(null_toggle)
         expect(subject.get("some id")).to eq(null_toggle)
       end
     end
@@ -165,18 +165,20 @@ describe Togls::ToggleRepository do
   describe "#reconstitute_toggle" do
     it "fetches the referenced feature from the feature repository" do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-      feature_repository = subject.instance_variable_get(:@feature_repository)
-      rule_repository = subject.instance_variable_get(:@rule_repository)
+      toggle = double('toggle')
       allow(rule_repository).to receive(:get)
+      allow(Togls::Toggle).to receive(:new).and_return(toggle)
+      allow(toggle).to receive(:rule=)
       expect(feature_repository).to receive(:get).with("badges")
       subject.reconstitute_toggle(toggle_data)
     end
 
     it "fetches the referenced rule from the rule repository" do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-      feature_repository = subject.instance_variable_get(:@feature_repository)
-      rule_repository = subject.instance_variable_get(:@rule_repository)
+      toggle = double('toggle')
       allow(feature_repository).to receive(:get)
+      allow(Togls::Toggle).to receive(:new).and_return(toggle)
+      allow(toggle).to receive(:rule=)
       expect(rule_repository).to receive(:get).with("ba234aoeubaooea23")
       subject.reconstitute_toggle(toggle_data)
     end
@@ -184,8 +186,6 @@ describe Togls::ToggleRepository do
     it "constructs a toggle with the fetcthed feature" do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
       feature = double('feature')
-      feature_repository = subject.instance_variable_get(:@feature_repository)
-      rule_repository = subject.instance_variable_get(:@rule_repository)
       allow(rule_repository).to receive(:get)
       allow(feature_repository).to receive(:get).and_return(feature)
       expect(Togls::Toggle).to receive(:new).with(feature).and_return(double.as_null_object)
@@ -196,8 +196,6 @@ describe Togls::ToggleRepository do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
       toggle = double('toggle')
       rule = double('rule')
-      feature_repository = subject.instance_variable_get(:@feature_repository)
-      rule_repository = subject.instance_variable_get(:@rule_repository)
       allow(rule_repository).to receive(:get).and_return(rule)
       allow(feature_repository).to receive(:get)
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
@@ -205,17 +203,33 @@ describe Togls::ToggleRepository do
       subject.reconstitute_toggle(toggle_data)
     end
 
-    it "returns the toggle" do
-      toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-      toggle = double('toggle')
-      rule = double('rule')
-      feature_repository = subject.instance_variable_get(:@feature_repository)
-      rule_repository = subject.instance_variable_get(:@rule_repository)
-      allow(rule_repository).to receive(:get).and_return(rule)
-      allow(feature_repository).to receive(:get)
-      allow(Togls::Toggle).to receive(:new).and_return(toggle)
-      allow(toggle).to receive(:rule=).with(rule)
-      expect(subject.reconstitute_toggle(toggle_data)).to eq(toggle)
+    context 'when rule assignment identifies a miss match' do
+      it 'returns a constructed missmatch toggle' do
+        toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
+        rule = double 'rule'
+        toggle = double('toggle')
+        null_toggle = double 'null toggle'
+        allow(feature_repository).to receive(:get)
+        allow(rule_repository).to receive(:get).and_return(rule)
+        allow(Togls::Toggle).to receive(:new).and_return(toggle)
+        allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMissMatch
+        allow(Togls::RuleFeatureMissMatchToggle).to receive(:new).and_return(null_toggle)
+        result = subject.reconstitute_toggle(toggle_data)
+        expect(result).to eql null_toggle
+      end
+    end
+
+    context 'when rule assignment is successful' do
+      it "returns the toggle" do
+        toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
+        toggle = double('toggle')
+        rule = double('rule')
+        allow(rule_repository).to receive(:get).and_return(rule)
+        allow(feature_repository).to receive(:get)
+        allow(Togls::Toggle).to receive(:new).and_return(toggle)
+        allow(toggle).to receive(:rule=).with(rule)
+        expect(subject.reconstitute_toggle(toggle_data)).to eq(toggle)
+      end
     end
   end
 

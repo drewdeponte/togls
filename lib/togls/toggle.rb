@@ -5,8 +5,7 @@ module Togls
   # responsibility is binding a specific rule to a specific feature. Toggle's by
   # default are associated with a boolean rule initialized to false.
   class Toggle
-    attr_reader :feature
-    attr_accessor :rule
+    attr_reader :feature, :rule
 
     def initialize(feature)
       @feature = feature
@@ -15,6 +14,16 @@ module Togls
 
     def id
       @feature.id
+    end
+
+    def rule=(rule)
+      raise Togls::RuleFeatureTargetTypeMissMatch unless target_matches?(rule)
+      @rule = rule
+    end
+
+    def target_matches?(rule)
+      @feature.target_type == rule.class.target_type ||
+        @feature.target_type == :any
     end
 
     def on?(target = nil)

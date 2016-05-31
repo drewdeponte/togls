@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Togls::Feature do
-  subject { Togls::Feature.new(:key, "some description") }
+  subject { Togls::Feature.new(:key, "some description", :foo_target_type) }
 
   describe "#initialize" do
     it "assigns the passed key" do
@@ -11,11 +11,29 @@ describe Togls::Feature do
     it "assigns the description" do
       expect(subject.description).to eq("some description")
     end
+
+    it 'assigns the given target_type' do
+      expect(subject.target_type).to eq(:foo_target_type)
+    end
+
+    context 'when constructed without a target_type' do
+      subject { Togls::Feature.new(:key, 'some description') }
+
+      it 'assigns the target_type to :any' do
+        expect(subject.target_type).to eq(:any)
+      end
+    end
   end
 
   describe "#description" do
     it "returns the description" do
       expect(subject.description).to eq("some description")
+    end
+  end
+
+  describe '#target_type' do
+    it 'returns the target_type' do
+      expect(subject.target_type).to eq(:foo_target_type)
     end
   end
 

@@ -20,6 +20,10 @@ describe "Togl" do
   end
 
   describe 'get registered rule type class' do
+    after do
+      Object.send(:remove_const, :FooBarRule)
+    end
+
     it 'returns the associated rule type class' do
       FooBarRule = Class.new(Togls::Rule) do
         def self.title
@@ -134,6 +138,73 @@ describe "Togl" do
       expect(Togls.feature(:test).on?("someone_else")).to eq(false)
     end
 
+
+    context 'when using a custom rule that has a miss-matched target type' do
+      after do
+        Object.send(:remove_const, :FooBarRule)
+      end
+
+      it 'raises an error' do
+        FooBarRule = Class.new(Togls::Rule) do
+          def self.title
+            'some title'
+          end
+
+          def self.description
+            'some desc'
+          end
+
+          def self.target_type
+            :purple_person
+          end
+        end
+
+        Togls.rule_types do
+          register(:some_rule_type, FooBarRule)
+        end
+
+        some_rule = FooBarRule.new
+
+        expect {
+          Togls.release do
+            feature(:hoopty, 'some hoopty description', target_type: :red_person).on(some_rule)
+          end
+        }.to raise_error Togls::RuleFeatureTargetTypeMissMatch
+      end
+    end
+
+    context 'when using a custom rule that has a matched target type' do
+      after do
+        Object.send(:remove_const, :FooBarRule)
+      end
+
+      it 'creates a new feature' do
+        FooBarRule = Class.new(Togls::Rule) do
+          def self.title
+            'some title'
+          end
+
+          def self.description
+            'some desc'
+          end
+
+          def self.target_type
+            :purple_person
+          end
+        end
+
+        Togls.rule_types do
+          register(:some_rule_type, FooBarRule)
+        end
+
+        some_rule = FooBarRule.new
+
+        Togls.release do
+          feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
+        end
+      end
+    end
+
     context 'when redefining an existing feature' do
       it 'raises an already defined error' do
         Togls.release do
@@ -218,6 +289,76 @@ describe "Togl" do
       end
 
       expect(Togls.feature(:not_defined).on?).to eq(false)
+    end
+
+    context "when a features rule can't properly be evaluated" do
+      after do
+        Object.send(:remove_const, :AnotherRule)
+      end
+
+      it 'reports the feature as being off' do
+        FooBarRule = Class.new(Togls::Rule) do
+          def self.title
+            'some title'
+          end
+
+          def self.description
+            'some desc'
+          end
+
+          def self.target_type
+            :purple_person
+          end
+
+          def run(key, target = nil)
+            # this shouldn't get returned
+            true
+          end
+        end
+
+        AnotherRule = Class.new(Togls::Rule) do
+          def self.title
+            'another title'
+          end
+
+          def self.description
+            'another desc'
+          end
+
+          def self.target_type
+            :red_person
+          end
+
+          def run(key, target = nil)
+            # this shouldn't get returned
+            true
+          end
+        end
+
+        Togls.rule_types do
+          register(:some_rule_type, FooBarRule)
+          register(:another_rule_type, AnotherRule)
+        end
+
+        some_rule = FooBarRule.new
+        a = AnotherRule.new
+        Togls.release do
+          feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
+          feature(:doopty, 'some doopty description', target_type: :red_person).on(a)
+        end
+
+        toggle_repo = Togls.send(:release_toggle_registry).instance_variable_get(:@toggle_repository)
+        rule_repo = toggle_repo.instance_variable_get(:@rule_repository)
+        rule_in_memory_driver = rule_repo.instance_variable_get(:@drivers).first
+
+        feature = Togls::Feature.new(:hoopty, 'some hoopty desc', :purple_person)
+        toggle = Togls::Toggle.new(feature)
+        toggle.instance_variable_set(:@rule, a)
+        toggle_repo.store(toggle)
+
+        expect(Togls.feature(:hoopty)).to be_a(Togls::RuleFeatureMissMatchToggle)
+        expect(Togls.feature(:hoopty).on?).to eq(false)
+      end
     end
 
     context "when environment variable feature override is false" do

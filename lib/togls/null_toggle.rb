@@ -17,4 +17,7 @@ module Togls
       self
     end
   end
+
+  class ToggleMissingToggle < NullToggle; end
+  class RuleFeatureMissMatchToggle < NullToggle; end
 end
