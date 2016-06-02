@@ -291,7 +291,7 @@ describe "Togl" do
       expect(Togls.feature(:not_defined).on?).to eq(false)
     end
 
-    context "when a features rule can't properly be evaluated" do
+    context "when a features rule can't properly be evaluated because of a mismatch" do
       after do
         Object.send(:remove_const, :AnotherRule)
       end
