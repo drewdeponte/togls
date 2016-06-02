@@ -29,8 +29,8 @@ module Togls
     # something (foo)     | something (foo)  | true
     # something (foo)     | something (bar)  | false
     def target_matches?(rule)
-      @feature.target_type == rule.class.target_type ||
-        rule.class.target_type == Togls::TargetTypes::ANY
+      @feature.target_type == rule.target_type ||
+        rule.target_type == Togls::TargetTypes::ANY
     end
 
     def on?(target = nil)

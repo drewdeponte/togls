@@ -43,7 +43,7 @@ module Togls
         toggle.rule = rule
         toggle
       rescue Togls::RuleFeatureTargetTypeMismatch
-        Togls.logger.warn("Feature (#{feature.key}) with target type '#{feature.target_type}' has a rule (#{rule.id}) mismatch with target type '#{rule.class.target_type}'")
+        Togls.logger.warn("Feature (#{feature.key}) with target type '#{feature.target_type}' has a rule (#{rule.id}) mismatch with target type '#{rule.target_type}'")
         return Togls::RuleFeatureMismatchToggle.new
       end
     end
