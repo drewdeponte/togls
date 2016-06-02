@@ -22,11 +22,33 @@ describe Togls::Rule do
     end
   end
 
-  describe "#initialize" do
-    it "assigns the given data to an instance variable" do
-      data = double('data')
-      rule = Togls::Rule.new(data)
-      expect(rule.instance_variable_get(:@data)).to eq(data)
+  describe '#initialize' do
+    context 'when just given intialization data' do
+      it 'assigns the given data to an instance variable' do
+        data = double('data')
+        rule = Togls::Rule.new(data)
+        expect(rule.instance_variable_get(:@data)).to eq(data)
+      end
+
+      it 'assigns the target type instance variable to nil' do
+        data = double('data')
+        rule = Togls::Rule.new(data)
+        expect(rule.instance_variable_get(:@target_type)).to be_nil
+      end
+    end
+
+    context 'when given initialization data and target_type' do
+      it 'assigns the given data to an instance variable' do
+        data = double('data')
+        rule = Togls::Rule.new(data, target_type: :some_target_type)
+        expect(rule.instance_variable_get(:@data)).to eq(data)
+      end
+
+      it 'assigns the given target type to an instance variable' do
+        data = double('data')
+        rule = Togls::Rule.new(data, target_type: :some_target_type)
+        expect(rule.instance_variable_get(:@target_type)).to eq(:some_target_type)
+      end
     end
   end
 
@@ -57,6 +79,28 @@ describe Togls::Rule do
     it "returns the data it was initially initialized with" do
       rule = Togls::Rule.new("test value")
       expect(rule.data).to eq("test value")
+    end
+  end
+
+  describe '#target_type' do
+    context 'when the rule instance has a target type' do
+      it 'returns the rule instances target type' do
+        rule = Togls::Rule.new('some data', target_type: :hoopty)
+        expect(rule.target_type).to eq(:hoopty)
+      end
+    end
+
+    context 'when the rule instance has NO target type' do
+      it 'returns the rule type target type' do
+        rule_klass = Class.new(Togls::Rule) do
+          def self.target_type
+            :woot_woot
+          end
+        end
+
+        rule = rule_klass.new('some data')
+        expect(rule.target_type).to eq(:woot_woot)
+      end
     end
   end
 end
