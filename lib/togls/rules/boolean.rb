@@ -31,6 +31,10 @@ Togls::Rules::Boolean.new(false) # rule that always evaluates to off
         }
       end
 
+      def self.target_type
+        Togls::TargetTypes::NONE
+      end
+
       def run(_key, _target = nil)
         @data
       end

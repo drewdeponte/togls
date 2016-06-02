@@ -32,8 +32,18 @@ describe Togls::Feature do
   end
 
   describe '#target_type' do
-    it 'returns the target_type' do
-      expect(subject.target_type).to eq(:foo_target_type)
+    context 'when the target type is NOT nil' do
+      it 'returns the target_type' do
+        expect(subject.target_type).to eq(:foo_target_type)
+      end
+    end
+
+    context 'when the target type is nil' do
+      subject { Togls::Feature.new(:key, 'some description', nil) }
+
+      it 'returns a not set target type' do
+        expect(subject.target_type).to eq(Togls::TargetTypes::NOT_SET)
+      end
     end
   end
 

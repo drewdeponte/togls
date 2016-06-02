@@ -59,15 +59,32 @@ describe Togls::Toggle do
   end
 
   describe '#target_matches?' do
-    context 'when the rule has no target type' do
-      context 'when the rule types target type matches the features target type' do
-        it 'returns true' do
-          feature = Togls::Feature.new('some name', 'some desc', :hoopty)
+    context 'when the features target type is not set' do
+      context 'when the rules target type is not set' do
+        it 'returns false' do
+          feature = Togls::Feature.new('some name', 'some desc')
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
-              :hoopty
+              Togls::TargetTypes::NOT_SET
+            end
+          end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql false
+        end
+      end
+
+      context 'when the rules target type is set to none' do
+        it 'returns true' do
+          feature = Togls::Feature.new('some name', 'some desc')
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              Togls::TargetTypes::NONE
             end
           end
           rule = rule_klass.new
@@ -77,79 +94,143 @@ describe Togls::Toggle do
         end
       end
 
-      context 'when the rule types target type does NOT match the features target type' do
-        context 'when the rule types target type has not been set' do
-          it 'returns true' do
-            feature = Togls::Feature.new('some name', 'some desc', :jokes)
-            toggle = Togls::Toggle.new(feature)
+      context 'when the rules target type is specified' do
+        it 'returns false' do
+          feature = Togls::Feature.new('some name', 'some desc')
+          toggle = Togls::Toggle.new(feature)
 
-            rule_klass = Class.new(Togls::Rule) do
-              def self.target_type
-                Togls::TargetTypes::NOT_SET
-              end
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :foo
             end
-            rule = rule_klass.new
-
-            result = toggle.target_matches?(rule)
-            expect(result).to eql true
           end
-        end
+          rule = rule_klass.new
 
-        context 'when the rule types target type is set but different from the feature' do
-          it 'returns false' do
-            feature = Togls::Feature.new('some name', 'some desc', :foo)
-            toggle = Togls::Toggle.new(feature)
-
-            rule_klass = Class.new(Togls::Rule) do
-              def self.target_type
-                :bar
-              end
-            end
-            rule = rule_klass.new
-
-            result = toggle.target_matches?(rule)
-            expect(result).to eql false
-          end
+          result = toggle.target_matches?(rule)
+          expect(result).to eql false
         end
       end
     end
 
-    context 'when the rule has a target type' do
-      context 'when the rule target type matches the features target type' do
+    context 'when the features target type is set to none' do
+      context 'when the rules target type is set to none' do
         it 'returns true' do
-          feature = Togls::Feature.new('some name', 'some desc', :hoopty)
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
           toggle = Togls::Toggle.new(feature)
 
-          rule = Togls::Rule.new('something', target_type: :hoopty)
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              Togls::TargetTypes::NONE
+            end
+          end
+          rule = rule_klass.new
 
           result = toggle.target_matches?(rule)
           expect(result).to eql true
         end
       end
 
-      context 'when the rule target type does NOT match the features target type' do
-        context 'when the rule target type is not set target type' do
-          it 'returns true' do
-            feature = Togls::Feature.new('some name', 'some desc', :hoopty)
-            toggle = Togls::Toggle.new(feature)
+      context 'when the rules target type is specified' do
+        it 'returns false' do
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          toggle = Togls::Toggle.new(feature)
 
-            rule = Togls::Rule.new('something', target_type: Togls::TargetTypes::NOT_SET)
-
-            result = toggle.target_matches?(rule)
-            expect(result).to eql true
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :foo
+            end
           end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql false
         end
+      end
 
-        context 'when the rule target type has been set' do
-          it 'returns false' do
-            feature = Togls::Feature.new('some name', 'some desc', :hoopty)
-            toggle = Togls::Toggle.new(feature)
+      context 'when the rules target type is not set' do
+        it 'returns false' do
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          toggle = Togls::Toggle.new(feature)
 
-            rule = Togls::Rule.new('something', target_type: :bar)
-
-            result = toggle.target_matches?(rule)
-            expect(result).to eql false
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              Togls::TargetTypes::NOT_SET
+            end
           end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql false
+        end
+      end
+    end
+
+    context 'when the features target type is specified' do
+      context 'when the rules target type is set to none' do
+        it 'returns true' do
+          feature = Togls::Feature.new('some name', 'some desc', :foo)
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              Togls::TargetTypes::NONE
+            end
+          end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql true
+        end
+      end
+
+      context 'when the rules target type is explicitly set to match' do
+        it 'returns true' do
+          feature = Togls::Feature.new('some name', 'some desc', :foo)
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :foo
+            end
+          end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql true
+        end
+      end
+
+      context 'when the rules target type is not set' do
+        it 'returns false' do
+          feature = Togls::Feature.new('some name', 'some desc', :foo)
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              Togls::TargetTypes::NOT_SET
+            end
+          end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql false
+        end
+      end
+
+      context 'when the rules target type is explicitly set to NOT match' do
+        it 'returns false' do
+          feature = Togls::Feature.new('some name', 'some desc', :foo)
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :bar
+            end
+          end
+          rule = rule_klass.new
+
+          result = toggle.target_matches?(rule)
+          expect(result).to eql false
         end
       end
     end
@@ -194,25 +275,6 @@ describe Togls::Toggle do
       allow(feature).to receive(:key).and_return("key")
       allow(rule).to receive(:run).and_return(result)
       expect(subject.off?(target)).to eq(true)
-    end
-  end
-
-  describe "#to_s" do
-    context "when based on boolean rule" do
-      it "returns a human readable string representation of the feature including value" do
-        toggle = Togls::Toggle.new(Togls::Feature.new(:key, "some description"))
-        toggle.rule = Togls::Rules::Boolean.new(true)
-        expect(toggle.to_s).to eq(" on - key - some description")
-      end
-    end
-
-    context "when NOT based on boolean rule" do
-      it "returns a human readable string representation of the feature with an unknown value" do
-        rule = Togls::Rule.new(true)
-        toggle = Togls::Toggle.new(Togls::Feature.new(:another_key, "another description"))
-        toggle.rule = rule
-        expect(toggle.to_s).to eq("  ? - another_key - another description")
-      end
     end
   end
 end

@@ -90,16 +90,31 @@ describe Togls::Rule do
       end
     end
 
-    context 'when the rule instance has NO target type' do
-      it 'returns the rule type target type' do
-        rule_klass = Class.new(Togls::Rule) do
-          def self.target_type
-            :woot_woot
+    context 'when the rule instance has NO target type or is NOT_SET' do
+      context 'the class target type is nil' do
+        it 'returns the rule type target type' do
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              nil
+            end
           end
-        end
 
-        rule = rule_klass.new('some data')
-        expect(rule.target_type).to eq(:woot_woot)
+          rule = rule_klass.new('some data')
+          expect(rule.target_type).to eq(Togls::TargetTypes::NOT_SET)
+        end
+      end
+
+      context 'when the class target type is NOT nil' do
+        it 'returns the rule type target type' do
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :woot_woot
+            end
+          end
+
+          rule = rule_klass.new('some data')
+          expect(rule.target_type).to eq(:woot_woot)
+        end
       end
     end
   end
