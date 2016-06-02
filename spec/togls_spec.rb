@@ -139,7 +139,7 @@ describe "Togl" do
     end
 
 
-    context 'when using a custom rule that has a miss-matched target type' do
+    context 'when using a custom rule that has a mismatched target type' do
       after do
         Object.send(:remove_const, :FooBarRule)
       end

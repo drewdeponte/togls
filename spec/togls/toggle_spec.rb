@@ -47,7 +47,7 @@ describe Togls::Toggle do
       expect(subject.instance_variable_get(:@rule)).to eq(rule)
     end
 
-    context 'when given a rule which belongs to a class that has a miss-matched target type' do
+    context 'when given a rule which belongs to a class that has a mismatched target type' do
       it 'raises a target type miss match error' do
         rule = double('rule')
         allow(subject).to receive(:target_matches?).and_return(false)
