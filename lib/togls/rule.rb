@@ -33,7 +33,8 @@ module Togls
 
     def target_type
       return @target_type if @target_type && @target_type != Togls::TargetTypes::NOT_SET
-      return self.class.target_type
+      return self.class.target_type unless self.class.target_type.nil?
+      return Togls::TargetTypes::NOT_SET
     end
   end
 end
