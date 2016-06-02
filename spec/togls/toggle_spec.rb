@@ -61,7 +61,7 @@ describe Togls::Toggle do
   describe '#target_matches?' do
     context 'when the rule target type matches the features target type' do
       it 'returns true' do
-        feature = Togls::Feature.new('some name', 'some desc', :hoopty) # accepts :hoopty or :any
+        feature = Togls::Feature.new('some name', 'some desc', :hoopty)
         toggle = Togls::Toggle.new(feature)
 
         rule_klass = Class.new(Togls::Rule) do
@@ -77,14 +77,14 @@ describe Togls::Toggle do
     end
 
     context 'when the rule target type does NOT match the features target type' do
-      context 'when the feature target type is for :any target type' do
+      context 'when the rule target type is for ANY target type' do
         it 'returns true' do
-          feature = Togls::Feature.new('some name', 'some desc') # accepts :hoopty or :any
+          feature = Togls::Feature.new('some name', 'some desc', :jokes)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
-              :hoopty
+              Togls::TargetTypes::ANY
             end
           end
           rule = rule_klass.new
@@ -94,9 +94,9 @@ describe Togls::Toggle do
         end
       end
 
-      context 'when the feature target type is NOT for :any target type' do
+      context 'when the rule target type is NOT for ANY target type' do
         it 'returns false' do
-          feature = Togls::Feature.new('some name', 'some desc', :foo) # accepts :hoopty or :any
+          feature = Togls::Feature.new('some name', 'some desc', :foo)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do

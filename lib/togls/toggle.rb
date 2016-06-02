@@ -21,9 +21,16 @@ module Togls
       @rule = rule
     end
 
+    # feature target type | rule target type | match?
+    # ------------------------------------------------
+    # any (aka none)      | any              | true
+    # something (foo)     | any              | true
+    # any (aka none)      | something (foo)  | false
+    # something (foo)     | something (foo)  | true
+    # something (foo)     | something (bar)  | false
     def target_matches?(rule)
       @feature.target_type == rule.class.target_type ||
-        @feature.target_type == Togls::TargetTypes::ANY
+        rule.class.target_type == Togls::TargetTypes::ANY
     end
 
     def on?(target = nil)

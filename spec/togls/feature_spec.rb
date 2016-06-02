@@ -19,7 +19,7 @@ describe Togls::Feature do
     context 'when constructed without a target_type' do
       subject { Togls::Feature.new(:key, 'some description') }
 
-      it 'assigns the target_type to :any' do
+      it 'assigns the target_type to ANY' do
         expect(subject.target_type).to eq(Togls::TargetTypes::ANY)
       end
     end
