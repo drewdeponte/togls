@@ -15,7 +15,7 @@ describe Togls::Rules::Boolean do
 
   describe '.target_type' do
     it 'returns not set' do
-      expect(Togls::Rules::Boolean.target_type).to eq(Togls::TargetTypes::NOT_SET)
+      expect(Togls::Rules::Boolean.target_type).to eq(Togls::TargetTypes::NONE)
     end
   end
 

@@ -130,8 +130,8 @@ describe "Togl" do
 
     it "creates a new feature with a group" do
       Togls.release do
-        rule = Togls::Rules::Group.new(["someone"])
-        feature(:test, "some human readable description").on(rule)
+        rule = Togls::Rules::Group.new(["someone"], target_type: :foo)
+        feature(:test, "some human readable description", target_type: :foo).on(rule)
       end
 
       expect(Togls.feature(:test).on?("someone")).to eq(true)

@@ -33,10 +33,16 @@ module Togls
     # something (foo)     | something (foo)  | true   |
     # something (foo)     | NOT_SET          | false  | broken - shouldn't happen
     # something (foo)     | something (bar)  | false  |
-    # something (bar)     | something (foo)  | false  |
     def target_matches?(rule)
-      @feature.target_type == rule.target_type ||
-        rule.target_type == Togls::TargetTypes::NOT_SET
+      if rule.target_type == Togls::TargetTypes::NONE
+        return true
+      elsif rule.target_type == Togls::TargetTypes::NOT_SET
+        return false
+      elsif rule.target_type == @feature.target_type
+        return true
+      else
+        false
+      end
     end
 
     def on?(target = nil)
