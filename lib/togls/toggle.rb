@@ -21,13 +21,19 @@ module Togls
       @rule = rule
     end
 
-    # feature target type | rule target type | match?
-    # ------------------------------------------------
-    # not set             | not set          | true
-    # something (foo)     | not set          | true
-    # not set             | something (foo)  | false
-    # something (foo)     | something (foo)  | true
-    # something (foo)     | something (bar)  | false
+    # feature target type | rule target type | match? | notes
+    # -------------------------------------------------------
+    # NOT_SET             | NOT_SET          | false  | broken - shouldn't happen
+    # NOT_SET             | NONE             | true   |
+    # NOT_SET             | something (foo)  | false  | broken - shouldn't happen
+    # NONE                | NONE             | true   |
+    # NONE                | something (foo)  | false  |
+    # NONE                | NOT_SET          | false  | broken - shouldn't happen
+    # something (foo)     | NONE             | true   |
+    # something (foo)     | something (foo)  | true   |
+    # something (foo)     | NOT_SET          | false  | broken - shouldn't happen
+    # something (foo)     | something (bar)  | false  |
+    # something (bar)     | something (foo)  | false  |
     def target_matches?(rule)
       @feature.target_type == rule.target_type ||
         rule.target_type == Togls::TargetTypes::NOT_SET
