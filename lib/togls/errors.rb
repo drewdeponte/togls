@@ -6,5 +6,5 @@ module Togls
   class NotImplemented < Error; end
   class FeatureAlreadyDefined < Error; end
   class RuleTypeAlreadyDefined < Error; end
-  class RuleFeatureTargetTypeMissMatch < Error; end
+  class RuleFeatureTargetTypeMismatch < Error; end
 end

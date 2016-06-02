@@ -169,7 +169,7 @@ describe "Togl" do
           Togls.release do
             feature(:hoopty, 'some hoopty description', target_type: :red_person).on(some_rule)
           end
-        }.to raise_error Togls::RuleFeatureTargetTypeMissMatch
+        }.to raise_error Togls::RuleFeatureTargetTypeMismatch
       end
     end
 
@@ -356,7 +356,7 @@ describe "Togl" do
         toggle.instance_variable_set(:@rule, a)
         toggle_repo.store(toggle)
 
-        expect(Togls.feature(:hoopty)).to be_a(Togls::RuleFeatureMissMatchToggle)
+        expect(Togls.feature(:hoopty)).to be_a(Togls::RuleFeatureMismatchToggle)
         expect(Togls.feature(:hoopty).on?).to eq(false)
       end
     end

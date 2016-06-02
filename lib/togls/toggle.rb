@@ -17,7 +17,7 @@ module Togls
     end
 
     def rule=(rule)
-      raise Togls::RuleFeatureTargetTypeMissMatch unless target_matches?(rule)
+      raise Togls::RuleFeatureTargetTypeMismatch unless target_matches?(rule)
       @rule = rule
     end
 

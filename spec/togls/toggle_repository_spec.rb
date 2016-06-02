@@ -212,8 +212,8 @@ describe Togls::ToggleRepository do
         allow(feature_repository).to receive(:get)
         allow(rule_repository).to receive(:get).and_return(rule)
         allow(Togls::Toggle).to receive(:new).and_return(toggle)
-        allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMissMatch
-        allow(Togls::RuleFeatureMissMatchToggle).to receive(:new).and_return(null_toggle)
+        allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMismatch
+        allow(Togls::RuleFeatureMismatchToggle).to receive(:new).and_return(null_toggle)
         result = subject.reconstitute_toggle(toggle_data)
         expect(result).to eql null_toggle
       end

@@ -42,8 +42,8 @@ module Togls
       begin
         toggle.rule = rule
         toggle
-      rescue Togls::RuleFeatureTargetTypeMissMatch
-        return Togls::RuleFeatureMissMatchToggle.new
+      rescue Togls::RuleFeatureTargetTypeMismatch
+        return Togls::RuleFeatureMismatchToggle.new
       end
     end
 

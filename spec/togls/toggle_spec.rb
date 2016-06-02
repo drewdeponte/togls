@@ -53,7 +53,7 @@ describe Togls::Toggle do
         allow(subject).to receive(:target_matches?).and_return(false)
         expect {
           subject.rule = rule
-        }.to raise_error(Togls::RuleFeatureTargetTypeMissMatch)
+        }.to raise_error(Togls::RuleFeatureTargetTypeMismatch)
       end
     end
   end
