@@ -15,7 +15,7 @@ module Togls
     end
 
     def self.target_type
-      Togls::TargetTypes::ANY
+      Togls::TargetTypes::NOT_SET
     end
 
     def initialize(data = nil, target_type: nil)

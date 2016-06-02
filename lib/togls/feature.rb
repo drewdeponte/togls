@@ -6,7 +6,7 @@ module Togls
   class Feature
     attr_reader :key, :description, :target_type
 
-    def initialize(key, description, target_type = Togls::TargetTypes::ANY)
+    def initialize(key, description, target_type = Togls::TargetTypes::NOT_SET)
       @key = key.to_s
       @description = description
       @target_type = target_type

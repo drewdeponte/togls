@@ -23,14 +23,14 @@ module Togls
 
     # feature target type | rule target type | match?
     # ------------------------------------------------
-    # any (aka none)      | any              | true
-    # something (foo)     | any              | true
-    # any (aka none)      | something (foo)  | false
+    # not set             | not set          | true
+    # something (foo)     | not set          | true
+    # not set             | something (foo)  | false
     # something (foo)     | something (foo)  | true
     # something (foo)     | something (bar)  | false
     def target_matches?(rule)
       @feature.target_type == rule.target_type ||
-        rule.target_type == Togls::TargetTypes::ANY
+        rule.target_type == Togls::TargetTypes::NOT_SET
     end
 
     def on?(target = nil)

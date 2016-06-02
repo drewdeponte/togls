@@ -1,5 +1,6 @@
 module Togls
   module TargetTypes
-    ANY = :any
+    NONE = :none
+    NOT_SET = :not_set
   end
 end
