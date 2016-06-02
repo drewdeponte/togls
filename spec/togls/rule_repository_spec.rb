@@ -72,11 +72,11 @@ describe Togls::RuleRepository do
       subject.extract_storage_payload(rule)
     end
 
-    it "returns the rule's extracted storage payload" do
-      rule = Togls::Rule.new(true)
+    it 'returns the rule\'s extracted storage payload with the target_type' do
+      rule = Togls::Rule.new(true, target_type: :foo)
       allow(rule_type_registry).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
       expect(subject.extract_storage_payload(rule))
-        .to eq({ 'type_id' => 'hoopty', 'data' => true })
+        .to eq({ 'type_id' => 'hoopty', 'data' => true, 'target_type' => 'foo' })
     end
   end
 
@@ -171,10 +171,20 @@ describe Togls::RuleRepository do
   end
 
   describe '#reconstitute_rule' do
-    it 'constructs a rule from the rule data' do
-      allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-      expect(Togls::Rules::Boolean).to receive(:new).with(true)
-      subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })
+    context 'when rule data has target_type' do
+      it 'constructs a rule with the target type' do
+        allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
+        expect(Togls::Rules::Boolean).to receive(:new).with(true, target_type: :foo)
+        subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true, 'target_type' => 'foo' })
+      end
+    end
+
+    context 'when rule data does NOT have a target_type' do
+      it 'constructs a rule without a target_type' do
+        allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
+        expect(Togls::Rules::Boolean).to receive(:new).with(true)
+        subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })
+      end
     end
 
     it 'returns the rule' do

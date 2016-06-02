@@ -18,8 +18,9 @@ module Togls
       Togls::TargetTypes::ANY
     end
 
-    def initialize(data = nil)
+    def initialize(data = nil, target_type: nil)
       @data = data
+      @target_type = target_type
     end
 
     def run(key, target = nil)
@@ -28,6 +29,11 @@ module Togls
 
     def id
       Togls::Helpers.sha1(self.class, @data)
+    end
+
+    def target_type
+      return @target_type if @target_type
+      return self.class.target_type
     end
   end
 end

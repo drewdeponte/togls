@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: rule instance target types and switch type checking over
+  ([#67](https://github.com/codebreakdown/togls/issues/67))
 * `Added`: optional target types, and target type checking
   ([#65](https://github.com/codebreakdown/togls/issues/65))
 * `Changed`: rule type repository to store meta data

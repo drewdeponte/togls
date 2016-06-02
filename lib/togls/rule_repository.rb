@@ -24,7 +24,11 @@ module Togls
     end
 
     def extract_storage_payload(rule)
-      { 'type_id' => @rule_type_registry.get_type_id(rule.class.to_s), 'data' => rule.data }
+      {
+        'type_id' => @rule_type_registry.get_type_id(rule.class.to_s),
+        'data' => rule.data, 
+        'target_type' => rule.target_type.to_s
+      }
     end
 
     def fetch_rule_data(id)
@@ -42,7 +46,13 @@ module Togls
     end
 
     def reconstitute_rule(rule_data)
-      @rule_type_registry.get(rule_data['type_id']).new(rule_data['data'])
+      if rule_data.has_key?('target_type')
+        @rule_type_registry.get(rule_data['type_id'])\
+          .new(rule_data['data'],
+               target_type: rule_data['target_type'].to_sym)
+      else
+        @rule_type_registry.get(rule_data['type_id']).new(rule_data['data'])
+      end
     end
   end
 end

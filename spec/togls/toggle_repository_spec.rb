@@ -206,8 +206,7 @@ describe Togls::ToggleRepository do
     context 'when rule assignment identifies a mismatch' do
       it 'logs the mismatch' do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-        rule_type = double('rule_type', target_type: 'janky')
-        rule = double('rule', id: 'someid', class: rule_type)
+        rule = double('rule', id: 'someid', target_type: 'janky')
         feature = double('feature', key: 'feature_key', target_type: 'hoopty')
         toggle = double('toggle')
         null_toggle = double 'null toggle'
@@ -222,8 +221,7 @@ describe Togls::ToggleRepository do
 
       it 'returns a constructed mismatch toggle' do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-        rule_type = double('rule_type', target_type: 'janky')
-        rule = double('rule', id: 'someid', class: rule_type)
+        rule = double('rule', id: 'someid', target_type: 'janky')
         toggle = double('toggle')
         feature = double('feature', key: 'feature_key', target_type: 'hoopty')
         null_toggle = double 'null toggle'
