@@ -15,7 +15,7 @@ module Togls
     end
 
     def self.target_type
-      :any
+      Togls::TargetTypes::ANY
     end
 
     def initialize(data = nil)

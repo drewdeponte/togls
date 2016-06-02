@@ -18,7 +18,7 @@ describe Togls::Rule do
   describe '.target_type' do
     it 'returns the default of :any' do
       klass = Class.new(Togls::Rule)
-      expect(klass.target_type).to eq(:any)
+      expect(klass.target_type).to eq(Togls::TargetTypes::ANY)
     end
   end
 

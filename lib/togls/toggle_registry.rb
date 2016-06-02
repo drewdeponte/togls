@@ -16,7 +16,7 @@ module Togls
       self
     end
 
-    def feature(key, desc, target_type: :any)
+    def feature(key, desc, target_type: Togls::TargetTypes::ANY)
       verify_uniqueness_of_feature(key)
       feature = Togls::Feature.new(key, desc, target_type)
       toggle = Togls::Toggle.new(feature)

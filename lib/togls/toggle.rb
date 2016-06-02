@@ -23,7 +23,7 @@ module Togls
 
     def target_matches?(rule)
       @feature.target_type == rule.class.target_type ||
-        @feature.target_type == :any
+        @feature.target_type == Togls::TargetTypes::ANY
     end
 
     def on?(target = nil)

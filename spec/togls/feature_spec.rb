@@ -20,7 +20,7 @@ describe Togls::Feature do
       subject { Togls::Feature.new(:key, 'some description') }
 
       it 'assigns the target_type to :any' do
-        expect(subject.target_type).to eq(:any)
+        expect(subject.target_type).to eq(Togls::TargetTypes::ANY)
       end
     end
   end
