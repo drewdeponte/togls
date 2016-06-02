@@ -78,14 +78,14 @@ describe Togls::Toggle do
       end
 
       context 'when the rule types target type does NOT match the features target type' do
-        context 'when the rule types target type is for ANY target type' do
+        context 'when the rule types target type has not been set' do
           it 'returns true' do
             feature = Togls::Feature.new('some name', 'some desc', :jokes)
             toggle = Togls::Toggle.new(feature)
 
             rule_klass = Class.new(Togls::Rule) do
               def self.target_type
-                Togls::TargetTypes::ANY
+                Togls::TargetTypes::NOT_SET
               end
             end
             rule = rule_klass.new
@@ -95,7 +95,7 @@ describe Togls::Toggle do
           end
         end
 
-        context 'when the rule types target type is NOT for ANY target type' do
+        context 'when the rule types target type is set but different from the feature' do
           it 'returns false' do
             feature = Togls::Feature.new('some name', 'some desc', :foo)
             toggle = Togls::Toggle.new(feature)
@@ -128,19 +128,19 @@ describe Togls::Toggle do
       end
 
       context 'when the rule target type does NOT match the features target type' do
-        context 'when the rule target type is for ANY target type' do
+        context 'when the rule target type is not set target type' do
           it 'returns true' do
             feature = Togls::Feature.new('some name', 'some desc', :hoopty)
             toggle = Togls::Toggle.new(feature)
 
-            rule = Togls::Rule.new('something', target_type: Togls::TargetTypes::ANY)
+            rule = Togls::Rule.new('something', target_type: Togls::TargetTypes::NOT_SET)
 
             result = toggle.target_matches?(rule)
             expect(result).to eql true
           end
         end
 
-        context 'when the rule target type is NOT for ANY target type' do
+        context 'when the rule target type has been set' do
           it 'returns false' do
             feature = Togls::Feature.new('some name', 'some desc', :hoopty)
             toggle = Togls::Toggle.new(feature)
