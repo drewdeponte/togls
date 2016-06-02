@@ -204,12 +204,30 @@ describe Togls::ToggleRepository do
     end
 
     context 'when rule assignment identifies a mismatch' do
-      it 'returns a constructed mismatch toggle' do
+      it 'logs the mismatch' do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-        rule = double 'rule'
+        rule_type = double('rule_type', target_type: 'janky')
+        rule = double('rule', id: 'someid', class: rule_type)
+        feature = double('feature', key: 'feature_key', target_type: 'hoopty')
         toggle = double('toggle')
         null_toggle = double 'null toggle'
-        allow(feature_repository).to receive(:get)
+        allow(feature_repository).to receive(:get).and_return(feature)
+        allow(rule_repository).to receive(:get).and_return(rule)
+        allow(Togls::Toggle).to receive(:new).and_return(toggle)
+        allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMismatch
+        allow(Togls::RuleFeatureMismatchToggle).to receive(:new).and_return(null_toggle)
+        expect(Togls.logger).to receive(:warn).with("Feature (feature_key) with target type 'hoopty' has a rule (someid) mismatch with target type 'janky'")
+        subject.reconstitute_toggle(toggle_data)
+      end
+
+      it 'returns a constructed mismatch toggle' do
+        toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
+        rule_type = double('rule_type', target_type: 'janky')
+        rule = double('rule', id: 'someid', class: rule_type)
+        toggle = double('toggle')
+        feature = double('feature', key: 'feature_key', target_type: 'hoopty')
+        null_toggle = double 'null toggle'
+        allow(feature_repository).to receive(:get).and_return(feature)
         allow(rule_repository).to receive(:get).and_return(rule)
         allow(Togls::Toggle).to receive(:new).and_return(toggle)
         allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMismatch

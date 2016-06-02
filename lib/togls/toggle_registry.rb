@@ -34,8 +34,6 @@ module Togls
       toggle = @toggle_repository.get(key.to_s)
       if toggle.is_a?(Togls::ToggleMissingToggle)
         Togls.logger.warn("Feature identified by '#{key}' has not been defined")
-      elsif toggle.is_a?(Togls::RuleFeatureMismatchToggle)
-        Togls.logger.warn("Feature identified by '#{key}' has a rule mismatch")
       end
       toggle
     end

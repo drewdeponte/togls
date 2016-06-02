@@ -152,23 +152,6 @@ describe Togls::ToggleRegistry do
         expect(subject.get("some not real key")).to be_a(Togls::ToggleMissingToggle)
       end
     end
-
-    context 'when a rule mismatch is detected' do
-      before do
-        toggle = Togls::RuleFeatureMismatchToggle.new
-        toggle_repository = subject.instance_variable_get(:@toggle_repository)
-        allow(toggle_repository).to receive(:get).and_return(toggle)
-      end
-
-      it "logs a warning" do
-        expect(Togls.logger).to receive(:warn).with("Feature identified by 'some_id' has a rule mismatch")
-        subject.get("some_id")
-      end
-
-      it "returns a null toggle" do
-        expect(subject.get("some not real key")).to be_a(Togls::RuleFeatureMismatchToggle)
-      end
-    end
   end
 
   describe "#all" do
