@@ -35,7 +35,7 @@ module Togls
       if toggle.is_a?(Togls::ToggleMissingToggle)
         Togls.logger.warn("Feature identified by '#{key}' has not been defined")
       elsif toggle.is_a?(Togls::RuleFeatureMismatchToggle)
-        Togls.logger.warn("Feature identified by '#{key}' has a rule miss-match")
+        Togls.logger.warn("Feature identified by '#{key}' has a rule mismatch")
       end
       toggle
     end

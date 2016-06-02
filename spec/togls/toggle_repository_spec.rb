@@ -203,8 +203,8 @@ describe Togls::ToggleRepository do
       subject.reconstitute_toggle(toggle_data)
     end
 
-    context 'when rule assignment identifies a miss match' do
-      it 'returns a constructed missmatch toggle' do
+    context 'when rule assignment identifies a mismatch' do
+      it 'returns a constructed mismatch toggle' do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
         rule = double 'rule'
         toggle = double('toggle')

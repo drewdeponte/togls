@@ -35,7 +35,7 @@ describe Togls::Toggle do
     it "returns the rule of the toggle" do
       rule = double('rule')
       subject.instance_variable_set(:@rule, rule)
-      expect(subject.rule).to eq(rule)      
+      expect(subject.rule).to eq(rule)
     end
   end
 
@@ -48,7 +48,7 @@ describe Togls::Toggle do
     end
 
     context 'when given a rule which belongs to a class that has a mismatched target type' do
-      it 'raises a target type miss match error' do
+      it 'raises a target type mismatch error' do
         rule = double('rule')
         allow(subject).to receive(:target_matches?).and_return(false)
         expect {

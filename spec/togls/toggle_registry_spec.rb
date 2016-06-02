@@ -153,7 +153,7 @@ describe Togls::ToggleRegistry do
       end
     end
 
-    context 'when a rule miss-match is detected' do
+    context 'when a rule mismatch is detected' do
       before do
         toggle = Togls::RuleFeatureMismatchToggle.new
         toggle_repository = subject.instance_variable_get(:@toggle_repository)
@@ -161,7 +161,7 @@ describe Togls::ToggleRegistry do
       end
 
       it "logs a warning" do
-        expect(Togls.logger).to receive(:warn).with("Feature identified by 'some_id' has a rule miss-match")
+        expect(Togls.logger).to receive(:warn).with("Feature identified by 'some_id' has a rule mismatch")
         subject.get("some_id")
       end
 
