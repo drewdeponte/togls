@@ -18,7 +18,7 @@ module Togls
       Togls::TargetTypes::NOT_SET
     end
 
-    def initialize(data = nil, target_type: nil)
+    def initialize(data = nil, target_type: Togls::TargetTypes::NOT_SET)
       @data = data
       @target_type = target_type
     end
@@ -32,7 +32,7 @@ module Togls
     end
 
     def target_type
-      return @target_type if @target_type
+      return @target_type if @target_type && @target_type != Togls::TargetTypes::NOT_SET
       return self.class.target_type
     end
   end

@@ -33,7 +33,7 @@ describe Togls::Rule do
       it 'assigns the target type instance variable to nil' do
         data = double('data')
         rule = Togls::Rule.new(data)
-        expect(rule.instance_variable_get(:@target_type)).to be_nil
+        expect(rule.instance_variable_get(:@target_type)).to eq(Togls::TargetTypes::NOT_SET)
       end
     end
 
