@@ -14,8 +14,8 @@ describe Togls::Rules::Boolean do
   end
 
   describe '.target_type' do
-    it 'returns :any' do
-      expect(Togls::Rules::Boolean.target_type).to eq(:any)
+    it 'returns ANY' do
+      expect(Togls::Rules::Boolean.target_type).to eq(Togls::TargetTypes::ANY)
     end
   end
 

@@ -52,12 +52,13 @@ describe Togls::ToggleRegistry do
       subject.feature(:some_key, "description")
     end
 
-    it "creates a new feature object with the passed key" do
+    it "creates a new feature object with the passed key and target type" do
       desc = double('feature desc')
-      key = "some_key"
-      feature = Togls::Feature.new('some_feature_key', "Some Feature Desc")
-      expect(Togls::Feature).to receive(:new).with(key, desc).and_return(feature)
-      subject.feature(key, desc)
+      key = 'some_key'
+      target_type = :some_target_type
+      feature = Togls::Feature.new('some_feature_key', 'Some Feature Desc', :some_target_type)
+      expect(Togls::Feature).to receive(:new).with(key, desc, target_type).and_return(feature)
+      subject.feature(key, desc, target_type: :some_target_type)
     end
     
     it "creates a feature toggle with the created feature" do
@@ -137,9 +138,9 @@ describe Togls::ToggleRegistry do
 
     context "when the toggle is NOT found" do
       before do
-        null_toggle = Togls::NullToggle.new
+        toggle_missing_toggle = Togls::ToggleMissingToggle.new
         toggle_repository = subject.instance_variable_get(:@toggle_repository)
-        allow(toggle_repository).to receive(:get).and_return(null_toggle)
+        allow(toggle_repository).to receive(:get).and_return(toggle_missing_toggle)
       end
 
       it "logs a warning" do
@@ -148,7 +149,7 @@ describe Togls::ToggleRegistry do
       end
 
       it "returns a null toggle" do
-        expect(subject.get("some not real key")).to be_a(Togls::NullToggle)
+        expect(subject.get("some not real key")).to be_a(Togls::ToggleMissingToggle)
       end
     end
   end

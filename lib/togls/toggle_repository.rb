@@ -32,15 +32,20 @@ module Togls
     def get(id)
       toggle_data = fetch_toggle_data(id)
       return reconstitute_toggle(toggle_data) if toggle_data
-      Togls::NullToggle.new
+      Togls::ToggleMissingToggle.new
     end
 
     def reconstitute_toggle(toggle_data)
       feature = @feature_repository.get(toggle_data['feature_id'])
       rule = @rule_repository.get(toggle_data['rule_id'])
       toggle = Togls::Toggle.new(feature)
-      toggle.rule = rule
-      toggle
+      begin
+        toggle.rule = rule
+        toggle
+      rescue Togls::RuleFeatureTargetTypeMismatch
+        Togls.logger.warn("Feature (#{feature.key}) with target type '#{feature.target_type}' has a rule (#{rule.id}) mismatch with target type '#{rule.class.target_type}'")
+        return Togls::RuleFeatureMismatchToggle.new
+      end
     end
 
     def fetch_toggle_data(id)

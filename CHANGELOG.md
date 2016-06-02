@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: optional target types, and target type checking
+  ([#65](https://github.com/codebreakdown/togls/issues/65))
 * `Changed`: rule type repository to store meta data
   ([#62](https://github.com/codebreakdown/togls/issues/62))
 * `Added`: uniqueness check for rule types

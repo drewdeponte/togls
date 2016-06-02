@@ -58,9 +58,9 @@ describe Togls::FeatureRepository do
 
   describe "#extract_feature_data" do
     it "returns the feature's extracted feature data" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :some_target_type)
       expect(subject.extract_feature_data(feature))
-        .to eq({ "key" => "some_feature_key", "description" => "Some Feature Desc" })
+        .to eq({ "key" => "some_feature_key", "description" => "Some Feature Desc", "target_type" => "some_target_type" })
     end
   end
 
@@ -177,14 +177,26 @@ describe Togls::FeatureRepository do
 
   describe "#reconstitute_feature" do
     it "constructs a feature from the feature data" do
-      expect(Togls::Feature).to receive(:new).with("some_key", "Your mom")
-      subject.reconstitute_feature({ "key" => "some_key", "description" => "Your mom" })
+      expect(Togls::Feature).to receive(:new).with("some_key", "some desc",
+                                                   :some_target_type)
+      subject.reconstitute_feature({ "key" => "some_key",
+                                     "description" => "some desc",
+                                     "target_type" => "some_target_type" })
+    end
+
+    context 'when feature data is missing target_type' do
+      it 'constructs a feature with a default target type' do
+        expect(Togls::Feature).to receive(:new).with("some_key", "some desc")
+        subject.reconstitute_feature({ "key" => "some_key",
+                                       "description" => "some desc" })
+      end
     end
 
     it "returns the feature" do
       feature = double('feature')
       allow(Togls::Feature).to receive(:new).and_return(feature)
-      subject.reconstitute_feature({ "key" => "some_key", "description" => "Your mom" })
+      expect(subject.reconstitute_feature({ "key" => "some_key", "description" => "some desc",
+                                            "target_type" => 'some target type' })).to eq(feature)
     end
   end
 end

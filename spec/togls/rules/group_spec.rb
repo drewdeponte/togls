@@ -14,8 +14,8 @@ describe Togls::Rules::Group do
   end
 
   describe '.target_type' do
-    it 'returns :any' do
-      expect(Togls::Rules::Group.target_type).to eq(:any)
+    it 'returns ANY' do
+      expect(Togls::Rules::Group.target_type).to eq(Togls::TargetTypes::ANY)
     end
   end
 

@@ -22,7 +22,7 @@ module Togls
     end
 
     def extract_feature_data(feature)
-      { 'key' => feature.key, 'description' => feature.description }
+      { 'key' => feature.key, 'description' => feature.description, 'target_type' => feature.target_type.to_s }
     end
 
     def fetch_feature_data(id)
@@ -45,8 +45,14 @@ module Togls
     end
 
     def reconstitute_feature(feature_data)
-      Togls::Feature.new(feature_data['key'],
-                         feature_data['description'])
+      if feature_data['target_type'].nil?
+        Togls::Feature.new(feature_data['key'],
+                           feature_data['description'])
+      else
+        Togls::Feature.new(feature_data['key'],
+                           feature_data['description'],
+                           feature_data['target_type'].to_sym)
+      end
     end
   end
 end
