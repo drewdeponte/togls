@@ -24,7 +24,11 @@ module Togls
     end
 
     def extract_storage_payload(rule)
-      { 'type_id' => @rule_type_registry.get_type_id(rule.class.to_s), 'data' => rule.data }
+      {
+        'type_id' => @rule_type_registry.get_type_id(rule.class.to_s),
+        'data' => rule.data, 
+        'target_type' => rule.target_type.to_s
+      }
     end
 
     def fetch_rule_data(id)

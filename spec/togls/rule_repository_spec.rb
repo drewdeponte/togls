@@ -72,11 +72,11 @@ describe Togls::RuleRepository do
       subject.extract_storage_payload(rule)
     end
 
-    it "returns the rule's extracted storage payload" do
-      rule = Togls::Rule.new(true)
+    it 'returns the rule\'s extracted storage payload without the target_type' do
+      rule = Togls::Rule.new(true, target_type: :foo)
       allow(rule_type_registry).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
       expect(subject.extract_storage_payload(rule))
-        .to eq({ 'type_id' => 'hoopty', 'data' => true })
+        .to eq({ 'type_id' => 'hoopty', 'data' => true, 'target_type' => 'foo' })
     end
   end
 
