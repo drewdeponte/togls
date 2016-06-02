@@ -277,23 +277,4 @@ describe Togls::Toggle do
       expect(subject.off?(target)).to eq(true)
     end
   end
-
-  describe "#to_s" do
-    context "when based on boolean rule" do
-      it "returns a human readable string representation of the feature including value" do
-        toggle = Togls::Toggle.new(Togls::Feature.new(:key, "some description"))
-        toggle.rule = Togls::Rules::Boolean.new(true)
-        expect(toggle.to_s).to eq(" on - key - some description")
-      end
-    end
-
-    context "when NOT based on boolean rule" do
-      it "returns a human readable string representation of the feature with an unknown value" do
-        rule = Togls::Rule.new(true)
-        toggle = Togls::Toggle.new(Togls::Feature.new(:another_key, "another description"))
-        toggle.rule = rule
-        expect(toggle.to_s).to eq("  ? - another_key - another description")
-      end
-    end
-  end
 end

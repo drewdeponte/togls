@@ -52,15 +52,5 @@ module Togls
     def off?(target = nil)
       !@rule.run(@feature.key, target)
     end
-
-    def to_s
-      display_value = if @rule.is_a?(Togls::Rules::Boolean)
-                        @rule.run(@feature.key) ? ' on' : 'off'
-                      else
-                        '  ?'
-                      end
-
-      "#{display_value} - #{@feature.key} - #{@feature.description}"
-    end
   end
 end
