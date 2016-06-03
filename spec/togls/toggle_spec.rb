@@ -67,7 +67,7 @@ describe Togls::Toggle do
 
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
-              :hoopty # doing this allow construction, changing it after
+              :hoopty
             end
           end
           rule = rule_klass.new
