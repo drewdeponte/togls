@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: setting a default feature target type
+  ([#69](https://github.com/codebreakdown/togls/issues/69))
 * `Added`: rule instance target types and switch type checking over
   ([#67](https://github.com/codebreakdown/togls/issues/67))
 * `Added`: optional target types, and target type checking
