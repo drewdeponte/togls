@@ -22,7 +22,7 @@ describe Togls::Rules::Group do
   describe "#run" do
     context "when the target is included in the list" do
       it "returns true" do
-        group = Togls::Rules::Group.new(["target"])
+        group = Togls::Rules::Group.new(["target"], target_type: :foo)
         expect(group.run(double('feature_key'), "target")).to eq(true)
       end
     end

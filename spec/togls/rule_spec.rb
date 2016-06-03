@@ -23,38 +23,51 @@ describe Togls::Rule do
   end
 
   describe '#initialize' do
-    context 'when just given intialization data' do
-      it 'assigns the given data to an instance variable' do
-        data = double('data')
-        rule = Togls::Rule.new(data)
-        expect(rule.instance_variable_get(:@data)).to eq(data)
+    context 'when given intialization data' do
+      context 'when given target type' do
+        it 'assigns the given data to an instance variable' do
+          data = double('data')
+          rule = Togls::Rule.new(data, target_type: :foo)
+          expect(rule.instance_variable_get(:@data)).to eq(data)
+        end
+
+        it 'assigns the given target type to an instance variable' do
+          data = double('data')
+          rule = Togls::Rule.new(data, target_type: :some_target_type)
+          expect(rule.instance_variable_get(:@target_type)).to eq(:some_target_type)
+        end
       end
 
-      it 'assigns the target type instance variable to nil' do
-        data = double('data')
-        rule = Togls::Rule.new(data)
-        expect(rule.instance_variable_get(:@target_type)).to eq(Togls::TargetTypes::NOT_SET)
-      end
-    end
+      context 'when not given target type' do
+        context 'when rule type did not set target type' do
+          it 'raises target type missing exception' do
+            expect {
+              data = double('data')
+              rule = Togls::Rule.new(data)
+            }.to raise_error(Togls::RuleMissingTargetType)
+          end
+        end
 
-    context 'when given initialization data and target_type' do
-      it 'assigns the given data to an instance variable' do
-        data = double('data')
-        rule = Togls::Rule.new(data, target_type: :some_target_type)
-        expect(rule.instance_variable_get(:@data)).to eq(data)
-      end
+        context 'when rule type did set target type' do
+          it 'return the rule types target type' do
+            rule_klass = Class.new(Togls::Rule) do
+              def self.target_type
+                :foo
+              end
+            end
 
-      it 'assigns the given target type to an instance variable' do
-        data = double('data')
-        rule = Togls::Rule.new(data, target_type: :some_target_type)
-        expect(rule.instance_variable_get(:@target_type)).to eq(:some_target_type)
+            data = double('data')
+            rule = rule_klass.new(data)
+            expect(rule.target_type).to eq(:foo)
+          end
+        end
       end
     end
   end
 
   describe "#run" do
     it "raises NotImplemented exception" do
-      rule = Togls::Rule.new("test value")
+      rule = Togls::Rule.new("test value", target_type: :foo)
       expect { rule.run(double('feature key')) }
         .to raise_error(Togls::NotImplemented)
     end
@@ -77,7 +90,7 @@ describe Togls::Rule do
 
   describe "#data" do
     it "returns the data it was initially initialized with" do
-      rule = Togls::Rule.new("test value")
+      rule = Togls::Rule.new("test value", target_type: :foo)
       expect(rule.data).to eq("test value")
     end
   end
@@ -91,20 +104,7 @@ describe Togls::Rule do
     end
 
     context 'when the rule instance has NO target type or is NOT_SET' do
-      context 'the class target type is nil' do
-        it 'returns the rule type target type' do
-          rule_klass = Class.new(Togls::Rule) do
-            def self.target_type
-              nil
-            end
-          end
-
-          rule = rule_klass.new('some data')
-          expect(rule.target_type).to eq(Togls::TargetTypes::NOT_SET)
-        end
-      end
-
-      context 'when the class target type is NOT nil' do
+      context 'when the rule type target type is NOT nil' do
         it 'returns the rule type target type' do
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
@@ -115,6 +115,31 @@ describe Togls::Rule do
           rule = rule_klass.new('some data')
           expect(rule.target_type).to eq(:woot_woot)
         end
+      end
+    end
+  end
+
+  describe '#missing_target_type?' do
+    context 'when target type is set' do
+      it 'returns false' do
+        rule = Togls::Rule.new(double, target_type: :foo)
+        expect(rule.missing_target_type?).to eq(false)
+      end
+    end
+
+    context 'when target type is not set' do
+      it 'returns true' do
+        rule = Togls::Rule.new(double, target_type: :hoopty)
+        rule.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
+        expect(rule.missing_target_type?).to eq(true)
+      end
+    end
+
+    context 'when target type is nil' do
+      it 'returns true' do
+        rule = Togls::Rule.new(double, target_type: :hoopty)
+        rule.instance_variable_set(:@target_type, nil)
+        expect(rule.missing_target_type?).to eq(true)
       end
     end
   end
