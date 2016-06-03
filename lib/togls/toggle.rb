@@ -23,20 +23,24 @@ module Togls
 
     # feature target type | rule target type | match? | notes
     # -------------------------------------------------------
-    # NOT_SET             | NOT_SET          | false  | broken - shouldn't happen
     # NOT_SET             | NONE             | true   |
-    # NOT_SET             | something (foo)  | false  | broken - shouldn't happen
     # NONE                | NONE             | true   |
-    # NONE                | something (foo)  | false  |
-    # NONE                | NOT_SET          | false  | broken - shouldn't happen
     # something (foo)     | NONE             | true   |
-    # something (foo)     | something (foo)  | true   |
+    # NOT_SET             | NOT_SET          | false  | broken - shouldn't happen
+    # NONE                | NOT_SET          | false  | broken - shouldn't happen
     # something (foo)     | NOT_SET          | false  | broken - shouldn't happen
+    # NOT_SET             | something (foo)  | false  | broken - shouldn't happen
+    # NONE                | something (foo)  | false  |
+    # something (foo)     | something (foo)  | true   |
     # something (foo)     | something (bar)  | false  |
     def target_matches?(rule)
       if rule.target_type == Togls::TargetTypes::NONE
         return true
       elsif rule.target_type == Togls::TargetTypes::NOT_SET
+        Togls.logger.warn "Rule (id: #{rule.id}) cannot have target type of :not_set"
+        return false
+      elsif @feature.target_type == Togls::TargetTypes::NOT_SET
+        Togls.logger.warn "Feature (key: #{feature.key}) cannot have target type of :not_set when rule (id: #{rule.id}) specifies a target type (target_type: #{rule.target_type}"
         return false
       elsif rule.target_type == @feature.target_type
         return true

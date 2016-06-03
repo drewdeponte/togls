@@ -61,7 +61,24 @@ describe Togls::Toggle do
   describe '#target_matches?' do
     context 'when the features target type is not set' do
       context 'when the rules target type is not set' do
+        it 'logs that the rule is broken' do
+          feature = Togls::Feature.new('some name', 'some desc')
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :hoopty
+            end
+          end
+          rule = rule_klass.new
+          allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
+
+          expect(Togls.logger).to receive(:warn).with("Rule (id: #{rule.id}) cannot have target type of :not_set")
+          toggle.target_matches?(rule)
+        end
+
         it 'returns false' do
+          allow(Togls.logger).to receive(:warn)
           feature = Togls::Feature.new('some name', 'some desc')
           toggle = Togls::Toggle.new(feature)
 
@@ -96,7 +113,23 @@ describe Togls::Toggle do
       end
 
       context 'when the rules target type is specified' do
+        it 'logs that the feature is broken' do
+          feature = Togls::Feature.new('some name', 'some desc')
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :foo
+            end
+          end
+          rule = rule_klass.new
+
+          expect(Togls.logger).to receive(:warn).with("Feature (key: #{feature.key}) cannot have target type of :not_set when rule (id: #{rule.id}) specifies a target type (target_type: #{rule.target_type}")
+          toggle.target_matches?(rule)
+        end
+
         it 'returns false' do
+          allow(Togls.logger).to receive(:warn)
           feature = Togls::Feature.new('some name', 'some desc')
           toggle = Togls::Toggle.new(feature)
 
@@ -149,7 +182,24 @@ describe Togls::Toggle do
       end
 
       context 'when the rules target type is not set' do
+        it 'logs that the rule is broken' do
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :foo
+            end
+          end
+          rule = rule_klass.new
+          allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
+
+          expect(Togls.logger).to receive(:warn).with("Rule (id: #{rule.id}) cannot have target type of :not_set")
+          toggle.target_matches?(rule)
+        end
+
         it 'returns false' do
+          allow(Togls.logger).to receive(:warn)
           feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
           toggle = Togls::Toggle.new(feature)
 
@@ -203,7 +253,24 @@ describe Togls::Toggle do
       end
 
       context 'when the rules target type is not set' do
+        it 'logs that the rule is broken' do
+          feature = Togls::Feature.new('some name', 'some desc', :foo)
+          toggle = Togls::Toggle.new(feature)
+
+          rule_klass = Class.new(Togls::Rule) do
+            def self.target_type
+              :foo
+            end
+          end
+          rule = rule_klass.new
+          allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
+
+          expect(Togls.logger).to receive(:warn).with("Rule (id: #{rule.id}) cannot have target type of :not_set")
+          toggle.target_matches?(rule)
+        end
+
         it 'returns false' do
+          allow(Togls.logger).to receive(:warn)
           feature = Togls::Feature.new('some name', 'some desc', :foo)
           toggle = Togls::Toggle.new(feature)
 
