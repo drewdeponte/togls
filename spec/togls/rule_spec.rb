@@ -23,7 +23,7 @@ describe Togls::Rule do
   end
 
   describe '#initialize' do
-    context 'when given intialization data' do
+    context 'when given initialization data' do
       context 'when given target type' do
         it 'assigns the given data to an instance variable' do
           data = double('data')
@@ -56,6 +56,43 @@ describe Togls::Rule do
 
             data = double('data')
             rule = rule_klass.new(data)
+            expect(rule.target_type).to eq(:foo)
+          end
+        end
+      end
+    end
+
+    context 'when not given initialization data' do
+      context 'when given target type' do
+        it 'assigns the data instance variable to nil' do
+          rule = Togls::Rule.new(target_type: :foo)
+          expect(rule.instance_variable_get(:@data)).to be_nil
+        end
+
+        it 'assigns the given target type to an instance variable' do
+          rule = Togls::Rule.new(target_type: :some_target_type)
+          expect(rule.instance_variable_get(:@target_type)).to eq(:some_target_type)
+        end
+      end
+
+      context 'when not given target type' do
+        context 'when rule type did not set target type' do
+          it 'raises target type missing exception' do
+            expect {
+              rule = Togls::Rule.new
+            }.to raise_error(Togls::RuleMissingTargetType)
+          end
+        end
+
+        context 'when rule type did set target type' do
+          it 'return the rule types target type' do
+            rule_klass = Class.new(Togls::Rule) do
+              def self.target_type
+                :foo
+              end
+            end
+
+            rule = rule_klass.new
             expect(rule.target_type).to eq(:foo)
           end
         end
