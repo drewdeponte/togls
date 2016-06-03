@@ -346,29 +346,27 @@ describe Togls::Toggle do
     end
 
     context 'when the feature target type contract specifies a target type' do
-      context 'when the rule target type expects a target' do
-        context 'when the target is not nil' do
-          it 'succeeds at validating' do
-            feature = Togls::Feature.new(:name, 'desc', :foo)
-            rule = Togls::Rule.new(target_type: :foo)
-            toggle = Togls::Toggle.new(feature)
-            toggle.rule = rule
-            expect {
-              toggle.validate_target('asdf')
-            }.not_to raise_error
-          end
+      context 'when the target is not nil' do
+        it 'succeeds at validating' do
+          feature = Togls::Feature.new(:name, 'desc', :foo)
+          rule = Togls::Rule.new(target_type: :foo)
+          toggle = Togls::Toggle.new(feature)
+          toggle.rule = rule
+          expect {
+            toggle.validate_target('asdf')
+          }.not_to raise_error
         end
+      end
 
-        context 'when the target is nil' do
-          it 'raises an exception' do
-            feature = Togls::Feature.new(:name, 'desc', :foo)
-            rule = Togls::Rule.new(target_type: :foo)
-            toggle = Togls::Toggle.new(feature)
-            toggle.rule = rule
-            expect {
-              toggle.validate_target(nil)
-            }.to raise_error Togls::EvaluationTargetMissing
-          end
+      context 'when the target is nil' do
+        it 'raises an exception' do
+          feature = Togls::Feature.new(:name, 'desc', :foo)
+          rule = Togls::Rule.new(target_type: :foo)
+          toggle = Togls::Toggle.new(feature)
+          toggle.rule = rule
+          expect {
+            toggle.validate_target(nil)
+          }.to raise_error Togls::EvaluationTargetMissing
         end
       end
     end

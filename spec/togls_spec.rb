@@ -489,7 +489,7 @@ describe "Togl" do
       end
 
       context 'when the feature evaluation does NOT send a target' do
-        it 'can be corredtly evaluated' do
+        it 'can be correctly evaluated' do
           Togls.release do
             feature(:foo, 'desc', target_type: Togls::TargetTypes::NONE).on
           end
