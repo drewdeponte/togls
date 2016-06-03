@@ -12,6 +12,10 @@ that you can set version constraints properly.
 
 * `Added`: setting a default feature target type
   ([#69](https://github.com/codebreakdown/togls/issues/69))
+* `Added`: logging for target type mismatches/erroneous states
+  ([#69](https://github.com/codebreakdown/togls/issues/69))
+* `Changed`: in code feature rule association API to require `target_type`
+  ([#69](https://github.com/codebreakdown/togls/issues/69))
 * `Added`: rule instance target types and switch type checking over
   ([#67](https://github.com/codebreakdown/togls/issues/67))
 * `Added`: optional target types, and target type checking
