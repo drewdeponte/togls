@@ -14,7 +14,7 @@ RSpec.describe Togls::DefaultFeatureTargetTypeManager do
         end
       end
 
-      context 'when default feature target type has been set' do
+      context 'when default feature target type has previously been set' do
         it 'raises an exception' do
           klass = Class.new do
             include Togls::DefaultFeatureTargetTypeManager
