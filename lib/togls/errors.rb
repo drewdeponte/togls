@@ -10,4 +10,6 @@ module Togls
   class RuleMissingTargetType < Error; end
   class DefaultFeatureTargetTypeAlreadySet < Error; end
   class FeatureMissingTargetType < Error; end
+  class EvaluationTargetMissing < Error; end
+  class UnexpectedEvaluationTarget < Error; end
 end

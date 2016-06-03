@@ -49,11 +49,30 @@ module Togls
       end
     end
 
+    # feature.target_type | target.nil? | valid target
+    # NONE                | false       | FALSE - EXCEPTION
+    # :foo                | true        | FALSE - EXCEPTION
+    # NONE                | true        | true
+    # :foo                | false       | true
+    # NOT_SET             | ignored     | true - broken
+    def validate_target(target)
+      is_explicit_target_type = @feature.target_type != Togls::TargetTypes::NONE &&
+        @feature.target_type != Togls::TargetTypes::NOT_SET
+      if @feature.target_type == Togls::TargetTypes::NONE && target
+        raise Togls::UnexpectedEvaluationTarget
+      elsif is_explicit_target_type && target.nil?
+        raise Togls::EvaluationTargetMissing
+      end
+      # Is valid
+    end
+
     def on?(target = nil)
+      validate_target(target)
       @rule.run(@feature.key, target)
     end
 
     def off?(target = nil)
+      validate_target(target)
       !@rule.run(@feature.key, target)
     end
   end
