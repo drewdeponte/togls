@@ -34,20 +34,20 @@ describe Togls::FeatureRepository do
 
   describe "#store" do
     it "extracts the feature data" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       expect(subject).to receive(:extract_feature_data).with(feature)
       allow(driver).to receive(:store)
       subject.store(feature)
     end
 
     it "iterate over each driver" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       expect(subject.instance_variable_get(:@drivers)).to receive(:each)
       subject.store(feature)
     end
 
     it "store the toggle in each driver" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       feature_data = double('feature data')
       allow(subject).to receive(:extract_feature_data).and_return(feature_data)
       allow(subject.instance_variable_get(:@drivers)).to receive(:each).and_yield(driver)

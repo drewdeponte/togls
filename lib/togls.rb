@@ -26,6 +26,7 @@ require 'togls/rule'
 require 'togls/rules'
 require 'logger'
 require 'togls/feature_toggle_registry_manager'
+require 'togls/default_feature_target_type_manager'
 
 # Togls
 #
@@ -33,4 +34,5 @@ require 'togls/feature_toggle_registry_manager'
 # the namespace the DSL is exposed under.
 module Togls
   include FeatureToggleRegistryManager
+  include DefaultFeatureTargetTypeManager
 end

@@ -48,6 +48,7 @@ describe Togls::ToggleRegistry do
 
   describe "#feature" do
     it "verifies that the feature is unique" do
+      Togls.default_feature_target_type :hoopty
       expect(subject).to receive(:verify_uniqueness_of_feature).with(:some_key)
       subject.feature(:some_key, "description")
     end
@@ -82,6 +83,7 @@ describe Togls::ToggleRegistry do
     end
 
     it "constructs a toggler" do
+      Togls.default_feature_target_type :hoopty
       key = "some_key"
       desc = double('feature desc')
       toggle_repository = subject.instance_variable_get(:@toggle_repository)
@@ -93,6 +95,7 @@ describe Togls::ToggleRegistry do
     end
 
     it "returns the created toggler" do
+      Togls.default_feature_target_type :hoopty
       key = "some_key"
       desc = double('feature desc')
       toggle = double('toggle').as_null_object

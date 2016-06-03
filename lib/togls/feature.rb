@@ -6,10 +6,11 @@ module Togls
   class Feature
     attr_reader :key, :description
 
-    def initialize(key, description, target_type = Togls::TargetTypes::NOT_SET)
+    def initialize(key, description, target_type)
       @key = key.to_s
       @description = description
       @target_type = target_type
+      raise Togls::FeatureMissingTargetType, "Feature '#{self.key}' is missing a required target type" if self.missing_target_type?
     end
 
     def target_type
@@ -19,6 +20,11 @@ module Togls
 
     def id
       @key
+    end
+
+    def missing_target_type?
+      return false if target_type && (target_type != Togls::TargetTypes::NOT_SET)
+      return true
     end
   end
 end

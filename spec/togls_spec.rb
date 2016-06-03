@@ -1,6 +1,19 @@
 require 'spec_helper'
 
 describe "Togl" do
+  describe 'set default feature target type' do
+    it 'sets the default feature target type' do
+      Togls.default_feature_target_type Togls::TargetTypes::NONE
+    end
+  end
+
+  describe 'get the default feature target type' do
+    it 'gets the default feature target type' do
+      Togls.default_feature_target_type :foopty
+      expect(Togls.default_feature_target_type).to eq(:foopty)
+    end
+  end
+
   describe 'registering rule types' do
     it 'registers the rule type' do
       rule_klass = Class.new(Togls::Rule) do
@@ -103,7 +116,60 @@ describe "Togl" do
   end
 
   describe "defining release toggles" do
+    context 'default feature target type NOT set' do
+      context 'feature defined does not include target type' do
+        it 'raise exception saying deafult feature target type has to be set or feature need a target type' do
+          expect {
+            Togls.release do
+              feature(:test, "some human readable description").on
+            end
+          }.to raise_error(Togls::FeatureMissingTargetType)
+        end
+      end
+
+      context 'feature defined does include target type' do
+        it 'defines the feature' do
+          expect {
+            Togls.release do
+              feature(:test, "some human readable description", target_type: :foo).on
+            end
+          }.not_to raise_error
+        end
+      end
+    end
+
+    context 'default feature target type set' do
+      before do
+        Togls.instance_variable_set(:@default_feature_target_type, nil)
+      end
+
+      context 'feature defined does not include target type' do
+        it 'defines the feature with the default feature target type' do
+          Togls.default_feature_target_type :jacked
+
+          Togls.release do
+            feature(:foo, 'foo desc').on
+          end
+
+          expect(Togls.feature(:foo).feature.target_type).to eq(:jacked)
+        end
+      end
+
+      context 'feature defined does include target type' do
+        it 'defines the feature' do
+          Togls.default_feature_target_type :jacked
+
+          Togls.release do
+            feature(:foo, 'foo desc', target_type: :hoopty).on
+          end
+
+          expect(Togls.feature(:foo).feature.target_type).to eq(:hoopty)
+        end
+      end
+    end
+
     it "creates a new feature toggled on" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:test, "some human readable description").on
       end
@@ -112,6 +178,7 @@ describe "Togl" do
     end
 
     it "creates a new feature toggled off" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:test, "some human readable description").off
       end
@@ -120,6 +187,7 @@ describe "Togl" do
     end
 
     it "creates a new feature with a rule" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         rule = Togls::Rules::Boolean.new(false)
         feature(:test, "some human readable description").on(rule)
@@ -207,6 +275,7 @@ describe "Togl" do
 
     context 'when redefining an existing feature' do
       it 'raises an already defined error' do
+        Togls.default_feature_target_type :hoopty
         Togls.release do
           feature(:foo, 'some decription')
         end
@@ -222,6 +291,7 @@ describe "Togl" do
 
   describe "expanding feature toggles" do
     it "creates a new feature toggled on while keeping the previously defined features" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:test, "some human readable description").on
       end
@@ -237,6 +307,7 @@ describe "Togl" do
 
   describe "set the feature toggle registry" do
     it "uses the specified feature toggle registry" do
+      Togls.default_feature_target_type :hoopty
       Togls.enable_test_mode
       Togls.release do
         feature(:foo, "some magic foo").on
@@ -248,6 +319,7 @@ describe "Togl" do
 
   describe 'isolating toggles using test mode' do
     it 'stores, isolates, and recovers the toggles' do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:foo, 'some foo feature').on
       end
@@ -267,6 +339,7 @@ describe "Togl" do
 
   describe "evaluating feature toggles" do
     it "asks a feature if it is on" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:test, "some human readable description").on
       end
@@ -275,6 +348,7 @@ describe "Togl" do
     end
 
     it "asks a feature if it is off" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:test, "some human readable description").on
       end
@@ -283,6 +357,7 @@ describe "Togl" do
     end
 
     it "defaults to false when a feature is not defined" do
+      Togls.default_feature_target_type :hoopty
       allow(Togls.logger).to receive(:warn)
       Togls.release do
         feature(:test, "some human readable description").on
@@ -367,6 +442,7 @@ describe "Togl" do
       end
 
       it "feature reports being off" do
+        Togls.default_feature_target_type :hoopty
         Togls.release do
           feature(:test, "some human readable description").on
         end
@@ -383,6 +459,7 @@ describe "Togl" do
       end
 
       it "feature reports being on" do
+        Togls.default_feature_target_type :hoopty
         Togls.release do
           feature(:test, "some human readable description").off
         end
@@ -399,6 +476,7 @@ describe "Togl" do
       end
 
       it "feature falls back to in memory store value" do
+        Togls.default_feature_target_type :hoopty
         Togls.release do
           feature(:test, "some human readable description").on
         end
@@ -425,6 +503,7 @@ describe "Togl" do
 
   describe "defining feature toggles in additional registry" do
     it "creates an isolated registred with a feature toggled off" do
+      Togls.default_feature_target_type :hoopty
       Togls.release do
         feature(:test, "some human readable description").on
       end
