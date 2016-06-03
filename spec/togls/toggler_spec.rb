@@ -31,17 +31,15 @@ describe Togls::Toggler do
   describe "#on" do
     context "when the rule is nil" do
       it "creates a new rule" do
-        toggle = subject.instance_variable_get(:@toggle)
-        toggle_repository = subject.instance_variable_get(:@toggle_repository)
         allow(toggle_repository).to receive(:store)
         allow(toggle).to receive(:rule=)
-        expect(Togls::Rules::Boolean).to receive(:new).once
+        expect(Togls::Rules::Boolean).to receive(:new).once.and_return(Togls::Rules::Boolean.new)
         subject.on
       end
     end
 
     it "sets the toggle's rule to the new rule" do
-      rule = double('rule')
+      rule = Togls::Rules::Boolean.new
       toggle_repository = subject.instance_variable_get(:@toggle_repository)
       allow(toggle_repository).to receive(:store)
       allow(Togls::Rules::Boolean).to receive(:new).and_return(rule)

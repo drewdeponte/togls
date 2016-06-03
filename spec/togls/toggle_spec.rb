@@ -67,10 +67,11 @@ describe Togls::Toggle do
 
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
-              Togls::TargetTypes::NOT_SET
+              :hoopty
             end
           end
           rule = rule_klass.new
+          allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql false
@@ -154,10 +155,11 @@ describe Togls::Toggle do
 
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
-              Togls::TargetTypes::NOT_SET
+              :hoopty
             end
           end
           rule = rule_klass.new
+          allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql false
@@ -207,10 +209,11 @@ describe Togls::Toggle do
 
           rule_klass = Class.new(Togls::Rule) do
             def self.target_type
-              Togls::TargetTypes::NOT_SET
+              :foo
             end
           end
           rule = rule_klass.new
+          allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql false

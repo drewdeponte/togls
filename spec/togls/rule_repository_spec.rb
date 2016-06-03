@@ -42,7 +42,7 @@ describe Togls::RuleRepository do
 
   describe "#store" do
     it "gets the storage payload" do
-      rule = Togls::Rule.new
+      rule = Togls::Rule.new(target_type: :foo)
       allow(driver).to receive(:store)
       expect(subject).to receive(:extract_storage_payload).with(rule)
       subject.store(rule)
@@ -56,7 +56,7 @@ describe Togls::RuleRepository do
     end
 
     it "store the rule data in each driver" do
-      rule = Togls::Rule.new(true)
+      rule = Togls::Rule.new(target_type: :foo)
       rule_data = double('rule data')
       allow(subject).to receive(:extract_storage_payload).and_return(rule_data)
       allow(subject.instance_variable_get(:@drivers)).to receive(:each).and_yield(driver)
@@ -67,7 +67,7 @@ describe Togls::RuleRepository do
 
   describe "#extract_storage_payload" do
     it 'gets the rule_type_id from rule type repository' do
-      rule = Togls::Rule.new(true)
+      rule = Togls::Rule.new(target_type: :foo)
       expect(rule_type_registry).to receive(:get_type_id).with('Togls::Rule')
       subject.extract_storage_payload(rule)
     end

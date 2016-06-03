@@ -21,6 +21,7 @@ module Togls
     def initialize(data = nil, target_type: Togls::TargetTypes::NOT_SET)
       @data = data
       @target_type = target_type
+      raise Togls::RuleMissingTargetType, "Rule '#{self.id}' of type '#{self.class}' is missing a required target type" if self.missing_target_type?
     end
 
     def run(key, target = nil)
@@ -35,6 +36,11 @@ module Togls
       return @target_type if @target_type && @target_type != Togls::TargetTypes::NOT_SET
       return self.class.target_type unless self.class.target_type.nil?
       return Togls::TargetTypes::NOT_SET
+    end
+
+    def missing_target_type?
+      return false if target_type && (target_type != Togls::TargetTypes::NOT_SET)
+      return true
     end
   end
 end
