@@ -62,7 +62,8 @@ describe Togls::Toggle do
     context 'when the features target type is not set' do
       context 'when the rules target type is not set' do
         it 'logs that the rule is broken' do
-          feature = Togls::Feature.new('some name', 'some desc')
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do
@@ -79,7 +80,8 @@ describe Togls::Toggle do
 
         it 'returns false' do
           allow(Togls.logger).to receive(:warn)
-          feature = Togls::Feature.new('some name', 'some desc')
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do
@@ -97,7 +99,8 @@ describe Togls::Toggle do
 
       context 'when the rules target type is set to none' do
         it 'returns true' do
-          feature = Togls::Feature.new('some name', 'some desc')
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do
@@ -114,7 +117,8 @@ describe Togls::Toggle do
 
       context 'when the rules target type is specified' do
         it 'logs that the feature is broken' do
-          feature = Togls::Feature.new('some name', 'some desc')
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do
@@ -130,7 +134,8 @@ describe Togls::Toggle do
 
         it 'returns false' do
           allow(Togls.logger).to receive(:warn)
-          feature = Togls::Feature.new('some name', 'some desc')
+          feature = Togls::Feature.new('some name', 'some desc', Togls::TargetTypes::NONE)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
           toggle = Togls::Toggle.new(feature)
 
           rule_klass = Class.new(Togls::Rule) do

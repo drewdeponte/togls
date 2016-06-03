@@ -14,7 +14,7 @@ describe Togls::ToggleRepositoryDrivers::InMemoryDriver do
 
   describe "storing and retrieving" do
     it "saves the storage payload and retrieves it" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       toggle = Togls::Toggle.new(feature)
       toggle_data = { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
       subject.store(toggle.id, toggle_data)
@@ -30,7 +30,7 @@ describe Togls::ToggleRepositoryDrivers::InMemoryDriver do
 
   describe "#all" do
     it "returns the collection of toggles" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       toggle = Togls::Toggle.new(feature)
       toggle_data = { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
       subject.store(toggle.id, toggle_data)

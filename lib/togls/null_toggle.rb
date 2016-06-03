@@ -5,7 +5,7 @@ module Togls
   # toggle found when requested to be retreived through a Toggle Repository.
   class NullToggle < Togls::Toggle
     def initialize
-      feature = Togls::Feature.new('null', 'the official null feature')
+      feature = Togls::Feature.new('null', 'the official null feature', Togls::TargetTypes::NONE)
       super(feature)
     end
 

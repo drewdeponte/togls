@@ -14,7 +14,7 @@ describe Togls::FeatureRepositoryDrivers::InMemoryDriver do
 
   describe "storing and retrieving" do
     it "saves and retrieves the storage payload" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc")
+      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :foo)
       subject.store(feature.id, { "key" => feature.key, "description" => feature.description })
       expect(subject.get(feature.id)).to eq({ "key" => feature.key, "description" => feature.description })
     end

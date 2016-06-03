@@ -8,4 +8,6 @@ module Togls
   class RuleTypeAlreadyDefined < Error; end
   class RuleFeatureTargetTypeMismatch < Error; end
   class RuleMissingTargetType < Error; end
+  class DefaultFeatureTargetTypeAlreadySet < Error; end
+  class FeatureMissingTargetType < Error; end
 end
