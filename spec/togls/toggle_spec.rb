@@ -311,11 +311,80 @@ describe Togls::Toggle do
     end
   end
 
+  describe "#validate_target" do
+    context 'when the feature target type contract is NONE' do
+      context 'when the target is not nil' do
+        it 'raises an exception' do
+          feature = Togls::Feature.new(:foo, 'desc', Togls::TargetTypes::NONE)
+          toggle = Togls::Toggle.new(feature)
+          expect {
+            toggle.validate_target('asdf')
+          }.to raise_error Togls::UnexpectedEvaluationTarget
+        end
+      end
+
+      context 'when the target is nil' do
+        it 'succeeds at validating' do
+          feature = Togls::Feature.new(:foo, 'desc', Togls::TargetTypes::NONE)
+          toggle = Togls::Toggle.new(feature)
+          expect {
+            toggle.validate_target(nil)
+          }.not_to raise_error
+        end
+      end
+    end
+
+    context 'when the feature target type contract is NOT_SET' do
+      it 'succeeds at validating' do
+        feature = Togls::Feature.new(:foo, 'desc', :foo)
+        feature.instance_variable_set(:@target_type, Togls::TargetTypes::NOT_SET)
+        toggle = Togls::Toggle.new(feature)
+        expect {
+          toggle.validate_target('asdf')
+        }.not_to raise_error
+      end
+    end
+
+    context 'when the feature target type contract specifies a target type' do
+      context 'when the target is not nil' do
+        it 'succeeds at validating' do
+          feature = Togls::Feature.new(:name, 'desc', :foo)
+          rule = Togls::Rule.new(target_type: :foo)
+          toggle = Togls::Toggle.new(feature)
+          toggle.rule = rule
+          expect {
+            toggle.validate_target('asdf')
+          }.not_to raise_error
+        end
+      end
+
+      context 'when the target is nil' do
+        it 'raises an exception' do
+          feature = Togls::Feature.new(:name, 'desc', :foo)
+          rule = Togls::Rule.new(target_type: :foo)
+          toggle = Togls::Toggle.new(feature)
+          toggle.rule = rule
+          expect {
+            toggle.validate_target(nil)
+          }.to raise_error Togls::EvaluationTargetMissing
+        end
+      end
+    end
+  end
+
   describe "#on?" do
+    it 'validates target against feature contract' do
+      target = double('target')
+      allow(feature).to receive(:key).and_return("key")
+      expect(subject).to receive(:validate_target).with(target)
+      subject.on?(target)
+    end
+
     it "runs the associated rule" do
       rule = double('rule')
       target = double('target')
       subject.instance_variable_set(:@rule, rule)
+      allow(subject).to receive(:validate_target).with(target)
       allow(feature).to receive(:key).and_return("key")
       expect(rule).to receive(:run).with(subject.feature.key, target)
       subject.on?(target)
@@ -326,6 +395,7 @@ describe Togls::Toggle do
       target = double('target')
       result = double('result')
       subject.instance_variable_set(:@rule, rule)
+      allow(subject).to receive(:validate_target).with(target)
       allow(feature).to receive(:key).and_return("key")
       allow(rule).to receive(:run).and_return(result)
       expect(subject.on?(target)).to eq(result)
@@ -333,10 +403,18 @@ describe Togls::Toggle do
   end
 
   describe "#off?" do
+    it 'validates target against feature contract' do
+      target = double('target')
+      allow(feature).to receive(:key).and_return("key")
+      expect(subject).to receive(:validate_target).with(target)
+      subject.off?(target)
+    end
+
     it "runs the associated rule" do
       rule = double('rule')
       target = double('target')
       subject.instance_variable_set(:@rule, rule)
+      allow(subject).to receive(:validate_target).with(target)
       allow(feature).to receive(:key).and_return("key")
       expect(rule).to receive(:run).with(subject.feature.key, target)
       subject.off?(target)
@@ -347,6 +425,7 @@ describe Togls::Toggle do
       target = double('target')
       result = false
       subject.instance_variable_set(:@rule, rule)
+      allow(subject).to receive(:validate_target).with(target)
       allow(feature).to receive(:key).and_return("key")
       allow(rule).to receive(:run).and_return(result)
       expect(subject.off?(target)).to eq(true)
