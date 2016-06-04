@@ -176,7 +176,15 @@ describe Togls::FeatureRepository do
   end
 
   describe "#reconstitute_feature" do
+    it 'validates the feature data' do
+      feature_data = { "key" => "some_key", "description" => "some desc",
+        "target_type" => "some_target_type" }
+      expect(subject).to receive(:validate_feature_data).with(feature_data)
+      subject.reconstitute_feature(feature_data)
+    end
+
     it "constructs a feature from the feature data" do
+      allow(subject).to receive(:validate_feature_data)
       expect(Togls::Feature).to receive(:new).with("some_key", "some desc",
                                                    :some_target_type)
       subject.reconstitute_feature({ "key" => "some_key",
@@ -184,19 +192,89 @@ describe Togls::FeatureRepository do
                                      "target_type" => "some_target_type" })
     end
 
-    context 'when feature data is missing target_type' do
-      it 'constructs a feature with a default target type' do
-        expect(Togls::Feature).to receive(:new).with("some_key", "some desc")
-        subject.reconstitute_feature({ "key" => "some_key",
-                                       "description" => "some desc" })
-      end
-    end
-
     it "returns the feature" do
+      allow(subject).to receive(:validate_feature_data)
       feature = double('feature')
       allow(Togls::Feature).to receive(:new).and_return(feature)
       expect(subject.reconstitute_feature({ "key" => "some_key", "description" => "some desc",
                                             "target_type" => 'some target type' })).to eq(feature)
+    end
+  end
+
+  describe '#validate_feature_data' do
+    context 'when feature data is complete and proper' do
+      it 'does not raise an exception' do
+        feature_data = { "key" => "some_key", "description" => "some desc",
+          "target_type" => "some_target_type" }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.not_to raise_error
+      end
+    end
+
+    context 'when feature data is nil' do
+      it 'raises an exception' do
+        feature_data = nil
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
+    end
+
+    context 'when feature data is missing key' do
+      it 'raises an exception' do
+        feature_data = { "description" => "some desc",
+          "target_type" => "some_target_type" }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
+    end
+
+    context 'when feature data is missing description' do
+      it 'raises an exception' do
+        feature_data = { "key" => "some_key",
+          "target_type" => "some_target_type" }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
+    end
+
+    context 'when feature data is missing target_type' do
+      it 'raises an exception' do
+        feature_data = { "key" => "some_key", "description" => "some desc" }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
+    end
+
+    context 'when feature data key is not a string' do
+      it 'raises an exception' do
+        feature_data = { "key" => 12342, "description" => "some desc", "target_type" => "some_target_type" }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
+    end
+
+    context 'when feature data description is not a string' do
+      it 'raises an exception' do
+        feature_data = { "key" => "foo", "description" => 234324, "target_type" => "some_target_type" }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
+    end
+
+    context 'when feature data target_type is not a string' do
+      it 'raises an exception' do
+        feature_data = { "key" => "foo", "description" => "aoeuaoe", "target_type" => 2343242 }
+        expect {
+          subject.validate_feature_data(feature_data)
+        }.to raise_error(Togls::RepositoryFeatureDataInvalid)
+      end
     end
   end
 end

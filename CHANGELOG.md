@@ -10,6 +10,7 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: Feature repository response validation
 * `Added`: validation of targets against feature target_type contract
   ([#78](https://github.com/codebreakdown/togls/issues/78))
 * `Added`: setting a default feature target type
