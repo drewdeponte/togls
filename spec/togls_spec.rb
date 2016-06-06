@@ -104,6 +104,31 @@ RSpec.describe "Togl" do
     end
   end
 
+  describe 'build rule' do
+    it 'builds a rule instance from an abstract rule type and params' do
+      FooBarRule = Class.new(Togls::Rule) do
+        def self.title
+          'some title'
+        end
+
+        def self.description
+          'some desc'
+        end
+      end
+
+      Togls.rule_types do
+        register(:rule_id, FooBarRule)
+      end
+
+      data = double('some data')
+
+      rule = Togls.rule(:rule_id, data, target_type: :some_target_type)
+      expect(rule).to be_a(FooBarRule)
+      expect(rule.data).to eq(data)
+      expect(rule.target_type).to eq(:some_target_type)
+    end
+  end
+
   describe 'default rule types registered' do
     it 'makes the default rule types available' do
       klass = Class.new do
