@@ -54,8 +54,8 @@ module Togls
     def validate_feature_data(feature_data)
       raise Togls::RepositoryFeatureDataInvalid, "None of the feature repository drivers claim to have the feature" if feature_data.nil?
       keys = ['key', 'description', 'target_type'].each do |k|
-        raise Togls::RepositoryFeatureDataInvalid, "One of the feature repository drivers returned feature data that is missing the '#{k}'" if !feature_data.has_key? k
-        raise Togls::RepositoryFeatureDataInvalid, "One of the feature repository drivers returned feature data that with '#{k}' not being a string" if !feature_data[k].is_a?(String)
+        raise Togls::RepositoryFeatureDataInvalid, "One of the feature repository drivers returned feature data that is missing the '#{k}'" unless feature_data.has_key? k
+        raise Togls::RepositoryFeatureDataInvalid, "One of the feature repository drivers returned feature data with '#{k}' not being a string" unless feature_data[k].is_a?(String)
       end
     end
   end
