@@ -3,8 +3,8 @@ module Togls
   #
   # Collection of helper methods used through the Togls library.
   module Helpers
-    def self.sha1(klass, data)
-      Digest::SHA1.hexdigest("#{klass}:#{data}")
+    def self.sha1(*args)
+      Digest::SHA1.hexdigest(args.join(':'))
     end
   end
 end
