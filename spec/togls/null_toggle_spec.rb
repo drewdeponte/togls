@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::NullToggle do
+RSpec.describe Togls::NullToggle do
   describe "#initialize" do
     it "constructs a null feature" do
       expect(Togls::Feature).to receive(:new).with("null", "the official null feature", Togls::TargetTypes::EITHER)

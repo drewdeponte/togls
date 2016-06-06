@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::FeatureRepository do
+RSpec.describe Togls::FeatureRepository do
   let(:driver) { double('driver') }
   subject { Togls::FeatureRepository.new([driver]) }
 

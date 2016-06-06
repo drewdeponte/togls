@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::RuleRepository do
+RSpec.describe Togls::RuleRepository do
   let(:driver) { double('driver') }
   let(:rule_type_registry) { double('rule_type_registry') }
   subject { Togls::RuleRepository.new(rule_type_registry, [driver]) }

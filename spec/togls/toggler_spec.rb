@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::Toggler do
+RSpec.describe Togls::Toggler do
   let(:toggle_repository) { double('toggle repository') }
   let(:toggle) { double('toggle') }
   subject { Togls::Toggler.new(toggle_repository, toggle) }

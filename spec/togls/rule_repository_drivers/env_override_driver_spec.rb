@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::RuleRepositoryDrivers::EnvOverrideDriver do
+RSpec.describe Togls::RuleRepositoryDrivers::EnvOverrideDriver do
   describe '#initialize' do
     it 'constructs an instance' do
       res = Togls::RuleRepositoryDrivers::EnvOverrideDriver.new

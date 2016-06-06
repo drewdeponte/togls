@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::ToggleRegistry do
+RSpec.describe Togls::ToggleRegistry do
   let!(:feature_repository) do
     Togls::FeatureRepository.new([Togls::FeatureRepositoryDrivers::InMemoryDriver.new])
   end

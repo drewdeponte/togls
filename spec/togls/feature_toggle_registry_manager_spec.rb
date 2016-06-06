@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::FeatureToggleRegistryManager do
+RSpec.describe Togls::FeatureToggleRegistryManager do
   let(:klass) { Class.new { include Togls::FeatureToggleRegistryManager } }
 
   describe '.rule_types' do

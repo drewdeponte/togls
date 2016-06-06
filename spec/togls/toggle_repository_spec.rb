@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::ToggleRepository do
+RSpec.describe Togls::ToggleRepository do
   let(:driver) { double('driver') }
   let(:rule_repository) { double('rule repository') }
   let(:feature_repository) { double('feature repository') }

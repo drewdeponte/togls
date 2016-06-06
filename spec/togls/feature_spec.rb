@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::Feature do
+RSpec.describe Togls::Feature do
   subject { Togls::Feature.new(:key, "some description", :foo_target_type) }
 
   describe "#initialize" do

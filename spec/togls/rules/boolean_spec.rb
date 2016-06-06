@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::Rules::Boolean do
+RSpec.describe Togls::Rules::Boolean do
   describe '.title' do
     it 'does not raise an error' do
       Togls::Rules::Boolean.title

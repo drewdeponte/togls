@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::Rules::Group do
+RSpec.describe Togls::Rules::Group do
   describe '.title' do
     it 'does not raise an error' do
       Togls::Rules::Group.title

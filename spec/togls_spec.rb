@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Togl" do
+RSpec.describe "Togl" do
   describe 'set default feature target type' do
     it 'sets the default feature target type' do
       Togls.default_feature_target_type Togls::TargetTypes::NONE
