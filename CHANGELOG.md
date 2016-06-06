@@ -10,6 +10,10 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: `Togls.rule` method to simplify rule construction from `type_id`
+  ([#86](https://github.com/codebreakdown/togls/issues/86))
+* `Changed`: Rule construction to require an abstract rule `type_id`
+  ([#86](https://github.com/codebreakdown/togls/issues/86))
 * `Added`: Feature repository response validation
 * `Added`: validation of targets against feature target_type contract
   ([#78](https://github.com/codebreakdown/togls/issues/78))

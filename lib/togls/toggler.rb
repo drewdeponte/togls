@@ -10,14 +10,14 @@ module Togls
     end
 
     def on(rule = nil)
-      rule = Togls::Rules::Boolean.new(true) if rule.nil?
+      rule = Togls::Rules::Boolean.new(:boolean, true) if rule.nil?
       @toggle.rule = rule
       @toggle_repository.store(@toggle)
       @toggle
     end
 
     def off
-      rule = Togls::Rules::Boolean.new(false)
+      rule = Togls::Rules::Boolean.new(:boolean, false)
       @toggle.rule = rule
       @toggle_repository.store(@toggle)
       @toggle

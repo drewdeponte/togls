@@ -27,6 +27,10 @@ module Togls
         rule_type_registry.get(type_id)
       end
 
+      def rule(type_id, data, target_type: Togls::TargetTypes::NOT_SET)
+        rule_type(type_id).new(type_id, data, target_type: target_type)
+      end
+
       def feature(key)
         release_toggle_registry.get(key)
       end

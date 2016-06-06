@@ -70,10 +70,10 @@ module Togls
     def reconstitute_rule(rule_data)
       if rule_data.has_key?('target_type')
         @rule_type_registry.get(rule_data['type_id'])\
-          .new(rule_data['data'],
+          .new(rule_data['type_id'].to_sym, rule_data['data'],
                target_type: rule_data['target_type'].to_sym)
       else
-        @rule_type_registry.get(rule_data['type_id']).new(rule_data['data'])
+        @rule_type_registry.get(rule_data['type_id']).new(rule_data['type_id'].to_sym, rule_data['data'])
       end
     end
   end

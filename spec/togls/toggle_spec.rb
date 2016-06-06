@@ -71,7 +71,7 @@ RSpec.describe Togls::Toggle do
               :hoopty
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:hoopty)
           allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           expect(Togls.logger).to receive(:warn).with("Rule (id: #{rule.id}) cannot have target type of :not_set")
@@ -89,7 +89,7 @@ RSpec.describe Togls::Toggle do
               :hoopty
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:hoopty)
           allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           result = toggle.target_matches?(rule)
@@ -108,7 +108,7 @@ RSpec.describe Togls::Toggle do
               Togls::TargetTypes::NONE
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql true
@@ -126,7 +126,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           expect(Togls.logger).to receive(:warn).with("Feature (key: #{feature.key}) cannot have target type of :not_set when rule (id: #{rule.id}) specifies a target type (target_type: #{rule.target_type}")
           toggle.target_matches?(rule)
@@ -143,7 +143,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql false
@@ -162,7 +162,7 @@ RSpec.describe Togls::Toggle do
               Togls::TargetTypes::NONE
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql true
@@ -179,7 +179,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql false
@@ -196,7 +196,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
           allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           expect(Togls.logger).to receive(:warn).with("Rule (id: #{rule.id}) cannot have target type of :not_set")
@@ -213,7 +213,7 @@ RSpec.describe Togls::Toggle do
               :hoopty
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
           allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           result = toggle.target_matches?(rule)
@@ -233,7 +233,7 @@ RSpec.describe Togls::Toggle do
               Togls::TargetTypes::NONE
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql true
@@ -250,7 +250,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql true
@@ -267,7 +267,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
           allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           expect(Togls.logger).to receive(:warn).with("Rule (id: #{rule.id}) cannot have target type of :not_set")
@@ -284,7 +284,7 @@ RSpec.describe Togls::Toggle do
               :foo
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
           allow(rule_klass).to receive(:target_type).and_return(Togls::TargetTypes::NOT_SET)
 
           result = toggle.target_matches?(rule)
@@ -302,7 +302,7 @@ RSpec.describe Togls::Toggle do
               :bar
             end
           end
-          rule = rule_klass.new
+          rule = rule_klass.new(:sometypeid)
 
           result = toggle.target_matches?(rule)
           expect(result).to eql false
@@ -373,7 +373,7 @@ RSpec.describe Togls::Toggle do
       context 'when the target is not nil' do
         it 'succeeds at validating' do
           feature = Togls::Feature.new(:name, 'desc', :foo)
-          rule = Togls::Rule.new(target_type: :foo)
+          rule = Togls::Rule.new(:sometypeid, target_type: :foo)
           toggle = Togls::Toggle.new(feature)
           toggle.rule = rule
           expect {
@@ -385,7 +385,7 @@ RSpec.describe Togls::Toggle do
       context 'when the target is nil' do
         it 'raises an exception' do
           feature = Togls::Feature.new(:name, 'desc', :foo)
-          rule = Togls::Rule.new(target_type: :foo)
+          rule = Togls::Rule.new(:sometypeid, target_type: :foo)
           toggle = Togls::Toggle.new(feature)
           toggle.rule = rule
           expect {

@@ -104,6 +104,31 @@ RSpec.describe "Togl" do
     end
   end
 
+  describe 'build rule' do
+    it 'builds a rule instance from an abstract rule type and params' do
+      FooBarRule = Class.new(Togls::Rule) do
+        def self.title
+          'some title'
+        end
+
+        def self.description
+          'some desc'
+        end
+      end
+
+      Togls.rule_types do
+        register(:rule_id, FooBarRule)
+      end
+
+      data = double('some data')
+
+      rule = Togls.rule(:rule_id, data, target_type: :some_target_type)
+      expect(rule).to be_a(FooBarRule)
+      expect(rule.data).to eq(data)
+      expect(rule.target_type).to eq(:some_target_type)
+    end
+  end
+
   describe 'default rule types registered' do
     it 'makes the default rule types available' do
       klass = Class.new do
@@ -189,7 +214,7 @@ RSpec.describe "Togl" do
     it "creates a new feature with a rule" do
       Togls.default_feature_target_type Togls::TargetTypes::NONE
       Togls.release do
-        rule = Togls::Rules::Boolean.new(false)
+        rule = Togls::Rules::Boolean.new(:boolean, false)
         feature(:test, "some human readable description").on(rule)
       end
 
@@ -198,7 +223,7 @@ RSpec.describe "Togl" do
 
     it "creates a new feature with a group" do
       Togls.release do
-        rule = Togls::Rules::Group.new(["someone"], target_type: :foo)
+        rule = Togls::Rules::Group.new(:group, ["someone"], target_type: :foo)
         feature(:test, "some human readable description", target_type: :foo).on(rule)
       end
 
@@ -230,7 +255,7 @@ RSpec.describe "Togl" do
           register(:some_rule_type, FooBarRule)
         end
 
-        some_rule = FooBarRule.new
+        some_rule = FooBarRule.new(:sometypeid)
 
         expect {
           Togls.release do
@@ -264,7 +289,7 @@ RSpec.describe "Togl" do
           register(:some_rule_type, FooBarRule)
         end
 
-        some_rule = FooBarRule.new
+        some_rule = FooBarRule.new(:sometypeid)
 
         Togls.release do
           feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
@@ -414,8 +439,8 @@ RSpec.describe "Togl" do
           register(:another_rule_type, AnotherRule)
         end
 
-        some_rule = FooBarRule.new
-        a = AnotherRule.new
+        some_rule = FooBarRule.new(:sometypeid)
+        a = AnotherRule.new(:someothertypeid)
         Togls.release do
           feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
           feature(:doopty, 'some doopty description', target_type: :red_person).on(a)
@@ -438,7 +463,7 @@ RSpec.describe "Togl" do
     context 'when the feature target type claims to send a target' do
       context 'when the feature evaluation sends a target' do
         it 'can be correctly evaluated' do
-          numbers = Togls::Rules::Group.new([1,3,5], target_type: :number)
+          numbers = Togls::Rules::Group.new(:group, [1,3,5], target_type: :number)
           Togls.release do
             feature(:foo, 'desc', target_type: :number).on(numbers)
           end
