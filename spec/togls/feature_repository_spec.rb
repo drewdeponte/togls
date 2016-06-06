@@ -156,12 +156,22 @@ describe Togls::FeatureRepository do
   describe "#get" do
     it "get the feature data" do
       allow(subject).to receive(:reconstitute_feature)
+      allow(subject).to receive(:validate_feature_data)
       expect(subject).to receive(:fetch_feature_data).with("some_id")
+      subject.get("some_id")
+    end
+
+    it 'validates the feature data' do
+      feature_data = { "key" => "some_key", "description" => "some desc",
+        "target_type" => "some_target_type" }
+      allow(subject).to receive(:fetch_feature_data).and_return(feature_data)
+      expect(subject).to receive(:validate_feature_data).with(feature_data)
       subject.get("some_id")
     end
 
     it "reconstitutes a feature" do
       feature_data = double('feature data')
+      allow(subject).to receive(:validate_feature_data)
       allow(subject).to receive(:fetch_feature_data).and_return(feature_data)
       expect(subject).to receive(:reconstitute_feature).with(feature_data)
       subject.get("some_id")
@@ -169,6 +179,7 @@ describe Togls::FeatureRepository do
 
     it "returns the feature" do
       feature = double('feature')
+      allow(subject).to receive(:validate_feature_data)
       allow(subject).to receive(:fetch_feature_data)
       allow(subject).to receive(:reconstitute_feature).and_return(feature)
       expect(subject.get("some_id")).to eq(feature)
@@ -176,15 +187,7 @@ describe Togls::FeatureRepository do
   end
 
   describe "#reconstitute_feature" do
-    it 'validates the feature data' do
-      feature_data = { "key" => "some_key", "description" => "some desc",
-        "target_type" => "some_target_type" }
-      expect(subject).to receive(:validate_feature_data).with(feature_data)
-      subject.reconstitute_feature(feature_data)
-    end
-
     it "constructs a feature from the feature data" do
-      allow(subject).to receive(:validate_feature_data)
       expect(Togls::Feature).to receive(:new).with("some_key", "some desc",
                                                    :some_target_type)
       subject.reconstitute_feature({ "key" => "some_key",
@@ -193,7 +196,6 @@ describe Togls::FeatureRepository do
     end
 
     it "returns the feature" do
-      allow(subject).to receive(:validate_feature_data)
       feature = double('feature')
       allow(Togls::Feature).to receive(:new).and_return(feature)
       expect(subject.reconstitute_feature({ "key" => "some_key", "description" => "some desc",

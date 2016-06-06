@@ -41,11 +41,11 @@ module Togls
 
     def get(feature_id)
       feature_data = fetch_feature_data(feature_id)
+      validate_feature_data(feature_data)
       reconstitute_feature(feature_data)
     end
 
     def reconstitute_feature(feature_data)
-      validate_feature_data(feature_data)
       Togls::Feature.new(feature_data['key'],
                          feature_data['description'],
                          feature_data['target_type'].to_sym)
