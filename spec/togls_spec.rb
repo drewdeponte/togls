@@ -486,6 +486,17 @@ describe "Togl" do
             Togls.feature(:foo).off?(3)
           }.to raise_error Togls::UnexpectedEvaluationTarget
         end
+
+        context 'when the evaluated feature is not defined' do
+          it 'defaults to false' do
+            allow(Togls.logger).to receive(:warn)
+            Togls.release do
+              feature(:test, "some human readable description", target_type: :hoopty).on
+            end
+
+            expect(Togls.feature(:not_defined).on?('aoeuoeau')).to eq(false)
+          end
+        end
       end
 
       context 'when the feature evaluation does NOT send a target' do

@@ -345,6 +345,30 @@ describe Togls::Toggle do
       end
     end
 
+    context 'when the feature target type contract is EITHER' do
+      context 'when the target is not nil' do
+        it 'succeeds at validating' do
+          feature = Togls::Feature.new(:foo, 'desc', :foo)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::EITHER)
+          toggle = Togls::Toggle.new(feature)
+          expect {
+            toggle.validate_target('asdf')
+          }.not_to raise_error
+        end
+      end
+
+      context 'when the target is nil' do
+        it 'succeeds at validating' do
+          feature = Togls::Feature.new(:foo, 'desc', :foo)
+          feature.instance_variable_set(:@target_type, Togls::TargetTypes::EITHER)
+          toggle = Togls::Toggle.new(feature)
+          expect {
+            toggle.validate_target(nil)
+          }.not_to raise_error
+        end
+      end
+    end
+
     context 'when the feature target type contract specifies a target type' do
       context 'when the target is not nil' do
         it 'succeeds at validating' do
