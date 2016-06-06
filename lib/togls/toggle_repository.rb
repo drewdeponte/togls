@@ -39,12 +39,14 @@ module Togls
       begin
         feature = @feature_repository.get(toggle_data['feature_id'])
       rescue Togls::RepositoryFeatureDataInvalid => e
+        Togls.logger.warn("Feature Repository failed to get feature due to invalid feature data")
         return Togls::NullToggle.new
       end
 
       begin
         rule = @rule_repository.get(toggle_data['rule_id'])
       rescue Togls::RepositoryRuleDataInvalid => e
+        Togls.logger.warn("Rule Repository failed to get rule due to invalid rule data")
         return Togls::NullToggle.new
       end
 
