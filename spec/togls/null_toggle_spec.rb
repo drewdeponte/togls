@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Togls::NullToggle do
   describe "#initialize" do
     it "constructs a null feature" do
-      expect(Togls::Feature).to receive(:new).with("null", "the official null feature", Togls::TargetTypes::NONE)
+      expect(Togls::Feature).to receive(:new).with("null", "the official null feature", Togls::TargetTypes::EITHER)
       subject
     end
   end

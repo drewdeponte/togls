@@ -57,7 +57,8 @@ module Togls
     # NOT_SET             | ignored     | true - broken
     def validate_target(target)
       is_explicit_target_type = @feature.target_type != Togls::TargetTypes::NONE &&
-        @feature.target_type != Togls::TargetTypes::NOT_SET
+        @feature.target_type != Togls::TargetTypes::NOT_SET &&
+        @feature.target_type != Togls::TargetTypes::EITHER
       if @feature.target_type == Togls::TargetTypes::NONE && target
         raise Togls::UnexpectedEvaluationTarget
       elsif is_explicit_target_type && target.nil?
