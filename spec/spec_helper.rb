@@ -8,6 +8,7 @@ require 'pry'
 
 RSpec.configure do |c|
   c.disable_monkey_patching!
+  c.order = :random
 
   c.before(:each) do
     Togls.instance_variable_set(:@release_toggle_registry, nil)
