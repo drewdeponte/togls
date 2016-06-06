@@ -489,8 +489,6 @@ describe "Togl" do
 
         context 'when the evaluated feature is not defined' do
           it 'defaults to false' do
-            # null toggle used in this case has a null feature which has a
-            # target_type of NONE at the moment
             allow(Togls.logger).to receive(:warn)
             Togls.release do
               feature(:test, "some human readable description", target_type: :hoopty).on
