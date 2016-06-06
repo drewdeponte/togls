@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::RuleRepositoryDrivers::InMemoryDriver do
+RSpec.describe Togls::RuleRepositoryDrivers::InMemoryDriver do
   describe "#initialize" do
     it "constructs an instance" do
       res = Togls::RuleRepositoryDrivers::InMemoryDriver.new

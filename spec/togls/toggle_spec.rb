@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::Toggle do
+RSpec.describe Togls::Toggle do
   let(:feature) { double(Togls::Feature) }
   subject { Togls::Toggle.new(feature) }
 

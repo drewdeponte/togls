@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
+RSpec.describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
   describe "#initialize" do
     it "constructs an instance of env driver" do
       expect(subject).to be_a(Togls::ToggleRepositoryDrivers::EnvOverrideDriver)

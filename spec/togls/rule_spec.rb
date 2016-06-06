@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Togls::Rule do
+RSpec.describe Togls::Rule do
   describe '.title' do
     it 'raises NotImplemented exception' do
       klass = Class.new(Togls::Rule)
