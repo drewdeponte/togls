@@ -41,7 +41,13 @@ module Togls
       rescue Togls::RepositoryFeatureDataInvalid => e
         return Togls::NullToggle.new
       end
-      rule = @rule_repository.get(toggle_data['rule_id'])
+
+      begin
+        rule = @rule_repository.get(toggle_data['rule_id'])
+      rescue Togls::RepositoryRuleDataInvalid => e
+        return Togls::NullToggle.new
+      end
+
       toggle = Togls::Toggle.new(feature)
       begin
         toggle.rule = rule
