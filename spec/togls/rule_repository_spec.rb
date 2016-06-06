@@ -151,12 +151,22 @@ describe Togls::RuleRepository do
   describe "#get" do
     it "get the rule data" do
       expect(subject).to receive(:fetch_rule_data).with("some_id")
+      allow(subject).to receive(:validate_rule_data)
       allow(subject).to receive(:reconstitute_rule)
       subject.get("some_id")
     end
 
+    it 'validates the fetched rule data' do
+      rule_data = double('rule data')
+      allow(subject).to receive(:fetch_rule_data).with('some_id').and_return(rule_data)
+      allow(subject).to receive(:reconstitute_rule)
+      expect(subject).to receive(:validate_rule_data).with(rule_data)
+      subject.get('some_id')
+    end
+
     it "reconstitutes a rule" do
       rule_data = double('rule data')
+      allow(subject).to receive(:validate_rule_data)
       allow(subject).to receive(:fetch_rule_data).and_return(rule_data)
       expect(subject).to receive(:reconstitute_rule).with(rule_data)
       subject.get("some_id")
@@ -164,9 +174,81 @@ describe Togls::RuleRepository do
 
     it "returns the rule" do
       rule = double('rule')
+      allow(subject).to receive(:validate_rule_data)
       allow(subject).to receive(:fetch_rule_data)
       allow(subject).to receive(:reconstitute_rule).and_return(rule)
       expect(subject.get("some_id")).to eq(rule)
+    end
+  end
+
+  describe '#validate_rule_data' do
+    context 'when rule data is complete and proper' do
+      it 'does not raise an exception' do
+        rule_data = { 'type_id' => 'sometype', 'data' => 'somedata', 'target_type' => 'sometype' }
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.not_to raise_error
+      end
+    end
+
+    context 'when rule data is nil' do
+      it 'logs and raises an exception' do
+        rule_data = nil
+        expect(Togls.logger).to receive(:debug).with("None of the rule repository drivers claim to have the rule")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
+    context 'when rule data is missing type_id' do
+      it 'logs and raises an exception' do
+        rule_data = { 'data' => 'somedata', 'target_type' => 'sometype' }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'type_id'")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
+    context 'when rule data is missing data' do
+      it 'logs and raises an exception' do
+        rule_data = { 'type_id' => 'sometype', 'target_type' => 'sometype' }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'data'")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
+    context 'when rule data is missing target_type' do
+      it 'logs and raises an exception' do
+        rule_data = { 'type_id' => 'sometype', 'data' => 'somedata' }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'target_type'")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
+    context 'when rule data type_id is not a string' do
+      it 'logs and raises an exception' do
+        rule_data = { 'type_id' => 232323, 'data' => 'somedata', 'target_type' => 'sometype' }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data with 'type_id' not being a string")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
+    context 'when rule data target_type is not a string' do
+      it 'logs and raises an exception' do
+        rule_data = { 'type_id' => 'aoeua', 'data' => 'aoeu', 'target_type' => 23423 }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data with 'target_type' not being a string")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
     end
   end
 

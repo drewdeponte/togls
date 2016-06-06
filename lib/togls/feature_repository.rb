@@ -41,17 +41,32 @@ module Togls
 
     def get(feature_id)
       feature_data = fetch_feature_data(feature_id)
+      validate_feature_data(feature_data)
       reconstitute_feature(feature_data)
     end
 
     def reconstitute_feature(feature_data)
-      if feature_data['target_type'].nil?
-        Togls::Feature.new(feature_data['key'],
-                           feature_data['description'])
-      else
-        Togls::Feature.new(feature_data['key'],
-                           feature_data['description'],
-                           feature_data['target_type'].to_sym)
+      Togls::Feature.new(feature_data['key'],
+                         feature_data['description'],
+                         feature_data['target_type'].to_sym)
+    end
+
+    def validate_feature_data(feature_data)
+      if feature_data.nil?
+        Togls.logger.debug("None of the feature repository drivers claim to have the feature")
+        raise Togls::RepositoryFeatureDataInvalid, "None of the feature repository drivers claim to have the feature"
+      end
+
+      ['key', 'description', 'target_type'].each do |k|
+        if !feature_data.has_key? k
+          Togls.logger.debug("One of the feature repository drivers returned feature data that is missing the '#{k}'")
+          raise Togls::RepositoryFeatureDataInvalid, "One of the feature repository drivers returned feature data that is missing the '#{k}'"
+        end
+
+        if !feature_data[k].is_a?(String)
+          Togls.logger.debug("One of the feature repository drivers returned feature data with '#{k}' not being a string")
+          raise Togls::RepositoryFeatureDataInvalid, "One of the feature repository drivers returned feature data with '#{k}' not being a string"
+        end
       end
     end
   end
