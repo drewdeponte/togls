@@ -47,14 +47,23 @@ module Togls
     end
 
     def validate_rule_data(rule_data)
-      raise Togls::RepositoryRuleDataInvalid, "None of the rule repository drivers claim to have the rule" if rule_data.nil?
+      if rule_data.nil?
+        Togls.logger.debug "None of the rule repository drivers claim to have the rule"
+        raise Togls::RepositoryRuleDataInvalid, "None of the rule repository drivers claim to have the rule"
+      end
 
       ['type_id', 'data', 'target_type'].each do |k|
-        raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data that is missing the '#{k}'" unless rule_data.has_key? k
+        if !rule_data.has_key? k
+          Togls.logger.debug "One of the rule repository drivers returned rule data that is missing the '#{k}'"
+          raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data that is missing the '#{k}'"
+        end
       end
 
       ['type_id', 'target_type'].each do |k|
-        raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data with '#{k}' not being a string" unless rule_data[k].is_a?(String)
+        if !rule_data[k].is_a?(String)
+          Togls.logger.debug "One of the rule repository drivers returned rule data with '#{k}' not being a string"
+          raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data with '#{k}' not being a string"
+        end
       end
     end
 

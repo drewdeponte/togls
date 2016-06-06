@@ -174,13 +174,6 @@ describe Togls::ToggleRepository do
     end
 
     context 'when fails to fetch a feature' do
-      it 'logs the failure' do
-        toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-        allow(feature_repository).to receive(:get).and_raise(Togls::RepositoryFeatureDataInvalid)
-        expect(Togls.logger).to receive(:warn).with("Feature Repository failed to get feature due to invalid feature data")
-        subject.reconstitute_toggle(toggle_data)
-      end
-
       it 'short circuits and returns a null toggle' do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
         allow(Togls.logger).to receive(:warn)
@@ -200,14 +193,6 @@ describe Togls::ToggleRepository do
     end
 
     context 'when fails to fetch a rule' do
-      it 'logs the failure' do
-        toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
-        allow(feature_repository).to receive(:get)
-        allow(rule_repository).to receive(:get).and_raise(Togls::RepositoryRuleDataInvalid)
-        expect(Togls.logger).to receive(:warn).with("Rule Repository failed to get rule due to invalid rule data")
-        subject.reconstitute_toggle(toggle_data)
-      end
-
       it 'short circuits and returns a null toggle' do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
         allow(feature_repository).to receive(:get)

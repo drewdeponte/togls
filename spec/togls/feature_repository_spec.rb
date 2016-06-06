@@ -215,8 +215,9 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data is nil' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = nil
+        expect(Togls.logger).to receive(:debug).with("None of the feature repository drivers claim to have the feature")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
@@ -224,9 +225,10 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data is missing key' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = { "description" => "some desc",
           "target_type" => "some_target_type" }
+        expect(Togls.logger).to receive(:debug).with("One of the feature repository drivers returned feature data that is missing the 'key'")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
@@ -234,9 +236,10 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data is missing description' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = { "key" => "some_key",
           "target_type" => "some_target_type" }
+        expect(Togls.logger).to receive(:debug).with("One of the feature repository drivers returned feature data that is missing the 'description'")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
@@ -244,8 +247,9 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data is missing target_type' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = { "key" => "some_key", "description" => "some desc" }
+        expect(Togls.logger).to receive(:debug).with("One of the feature repository drivers returned feature data that is missing the 'target_type'")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
@@ -253,8 +257,9 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data key is not a string' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = { "key" => 12342, "description" => "some desc", "target_type" => "some_target_type" }
+        expect(Togls.logger).to receive(:debug).with("One of the feature repository drivers returned feature data with 'key' not being a string")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
@@ -262,8 +267,9 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data description is not a string' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = { "key" => "foo", "description" => 234324, "target_type" => "some_target_type" }
+        expect(Togls.logger).to receive(:debug).with("One of the feature repository drivers returned feature data with 'description' not being a string")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
@@ -271,8 +277,9 @@ describe Togls::FeatureRepository do
     end
 
     context 'when feature data target_type is not a string' do
-      it 'raises an exception' do
+      it 'logs and raises an exception' do
         feature_data = { "key" => "foo", "description" => "aoeuaoe", "target_type" => 2343242 }
+        expect(Togls.logger).to receive(:debug).with("One of the feature repository drivers returned feature data with 'target_type' not being a string")
         expect {
           subject.validate_feature_data(feature_data)
         }.to raise_error(Togls::RepositoryFeatureDataInvalid)
