@@ -12,14 +12,14 @@ describe Togls::RuleRepositoryDrivers::EnvOverrideDriver do
     context 'when requesting a boolean rule with true' do
       it 'returns a boolean rule type with true' do
         rule_id = Togls::Helpers.sha1(Togls::Rules::Boolean, true)
-        expect(subject.get(rule_id)).to eq({ 'type_id' => 'boolean', 'data' => true })
+        expect(subject.get(rule_id)).to eq({ 'type_id' => 'boolean', 'data' => true, 'target_type' => Togls::TargetTypes::NONE.to_s })
       end
     end
 
     context 'when requesting a boolean rule with false' do
       it 'returns a boolean rule type with false' do
         rule_id = Togls::Helpers.sha1(Togls::Rules::Boolean, false)
-        expect(subject.get(rule_id)).to eq({ 'type_id' => 'boolean', 'data' => false })
+        expect(subject.get(rule_id)).to eq({ 'type_id' => 'boolean', 'data' => false, 'target_type' => Togls::TargetTypes::NONE.to_s })
       end
     end
 

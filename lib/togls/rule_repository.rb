@@ -42,7 +42,20 @@ module Togls
 
     def get(rule_id)
       rule_data = fetch_rule_data(rule_id)
+      validate_rule_data(rule_data)
       reconstitute_rule(rule_data)
+    end
+
+    def validate_rule_data(rule_data)
+      raise Togls::RepositoryRuleDataInvalid, "None of the rule repository drivers claim to have the rule" if rule_data.nil?
+
+      required_keys = ['type_id', 'data', 'target_type'].each do |k|
+        raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data that is missing the '#{k}'" if !rule_data.has_key? k
+      end
+
+      string_keys = ['type_id', 'target_type'].each do |k|
+        raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data with '#{k}' not being a string" if !rule_data[k].is_a?(String)
+      end
     end
 
     def reconstitute_rule(rule_data)

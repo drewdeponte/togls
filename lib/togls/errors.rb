@@ -13,4 +13,5 @@ module Togls
   class EvaluationTargetMissing < Error; end
   class UnexpectedEvaluationTarget < Error; end
   class RepositoryFeatureDataInvalid < Error; end
+  class RepositoryRuleDataInvalid < Error; end
 end
