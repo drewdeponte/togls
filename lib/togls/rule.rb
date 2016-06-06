@@ -30,7 +30,7 @@ module Togls
     end
 
     def id
-      Togls::Helpers.sha1(self.class, @data)
+      Togls::Helpers.sha1(@type_id, @data, target_type)
     end
 
     def target_type

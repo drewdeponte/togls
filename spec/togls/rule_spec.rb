@@ -114,9 +114,9 @@ RSpec.describe Togls::Rule do
   end
 
   describe "#id" do
-    it "gets the sha1 of the rule klass with the initializer data" do
+    it "gets the sha1 of the rule type_id, data, and target_type" do
       rule = Togls::Rules::Boolean.new(:boolean, true)
-      expect(Togls::Helpers).to receive(:sha1).with(Togls::Rules::Boolean, true)
+      expect(Togls::Helpers).to receive(:sha1).with(:boolean, true, Togls::TargetTypes::NONE)
       rule.id
     end
 
