@@ -116,7 +116,7 @@ RSpec.describe Togls::ToggleRepository do
       feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       toggle = Togls::Toggle.new(feature)
       expect(subject.extract_storage_payload(toggle))
-        .to eq({ "feature_id" => "some_feature_key", "rule_id" => "4e4b466b49e148b5a58de1d666ca7c87c7765301" })
+        .to eq({ "feature_id" => "some_feature_key", "rule_id" => "e37f6204963d58a33ee8e261aed6fd395dbf2cd6" })
     end
   end
 

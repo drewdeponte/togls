@@ -189,7 +189,7 @@ RSpec.describe "Togl" do
     it "creates a new feature with a rule" do
       Togls.default_feature_target_type Togls::TargetTypes::NONE
       Togls.release do
-        rule = Togls::Rules::Boolean.new(false)
+        rule = Togls::Rules::Boolean.new(:boolean, false)
         feature(:test, "some human readable description").on(rule)
       end
 
@@ -198,7 +198,7 @@ RSpec.describe "Togl" do
 
     it "creates a new feature with a group" do
       Togls.release do
-        rule = Togls::Rules::Group.new(["someone"], target_type: :foo)
+        rule = Togls::Rules::Group.new(:group, ["someone"], target_type: :foo)
         feature(:test, "some human readable description", target_type: :foo).on(rule)
       end
 
@@ -230,7 +230,7 @@ RSpec.describe "Togl" do
           register(:some_rule_type, FooBarRule)
         end
 
-        some_rule = FooBarRule.new
+        some_rule = FooBarRule.new(:sometypeid)
 
         expect {
           Togls.release do
@@ -264,7 +264,7 @@ RSpec.describe "Togl" do
           register(:some_rule_type, FooBarRule)
         end
 
-        some_rule = FooBarRule.new
+        some_rule = FooBarRule.new(:sometypeid)
 
         Togls.release do
           feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
@@ -414,8 +414,8 @@ RSpec.describe "Togl" do
           register(:another_rule_type, AnotherRule)
         end
 
-        some_rule = FooBarRule.new
-        a = AnotherRule.new
+        some_rule = FooBarRule.new(:sometypeid)
+        a = AnotherRule.new(:someothertypeid)
         Togls.release do
           feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
           feature(:doopty, 'some doopty description', target_type: :red_person).on(a)
@@ -438,7 +438,7 @@ RSpec.describe "Togl" do
     context 'when the feature target type claims to send a target' do
       context 'when the feature evaluation sends a target' do
         it 'can be correctly evaluated' do
-          numbers = Togls::Rules::Group.new([1,3,5], target_type: :number)
+          numbers = Togls::Rules::Group.new(:group, [1,3,5], target_type: :number)
           Togls.release do
             feature(:foo, 'desc', target_type: :number).on(numbers)
           end

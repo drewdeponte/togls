@@ -256,7 +256,7 @@ RSpec.describe Togls::RuleRepository do
     context 'when rule data has target_type' do
       it 'constructs a rule with the target type' do
         allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-        expect(Togls::Rules::Boolean).to receive(:new).with(true, target_type: :foo)
+        expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, true, target_type: :foo)
         subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true, 'target_type' => 'foo' })
       end
     end
@@ -264,7 +264,7 @@ RSpec.describe Togls::RuleRepository do
     context 'when rule data does NOT have a target_type' do
       it 'constructs a rule without a target_type' do
         allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-        expect(Togls::Rules::Boolean).to receive(:new).with(true)
+        expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, true)
         subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })
       end
     end
@@ -272,7 +272,7 @@ RSpec.describe Togls::RuleRepository do
     it 'returns the rule' do
       rule = double('rule')
       allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-      allow(Togls::Rules::Boolean).to receive(:new).with(true).and_return(rule)
+      allow(Togls::Rules::Boolean).to receive(:new).with(:boolean, true).and_return(rule)
       expect(subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })).to eq(rule)
     end
   end
