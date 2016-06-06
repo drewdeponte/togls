@@ -4,7 +4,7 @@ module Togls
   # The Rule is an abstract base class that is intended to act as an interface
   # for other rules to be implemented against.
   class Rule
-    attr_reader :data
+    attr_reader :data, :type_id
 
     def self.title
       raise Togls::NotImplemented, "Rule type title not implemented"

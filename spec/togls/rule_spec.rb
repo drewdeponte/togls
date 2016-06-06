@@ -135,6 +135,13 @@ RSpec.describe Togls::Rule do
     end
   end
 
+  describe '#type_id' do
+    it 'returns the type_it it was initialized with' do
+      rule = Togls::Rule.new(:hoopty, "test value", target_type: :foo)
+      expect(rule.type_id).to eq(:hoopty)
+    end
+  end
+
   describe '#target_type' do
     context 'when the rule instance has a target type' do
       it 'returns the rule instances target type' do
