@@ -173,6 +173,14 @@ describe Togls::ToggleRepository do
       subject.reconstitute_toggle(toggle_data)
     end
 
+    context 'when fails to fetch a feature' do
+      it 'short circuits and returns a null toggle' do
+        toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
+        allow(feature_repository).to receive(:get).and_raise(Togls::RepositoryFeatureDataInvalid)
+        expect(subject.reconstitute_toggle(toggle_data)).to be_a(Togls::NullToggle)
+      end
+    end
+
     it "fetches the referenced rule from the rule repository" do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
       toggle = double('toggle')

@@ -36,7 +36,11 @@ module Togls
     end
 
     def reconstitute_toggle(toggle_data)
-      feature = @feature_repository.get(toggle_data['feature_id'])
+      begin
+        feature = @feature_repository.get(toggle_data['feature_id'])
+      rescue Togls::RepositoryFeatureDataInvalid => e
+        return Togls::NullToggle.new
+      end
       rule = @rule_repository.get(toggle_data['rule_id'])
       toggle = Togls::Toggle.new(feature)
       begin
