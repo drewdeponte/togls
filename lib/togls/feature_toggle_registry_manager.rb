@@ -15,7 +15,7 @@ module Togls
     module ClassMethods
       def release(&block)
         release_blocks << block if block
-        
+
         release_toggle_registry.expand(&block) if block
         release_toggle_registry
       end
