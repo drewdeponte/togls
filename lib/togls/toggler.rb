@@ -10,9 +10,12 @@ module Togls
     end
 
     def on(rule = nil)
+      p 'hedges'
+      p 'WE ARE ON'
       rule = Togls::Rules::Boolean.new(:boolean, true) if rule.nil?
       @toggle.rule = rule
       @toggle_repository.store(@toggle)
+      p @toggle
       @toggle
     end
 
@@ -21,6 +24,14 @@ module Togls
       @toggle.rule = rule
       @toggle_repository.store(@toggle)
       @toggle
+    end
+
+    def on?(target = nil)
+      @toggle.on?(target)
+    end
+
+    def off?(target = nil)
+      @toggle.off?(target)
     end
   end
 end

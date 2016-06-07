@@ -14,8 +14,14 @@ module Togls
     # FeatureToggleRegistryManager is included.
     module ClassMethods
       def release(&block)
+        release_blocks << block if block
+        
         release_toggle_registry.expand(&block) if block
         release_toggle_registry
+      end
+
+      def release_blocks
+        @release_blocks ||= []
       end
 
       def rule_types(&block)
@@ -32,7 +38,7 @@ module Togls
       end
 
       def feature(key)
-        release_toggle_registry.get(key)
+        Toggler.new(release_toggle_registry.instance_variable_get(:@toggle_repository), release_toggle_registry.get(key))
       end
 
       def logger
@@ -89,7 +95,12 @@ module Togls
         toggle_repository = Togls::ToggleRepository.new(
           toggle_repository_drivers, test_feature_repository, rule_repository)
 
-        return ToggleRegistry.new(test_feature_repository, toggle_repository)
+        tr = ToggleRegistry.new(test_feature_repository, toggle_repository)
+        release_blocks.each do |p|
+          tr.expand(&p)
+        end
+
+        return tr
       end
 
       def release_toggle_registry
