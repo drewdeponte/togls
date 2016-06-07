@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Changed`: The testing interface to allow for contract enforcement in tests
+  and allow altering existing feature rules within tests.
 * `Added`: `Togls.rule` method to simplify rule construction from `type_id`
   ([#86](https://github.com/codebreakdown/togls/issues/86))
 * `Changed`: Rule construction to require an abstract rule `type_id`

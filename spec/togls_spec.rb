@@ -105,6 +105,10 @@ RSpec.describe "Togl" do
   end
 
   describe 'build rule' do
+    after do
+      Object.send(:remove_const, :FooBarRule)
+    end
+
     it 'builds a rule instance from an abstract rule type and params' do
       FooBarRule = Class.new(Togls::Rule) do
         def self.title
@@ -136,6 +140,8 @@ RSpec.describe "Togl" do
       end
 
       expect(klass.rule_type(:boolean)).to eq(Togls::Rules::Boolean)
+      expect(klass.rule_type('boolean')).to eq(Togls::Rules::Boolean)
+      expect(klass.rule_type(:group)).to eq(Togls::Rules::Group)
       expect(klass.rule_type('group')).to eq(Togls::Rules::Group)
     end
   end
@@ -164,10 +170,6 @@ RSpec.describe "Togl" do
     end
 
     context 'default feature target type set' do
-      before do
-        Togls.instance_variable_set(:@default_feature_target_type, nil)
-      end
-
       context 'feature defined does not include target type' do
         it 'defines the feature with the default feature target type' do
           Togls.default_feature_target_type :jacked
@@ -353,6 +355,8 @@ RSpec.describe "Togl" do
           feature(:zar, 'some zar feature').on
         end
 
+        Togls.feature(:foo).off
+
         expect(Togls.feature(:foo).on?).to eq(false)
         expect(Togls.feature(:zar).on?).to eq(true)
       end
@@ -393,6 +397,7 @@ RSpec.describe "Togl" do
     context "when a features rule can't properly be evaluated because of a mismatch" do
       after do
         Object.send(:remove_const, :AnotherRule)
+        Object.send(:remove_const, :FooBarRule)
       end
 
       it 'reports the feature as being off' do
@@ -455,7 +460,7 @@ RSpec.describe "Togl" do
         toggle.instance_variable_set(:@rule, a)
         toggle_repo.store(toggle)
 
-        expect(Togls.feature(:hoopty)).to be_a(Togls::RuleFeatureMismatchToggle)
+        expect(Togls.feature(:hoopty).instance_variable_get(:@toggle)).to be_a(Togls::RuleFeatureMismatchToggle)
         expect(Togls.feature(:hoopty).on?).to eq(false)
       end
     end
