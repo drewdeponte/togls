@@ -34,7 +34,7 @@ RSpec.describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
 
         it "returns Togls::Rules::Boolean true toggle data" do
           expect(subject.get("some_toggle_id")).to eq({ "feature_id" => "some_toggle_id",
-                     "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, true) })
+                     "rule_id" => Togls::Rules::Boolean.new(:boolean, true).id })
         end
       end
 
@@ -45,7 +45,7 @@ RSpec.describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
 
         it "returns Togls::Rules::Boolean false toggle data" do
           expect(subject.get("some_toggle_id")).to eq({ "feature_id" => "some_toggle_id",
-                     "rule_id" => Togls::Helpers.sha1(Togls::Rules::Boolean, false) })
+                     "rule_id" => Togls::Rules::Boolean.new(:boolean, false).id })
         end
       end
 

@@ -11,21 +11,21 @@ RSpec.describe Togls::RuleRepositoryDrivers::EnvOverrideDriver do
   describe 'retrieving' do
     context 'when requesting a boolean rule with true' do
       it 'returns a boolean rule type with true' do
-        rule_id = Togls::Helpers.sha1(Togls::Rules::Boolean, true)
+        rule_id = Togls::Rules::Boolean.new(:boolean, true).id
         expect(subject.get(rule_id)).to eq({ 'type_id' => 'boolean', 'data' => true, 'target_type' => Togls::TargetTypes::NONE.to_s })
       end
     end
 
     context 'when requesting a boolean rule with false' do
       it 'returns a boolean rule type with false' do
-        rule_id = Togls::Helpers.sha1(Togls::Rules::Boolean, false)
+        rule_id = Togls::Rules::Boolean.new(:boolean, false).id
         expect(subject.get(rule_id)).to eq({ 'type_id' => 'boolean', 'data' => false, 'target_type' => Togls::TargetTypes::NONE.to_s })
       end
     end
 
     context 'when requesting any other type of rule' do
       it 'returns nil' do
-        rule_id = Togls::Helpers.sha1(Togls::Rule, nil)
+        rule_id = 'aeuaoeuao'
         expect(subject.get(rule_id)).to be_nil
       end
     end

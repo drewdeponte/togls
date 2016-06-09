@@ -22,11 +22,11 @@ module Togls
       def get(toggle_id)
         return nil if ENV[toggle_env_key(toggle_id)].nil?
         if ENV[toggle_env_key(toggle_id)] == 'true'
-          return { 'feature_id' => toggle_id, 'rule_id' => Togls::Helpers.sha1(
-            Togls::Rules::Boolean, true) }
+          return { 'feature_id' => toggle_id, 'rule_id' =>
+                   Togls::Rules::Boolean.new(:boolean, true).id }
         elsif ENV[toggle_env_key(toggle_id)] == 'false'
-          return { 'feature_id' => toggle_id, 'rule_id' => Togls::Helpers.sha1(
-            Togls::Rules::Boolean, false) }
+          return { 'feature_id' => toggle_id, 'rule_id' =>
+                   Togls::Rules::Boolean.new(:boolean, false).id }
         else
           return nil
         end
