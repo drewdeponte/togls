@@ -52,10 +52,24 @@ how one would define some basic feature toggles.
 ```ruby
 Togls.release do
   # Set this feature to always be on
-  feature(:pop_up_login_form, "use pop up login instead of normal login").on 
+  feature(:pop_up_login_form, "use pop up login instead of normal login").on
 
   # Set this feature to always be off
   feature(:send_follup_email, "send the follow up email").off
+end
+```
+
+The above defined feature toggles would use default feature target type. If we
+wanted to define them explicitly with other target types it would like as
+follows.
+
+```ruby
+Togls.release do
+  # Set this feature to always be on
+  feature(:pop_up_login_form, "use pop up login instead of normal login", :user_id).on
+
+  # Set this feature to always be off
+  feature(:send_follup_email, "send the follow up email", :user_email_address).off
 end
 ```
 
@@ -83,6 +97,28 @@ end
 **Note:** Feature toggles that are evaluated but have **not** been
 defined will default to **off**.
 
+The above two feature toggles evaluated are written as if the feature toggle has
+a target type of `Togls::TargetTypes::NONE`. If the feature toggles had a
+specific target type and they were evaluted as shown above an exception would be
+raised notifying you that they expect an entity of that type as the target for
+evaluation. To better match the explicit target type example from Defining
+Feature Toggles it would look something like the following.
+
+
+```ruby
+if Togls.feature(:pop_up_login_form).on?(current_user.id)
+  # Use pop up login form
+else
+  # Use normal non-pop up login form
+end
+
+...
+
+if Togls.feature(:send_follup_email).on?(current_user.email)
+  # send the follow up email
+end
+```
+
 ### Override Feature Toggles
 
 Toggles can be overriden using environment variables following the
@@ -106,7 +142,11 @@ We could override this by setting the value of the
 to override a feature toggle to an on state you can set the
 `TOGLS_POP_UP_LOGIN_FORM` environment variable to `"true"`.
 
-### Toggle Features based on Group Membership  
+**Note:** This feature is explicitly designed for use in your development
+environment. If you use this feature in other environments (qa, staging,
+production, etc.) it may not behave as you expect.
+
+### Toggle Features based on Group Membership
 
 `togls` provides out of the box support for toggling features based on
 group membership. This basically allows you to have a feature **on** for
@@ -115,10 +155,10 @@ extremely useful if you want to enable features for a small alpha test
 group for example.
 
 **Note:** This is implemented using `togls` extremely robust [custom
-rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules) system.
+rules](https://github.com/codebreakdown/togls/wiki/Custom-Rule-Types-&-Rules) system.
 The following example is just one of the many powerful things you can do
 with `togls` and [custom
-rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules).
+rules](https://github.com/codebreakdown/togls/wiki/Custom-Rule-Types-&-Rules).
 
 #### Defining Group based Feature Toggles
 
@@ -128,11 +168,10 @@ based on group membership.
 ```ruby
 # Create a group rule so the feature is on if the user is a member of
 # the group.
-alpha_testers = Togls::Rules::Group.new(["user1@email.com",
-                                         "user2@example.com"])
+alpha_testers = Togls.rule(:group, ["user1@email.com", "user2@example.com"], target_type: :user_email_address)
 
 Togls.release do
-  feature(:new_contact_form, "use new contact form").on(alpha_testers)
+  feature(:new_contact_form, "use new contact form", target_type: :user_email_address).on(alpha_testers)
 end
 ```
 
@@ -181,10 +220,10 @@ in the example above and it would look something like the following:
 ```ruby
 # Create a group rule so the feature is on if the user is a member of
 # the group.
-alpha_testers = Togls::Rules::Group.new([1, 23, 42, 83])
+alpha_testers = Togls.rule(:group, [1, 23, 42, 83], :user_id)
 
 Togls.release do
-  feature(:new_contact_form, "use new contact form").on(alpha_testers)
+  feature(:new_contact_form, "use new contact form", :user_id).on(alpha_testers)
 end
 ```
 
@@ -213,7 +252,7 @@ Toggles](https://github.com/codebreakdown/togls/wiki/Testing-with-Toggles),
 [Provided Rules
 Reference](https://github.com/codebreakdown/togls/wiki/Provided-Rules-Reference),
 [Custom
-Rules](https://github.com/codebreakdown/togls/wiki/Custom-Rules),
+Rules](https://github.com/codebreakdown/togls/wiki/Custom-Rule-Types-&-Rules),
 [Organize Toggle
 Definitions](https://github.com/codebreakdown/togls/wiki/Organize-Toggle-Definitions),
 [Creating Additional Toggle
