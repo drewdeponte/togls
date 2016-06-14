@@ -59,8 +59,9 @@ Togls.release do
 end
 ```
 
-The above defined feature toggles would use default feature target type. If we
-wanted to define them explicitly with other target types it would like as
+The above defined feature toggles would use
+[default feature target type](https://github.com/codebreakdown/togls/wiki/Abstract-Target-Types#setting-the-default-feature-target-type).
+If we wanted to define them explicitly with other target types it would like as
 follows.
 
 ```ruby
