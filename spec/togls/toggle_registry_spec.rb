@@ -5,17 +5,9 @@ RSpec.describe Togls::ToggleRegistry do
     Togls::FeatureRepository.new([Togls::FeatureRepositoryDrivers::InMemoryDriver.new])
   end
 
-  let!(:rule_type_repository) do
-    Togls::RuleTypeRepository.new([Togls::RuleTypeRepositoryDrivers::InMemoryDriver.new])
-  end
-
-  let!(:rule_repository) do
-    Togls::RuleRepository.new(rule_type_repository, [Togls::RuleRepositoryDrivers::InMemoryDriver.new])
-  end
-
   let!(:toggle_repository) do
     Togls::ToggleRepository.new([Togls::ToggleRepositoryDrivers::InMemoryDriver.new],
-                                feature_repository, rule_repository)
+                                feature_repository)
   end
 
   subject { Togls::ToggleRegistry.new(feature_repository, toggle_repository) }
@@ -61,7 +53,7 @@ RSpec.describe Togls::ToggleRegistry do
       expect(Togls::Feature).to receive(:new).with(key, desc, target_type).and_return(feature)
       subject.feature(key, desc, target_type: :some_target_type)
     end
-    
+
     it "creates a feature toggle with the created feature" do
       desc = double('feature desc')
       key = "some_key"

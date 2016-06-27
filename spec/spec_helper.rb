@@ -28,6 +28,7 @@ RSpec.configure do |c|
     # reset the feature and toggle repository/registry before each test
     Togls.instance_variable_set(:@release_toggle_registry, nil)
     Togls.instance_variable_set(:@feature_repository, nil)
+    Togls.instance_variable_set(:@rule_repository, nil)
 
     example.run
 

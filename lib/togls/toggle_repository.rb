@@ -3,7 +3,7 @@ module Togls
   #
   # Repository interface for storing and retrieving toggles.
   class ToggleRepository
-    def initialize(drivers, feature_repository, rule_repository)
+    def initialize(drivers, feature_repository)
       unless drivers.is_a?(Array)
         raise Togls::InvalidDriver, 'ToggleRepository requires a valid driver'
       end
@@ -12,12 +12,11 @@ module Togls
       end
       @drivers = drivers
       @feature_repository = feature_repository
-      @rule_repository = rule_repository
     end
 
     def store(toggle)
       @feature_repository.store(toggle.feature)
-      @rule_repository.store(toggle.rule)
+      ::Togls.send(:rule_repository).store(toggle.rule)
       payload = extract_storage_payload(toggle)
 
       @drivers.each do |driver|
@@ -43,7 +42,7 @@ module Togls
       end
 
       begin
-        rule = @rule_repository.get(toggle_data['rule_id'])
+        rule = ::Togls.send(:rule_repository).get(toggle_data['rule_id'])
       rescue Togls::RepositoryRuleDataInvalid => e
         return Togls::NullToggle.new
       end

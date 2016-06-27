@@ -24,19 +24,6 @@ module Togls
         @release_blocks ||= []
       end
 
-      def rule_types(&block)
-        rule_type_registry.expand(&block) if block
-        rule_type_registry
-      end
-
-      def rule_type(type_id)
-        rule_type_registry.get(type_id)
-      end
-
-      def rule(type_id, data, target_type: Togls::TargetTypes::NOT_SET)
-        rule_type(type_id).new(type_id, data, target_type: target_type)
-      end
-
       def feature(key)
         Toggler.new(release_toggle_registry.instance_variable_get(:@toggle_repository), release_toggle_registry.get(key))
       end
@@ -62,38 +49,17 @@ module Togls
 
       private
 
-      def rule_type_repository
-        if @rule_type_repository.nil?
-          rule_type_repository_drivers = [RuleTypeRepositoryDrivers::InMemoryDriver.new]
-          @rule_type_repository = RuleTypeRepository.new(rule_type_repository_drivers)
-        end
-        @rule_type_repository
-      end
-
-      def rule_type_registry
-        if @rule_type_registry.nil?
-          @rule_type_registry = RuleTypeRegistry.new(rule_type_repository)
-          @rule_type_registry.register(:boolean, Togls::Rules::Boolean)
-          @rule_type_registry.register(:group, Togls::Rules::Group)
-        end
-        @rule_type_registry
-      end
-
       def test_toggle_registry
         feature_repository_drivers =
           [Togls::FeatureRepositoryDrivers::InMemoryDriver.new]
         test_feature_repository = Togls::FeatureRepository.new(
           feature_repository_drivers)
 
-        rule_repository_drivers =
-          [Togls::RuleRepositoryDrivers::InMemoryDriver.new]
-        rule_repository = Togls::RuleRepository.new(rule_type_registry, rule_repository_drivers)
-
         toggle_repository_drivers = [
           Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
 
         toggle_repository = Togls::ToggleRepository.new(
-          toggle_repository_drivers, test_feature_repository, rule_repository)
+          toggle_repository_drivers, test_feature_repository)
 
         tr = ToggleRegistry.new(test_feature_repository, toggle_repository)
         release_blocks.each do |p|
@@ -105,12 +71,6 @@ module Togls
 
       def release_toggle_registry
         if @release_toggle_registry.nil?
-          rule_repository_drivers = [
-            Togls::RuleRepositoryDrivers::InMemoryDriver.new,
-            Togls::RuleRepositoryDrivers::EnvOverrideDriver.new
-          ]
-
-          rule_repository = Togls::RuleRepository.new(rule_type_registry, rule_repository_drivers)
 
           toggle_repository_drivers = [
             Togls::ToggleRepositoryDrivers::InMemoryDriver.new,
@@ -118,7 +78,7 @@ module Togls
           ]
 
           toggle_repository = Togls::ToggleRepository.new(
-            toggle_repository_drivers, feature_repository, rule_repository)
+            toggle_repository_drivers, feature_repository)
 
           @release_toggle_registry = ToggleRegistry.new(feature_repository,
                                                         toggle_repository)

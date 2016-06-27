@@ -2,54 +2,41 @@ require 'spec_helper'
 
 RSpec.describe Togls::ToggleRepository do
   let(:driver) { double('driver') }
-  let(:rule_repository) { double('rule repository') }
   let(:feature_repository) { double('feature repository') }
 
-  subject { Togls::ToggleRepository.new([driver], feature_repository, rule_repository) }
+  subject { Togls::ToggleRepository.new([driver], feature_repository) }
 
   describe "#initialize" do
     context "when given an array of 1 or more drivers" do
       it "constructs a toggle repository" do
         repository = Togls::ToggleRepository.new([driver],
-                                                 feature_repository,
-                                                 rule_repository)
+                                                 feature_repository)
         expect(repository).to be_a(Togls::ToggleRepository)
       end
 
       it "assigns the given drivers" do
         repository = Togls::ToggleRepository.new([driver],
-                                                 feature_repository,
-                                                 rule_repository)
+                                                 feature_repository)
         expect(repository.instance_variable_get(:@drivers)).to eq([driver])
       end
 
       it "assigns the feature repository" do
         repository = Togls::ToggleRepository.new([driver],
-                                                 feature_repository,
-                                                 rule_repository)
+                                                 feature_repository)
         expect(repository.instance_variable_get(:@feature_repository)).to eq(feature_repository)
-      end
-
-      it "assigns the rule repository" do
-        repository = Togls::ToggleRepository.new([driver],
-                                                 feature_repository,
-                                                 rule_repository)
-        expect(repository.instance_variable_get(:@rule_repository)).to eq(rule_repository)
       end
     end
 
     context "when given an empty array of drivers" do
       it "raises an exception" do
-        expect { Togls::ToggleRepository.new([], feature_repository,
-                                             rule_repository) }.to raise_error(Togls::MissingDriver)
+        expect { Togls::ToggleRepository.new([], feature_repository) }.to raise_error(Togls::MissingDriver)
       end
     end
 
     context "when not given an array" do
       it "raises an exception" do
         expect { Togls::ToggleRepository.new("something else",
-                                             feature_repository,
-                                             rule_repository) }.to raise_error(Togls::InvalidDriver)
+                                             feature_repository) }.to raise_error(Togls::InvalidDriver)
       end
     end
   end
@@ -60,7 +47,7 @@ RSpec.describe Togls::ToggleRepository do
       feature = instance_double(Togls::Feature, id: 'foueououeo')
       rule = instance_double(Togls::Rule, id: '234oau234oue')
       toggle = instance_double(Togls::Toggle, feature: feature, rule: rule, id: 'foueououeo')
-      allow(subject.instance_variable_get(:@rule_repository)).to receive(:store)
+      allow(::Togls.send(:rule_repository)).to receive(:store)
       expect(subject.instance_variable_get(:@feature_repository)).to receive(:store).with(feature)
       subject.store(toggle)
     end
@@ -71,7 +58,7 @@ RSpec.describe Togls::ToggleRepository do
       rule = instance_double(Togls::Rule, id: '234oau234oue')
       toggle = instance_double(Togls::Toggle, feature: feature, rule: rule, id: 'foueououeo')
       allow(subject.instance_variable_get(:@feature_repository)).to receive(:store)
-      expect(subject.instance_variable_get(:@rule_repository)).to receive(:store).with(rule)
+      expect(::Togls.send(:rule_repository)).to receive(:store).with(rule)
       subject.store(toggle)
     end
 
@@ -79,7 +66,7 @@ RSpec.describe Togls::ToggleRepository do
       feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
       toggle = Togls::Toggle.new(feature)
       allow(subject.instance_variable_get(:@feature_repository)).to receive(:store)
-      allow(subject.instance_variable_get(:@rule_repository)).to receive(:store)
+      allow(::Togls.send(:rule_repository)).to receive(:store)
       allow(driver).to receive(:store)
       expect(subject).to receive(:extract_storage_payload).with(toggle)
       subject.store(toggle)
@@ -91,7 +78,7 @@ RSpec.describe Togls::ToggleRepository do
       toggle = instance_double(Togls::Toggle, feature: feature, rule: rule)
       allow(subject).to receive(:extract_storage_payload)
       allow(subject.instance_variable_get(:@feature_repository)).to receive(:store)
-      allow(subject.instance_variable_get(:@rule_repository)).to receive(:store)
+      allow(::Togls.send(:rule_repository)).to receive(:store)
       expect(subject.instance_variable_get(:@drivers)).to receive(:each)
       subject.store(toggle)
     end
@@ -104,7 +91,7 @@ RSpec.describe Togls::ToggleRepository do
       toggle_data = double('toggle data')
       allow(subject).to receive(:extract_storage_payload).and_return(toggle_data)
       allow(subject.instance_variable_get(:@feature_repository)).to receive(:store)
-      allow(subject.instance_variable_get(:@rule_repository)).to receive(:store)
+      allow(::Togls.send(:rule_repository)).to receive(:store)
       allow(subject.instance_variable_get(:@drivers)).to receive(:each).and_yield(driver)
       expect(driver).to receive(:store).with(toggle.id, toggle_data)
       subject.store(toggle)
@@ -166,7 +153,7 @@ RSpec.describe Togls::ToggleRepository do
     it "fetches the referenced feature from the feature repository" do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
       toggle = double('toggle')
-      allow(rule_repository).to receive(:get)
+      allow(::Togls.send(:rule_repository)).to receive(:get)
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
       allow(toggle).to receive(:rule=)
       expect(feature_repository).to receive(:get).with("badges")
@@ -188,7 +175,7 @@ RSpec.describe Togls::ToggleRepository do
       allow(feature_repository).to receive(:get)
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
       allow(toggle).to receive(:rule=)
-      expect(rule_repository).to receive(:get).with("ba234aoeubaooea23")
+      expect(::Togls.send(:rule_repository)).to receive(:get).with("ba234aoeubaooea23")
       subject.reconstitute_toggle(toggle_data)
     end
 
@@ -197,7 +184,7 @@ RSpec.describe Togls::ToggleRepository do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
         allow(feature_repository).to receive(:get)
         allow(Togls.logger).to receive(:warn)
-        allow(rule_repository).to receive(:get).and_raise(Togls::RepositoryRuleDataInvalid)
+        allow(::Togls.send(:rule_repository)).to receive(:get).and_raise(Togls::RepositoryRuleDataInvalid)
         expect(subject.reconstitute_toggle(toggle_data)).to be_a(Togls::NullToggle)
       end
     end
@@ -205,7 +192,7 @@ RSpec.describe Togls::ToggleRepository do
     it "constructs a toggle with the fetcthed feature" do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
       feature = double('feature')
-      allow(rule_repository).to receive(:get)
+      allow(::Togls.send(:rule_repository)).to receive(:get)
       allow(feature_repository).to receive(:get).and_return(feature)
       expect(Togls::Toggle).to receive(:new).with(feature).and_return(double.as_null_object)
       subject.reconstitute_toggle(toggle_data)
@@ -215,7 +202,7 @@ RSpec.describe Togls::ToggleRepository do
       toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
       toggle = double('toggle')
       rule = double('rule')
-      allow(rule_repository).to receive(:get).and_return(rule)
+      allow(::Togls.send(:rule_repository)).to receive(:get).and_return(rule)
       allow(feature_repository).to receive(:get)
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
       expect(toggle).to receive(:rule=).with(rule)
@@ -230,7 +217,7 @@ RSpec.describe Togls::ToggleRepository do
         toggle = double('toggle')
         null_toggle = double 'null toggle'
         allow(feature_repository).to receive(:get).and_return(feature)
-        allow(rule_repository).to receive(:get).and_return(rule)
+        allow(::Togls.send(:rule_repository)).to receive(:get).and_return(rule)
         allow(Togls::Toggle).to receive(:new).and_return(toggle)
         allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMismatch
         allow(Togls::RuleFeatureMismatchToggle).to receive(:new).and_return(null_toggle)
@@ -245,7 +232,7 @@ RSpec.describe Togls::ToggleRepository do
         feature = double('feature', key: 'feature_key', target_type: 'hoopty')
         null_toggle = double 'null toggle'
         allow(feature_repository).to receive(:get).and_return(feature)
-        allow(rule_repository).to receive(:get).and_return(rule)
+        allow(::Togls.send(:rule_repository)).to receive(:get).and_return(rule)
         allow(Togls::Toggle).to receive(:new).and_return(toggle)
         allow(toggle).to receive(:rule=).and_raise Togls::RuleFeatureTargetTypeMismatch
         allow(Togls::RuleFeatureMismatchToggle).to receive(:new).and_return(null_toggle)
@@ -259,7 +246,7 @@ RSpec.describe Togls::ToggleRepository do
         toggle_data = { "feature_id" => "badges", "rule_id" => "ba234aoeubaooea23" }
         toggle = double('toggle')
         rule = double('rule')
-        allow(rule_repository).to receive(:get).and_return(rule)
+        allow(::Togls.send(:rule_repository)).to receive(:get).and_return(rule)
         allow(feature_repository).to receive(:get)
         allow(Togls::Toggle).to receive(:new).and_return(toggle)
         allow(toggle).to receive(:rule=).with(rule)
