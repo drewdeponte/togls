@@ -135,14 +135,10 @@ RSpec.describe "Togl" do
 
   describe 'default rule types registered' do
     it 'makes the default rule types available' do
-      klass = Class.new do
-        include Togls::FeatureToggleRegistryManager
-      end
-
-      expect(klass.rule_type(:boolean)).to eq(Togls::Rules::Boolean)
-      expect(klass.rule_type('boolean')).to eq(Togls::Rules::Boolean)
-      expect(klass.rule_type(:group)).to eq(Togls::Rules::Group)
-      expect(klass.rule_type('group')).to eq(Togls::Rules::Group)
+      expect(Togls.rule_type(:boolean)).to eq(Togls::Rules::Boolean)
+      expect(Togls.rule_type('boolean')).to eq(Togls::Rules::Boolean)
+      expect(Togls.rule_type(:group)).to eq(Togls::Rules::Group)
+      expect(Togls.rule_type('group')).to eq(Togls::Rules::Group)
     end
   end
 
@@ -216,7 +212,7 @@ RSpec.describe "Togl" do
     it "creates a new feature with a rule" do
       Togls.default_feature_target_type Togls::TargetTypes::NONE
       Togls.release do
-        rule = Togls::Rules::Boolean.new(:boolean, false)
+        rule = Togls.rule(:boolean, false)
         feature(:test, "some human readable description").on(rule)
       end
 
@@ -225,7 +221,7 @@ RSpec.describe "Togl" do
 
     it "creates a new feature with a group" do
       Togls.release do
-        rule = Togls::Rules::Group.new(:group, ["someone"], target_type: :foo)
+        rule = Togls.rule(:group, ["someone"], target_type: :foo)
         feature(:test, "some human readable description", target_type: :foo).on(rule)
       end
 
@@ -257,7 +253,7 @@ RSpec.describe "Togl" do
           register(:some_rule_type, FooBarRule)
         end
 
-        some_rule = FooBarRule.new(:sometypeid)
+        some_rule = Togls.rule(:some_rule_type)
 
         expect {
           Togls.release do
@@ -291,7 +287,7 @@ RSpec.describe "Togl" do
           register(:some_rule_type, FooBarRule)
         end
 
-        some_rule = FooBarRule.new(:sometypeid)
+        some_rule = Togls.rule(:some_rule_type)
 
         Togls.release do
           feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
@@ -444,16 +440,16 @@ RSpec.describe "Togl" do
           register(:another_rule_type, AnotherRule)
         end
 
-        some_rule = FooBarRule.new(:sometypeid)
-        a = AnotherRule.new(:someothertypeid)
+        some_rule = Togls.rule(:some_rule_type)
+        a = Togls.rule(:another_rule_type)
+
         Togls.release do
           feature(:hoopty, 'some hoopty description', target_type: :purple_person).on(some_rule)
           feature(:doopty, 'some doopty description', target_type: :red_person).on(a)
         end
 
         toggle_repo = Togls.send(:release_toggle_registry).instance_variable_get(:@toggle_repository)
-        rule_repo = toggle_repo.instance_variable_get(:@rule_repository)
-        rule_in_memory_driver = rule_repo.instance_variable_get(:@drivers).first
+        rule_in_memory_driver = Togls.send(:rule_repository).instance_variable_get(:@drivers).first
 
         feature = Togls::Feature.new(:hoopty, 'some hoopty desc', :purple_person)
         toggle = Togls::Toggle.new(feature)
@@ -468,7 +464,7 @@ RSpec.describe "Togl" do
     context 'when the feature target type claims to send a target' do
       context 'when the feature evaluation sends a target' do
         it 'can be correctly evaluated' do
-          numbers = Togls::Rules::Group.new(:group, [1,3,5], target_type: :number)
+          numbers = Togls.rule(:group, [1,3,5], target_type: :number)
           Togls.release do
             feature(:foo, 'desc', target_type: :number).on(numbers)
           end
@@ -485,7 +481,7 @@ RSpec.describe "Togl" do
 
       context 'when the feature evaluation does NOT sends a target' do
         it 'raises an exception' do
-          numbers = Togls::Rules::Group.new([1,3,5], target_type: :number)
+          numbers = Togls.rule(:group, [1,3,5], target_type: :number)
           Togls.release do
             feature(:foo, 'desc', target_type: :number).on(numbers)
           end
@@ -628,6 +624,53 @@ RSpec.describe "Togl" do
 
       expect(Togls.feature(:test).on?).to eq(true)
       expect(klass.feature(:test).on?).to eq(false)
+    end
+  end
+
+  describe 'defining feature toggles in additional registry that reference rule from other registry' do
+    after do
+      Object.send(:remove_const, :FooBarRule)
+    end
+
+    it "successfully gets and evaluates the feature toggles" do
+      FooBarRule = Class.new(Togls::Rule) do
+        def self.title
+          'some title'
+        end
+
+        def self.description
+          'some desc'
+        end
+
+        def self.target_type
+          Togls::TargetTypes::NONE
+        end
+
+        def run(key, target = nil)
+          true
+        end
+      end
+
+      Togls.rule_types do
+        register(:my_rule_type, FooBarRule)
+      end
+      rule = Togls.rule(:my_rule_type)
+
+      Togls.default_feature_target_type Togls::TargetTypes::NONE
+      Togls.release do
+        feature(:test, "some human readable description").on(rule)
+      end
+
+      klass = Class.new do
+        include Togls::FeatureToggleRegistryManager
+      end
+
+      klass.release do
+        feature(:foobar, "some human readable description").on(rule)
+      end
+
+      expect(Togls.feature(:test).on?).to eq(true)
+      expect(klass.feature(:foobar).on?).to eq(true)
     end
   end
 end

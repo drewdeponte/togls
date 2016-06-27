@@ -25,6 +25,7 @@ require 'togls/null_toggle'
 require 'togls/rule'
 require 'togls/rules'
 require 'logger'
+require 'togls/rule_manager'
 require 'togls/feature_toggle_registry_manager'
 require 'togls/default_feature_target_type_manager'
 
@@ -33,6 +34,7 @@ require 'togls/default_feature_target_type_manager'
 # Togls is the primary interface to the out of the box toggle registry. It is
 # the namespace the DSL is exposed under.
 module Togls
+  include RuleManager
   include FeatureToggleRegistryManager
   include DefaultFeatureTargetTypeManager
 end
