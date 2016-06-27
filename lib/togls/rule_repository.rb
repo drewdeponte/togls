@@ -5,7 +5,7 @@ module Togls
   # It does these by interfacing with Rule Repository Drivers which are passed
   # in during construction as an Array.
   class RuleRepository
-    def initialize(rule_type_registry, drivers)
+    def initialize(drivers)
       unless drivers.is_a?(Array)
         raise Togls::InvalidDriver, 'RuleRepository requires a valid driver'
       end
@@ -13,7 +13,6 @@ module Togls
         raise Togls::MissingDriver, 'RuleRepository requires a driver'
       end
       @drivers = drivers
-      @rule_type_registry = rule_type_registry
     end
 
     def store(rule)
@@ -25,7 +24,7 @@ module Togls
 
     def extract_storage_payload(rule)
       {
-        'type_id' => @rule_type_registry.get_type_id(rule.class.to_s),
+        'type_id' => ::Togls.send(:rule_type_registry).get_type_id(rule.class.to_s),
         'data' => rule.data, 
         'target_type' => rule.target_type.to_s
       }
@@ -69,11 +68,12 @@ module Togls
 
     def reconstitute_rule(rule_data)
       if rule_data.has_key?('target_type')
-        @rule_type_registry.get(rule_data['type_id'])\
+        ::Togls.rule_type(rule_data['type_id'])\
           .new(rule_data['type_id'].to_sym, rule_data['data'],
                target_type: rule_data['target_type'].to_sym)
       else
-        @rule_type_registry.get(rule_data['type_id']).new(rule_data['type_id'].to_sym, rule_data['data'])
+        ::Togls.rule_type(rule_data['type_id']).new(rule_data['type_id'].to_sym,
+                                                    rule_data['data'])
       end
     end
   end

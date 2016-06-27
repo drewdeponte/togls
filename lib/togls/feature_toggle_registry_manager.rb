@@ -59,7 +59,7 @@ module Togls
           Togls::ToggleRepositoryDrivers::InMemoryDriver.new]
 
         toggle_repository = Togls::ToggleRepository.new(
-          toggle_repository_drivers, test_feature_repository, ::Togls.send(:rule_repository))
+          toggle_repository_drivers, test_feature_repository)
 
         tr = ToggleRegistry.new(test_feature_repository, toggle_repository)
         release_blocks.each do |p|
@@ -78,7 +78,7 @@ module Togls
           ]
 
           toggle_repository = Togls::ToggleRepository.new(
-            toggle_repository_drivers, feature_repository, ::Togls.send(:rule_repository))
+            toggle_repository_drivers, feature_repository)
 
           @release_toggle_registry = ToggleRegistry.new(feature_repository,
                                                         toggle_repository)

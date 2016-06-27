@@ -2,40 +2,32 @@ require 'spec_helper'
 
 RSpec.describe Togls::RuleRepository do
   let(:driver) { double('driver') }
-  let(:rule_type_registry) { double('rule_type_registry') }
-  subject { Togls::RuleRepository.new(rule_type_registry, [driver]) }
+  subject { Togls::RuleRepository.new([driver]) }
 
   describe "#initialize" do
     context "when given an array of 1 or more drivers" do
       it "constructs a toggle repository" do
         driver = double('driver')
-        repository = Togls::RuleRepository.new(rule_type_registry, [driver])
+        repository = Togls::RuleRepository.new([driver])
         expect(repository).to be_a(Togls::RuleRepository)
       end
 
       it "assigns the given drivers" do
         driver = double('driver')
-        repository = Togls::RuleRepository.new(rule_type_registry, [driver])
+        repository = Togls::RuleRepository.new([driver])
         expect(repository.instance_variable_get(:@drivers)).to eq([driver])
-      end
-
-      it 'assigns the given rule type repository' do
-        driver = double('driver')
-        rule_type_registry = double('rule type repository')
-        repository = Togls::RuleRepository.new(rule_type_registry, [driver])
-        expect(repository.instance_variable_get(:@rule_type_registry)).to eq(rule_type_registry)
       end
     end
 
     context "when given an empty array of drivers" do
       it "raises an exception" do
-        expect { Togls::RuleRepository.new(rule_type_registry, []) }.to raise_error(Togls::MissingDriver)
+        expect { Togls::RuleRepository.new([]) }.to raise_error(Togls::MissingDriver)
       end
     end
 
     context "when not given an array" do
       it "raises an exception" do
-        expect { Togls::RuleRepository.new(rule_type_registry, "something else") }.to raise_error(Togls::InvalidDriver)
+        expect { Togls::RuleRepository.new("something else") }.to raise_error(Togls::InvalidDriver)
       end
     end
   end
@@ -68,13 +60,13 @@ RSpec.describe Togls::RuleRepository do
   describe "#extract_storage_payload" do
     it 'gets the rule_type_id from rule type repository' do
       rule = Togls::Rule.new(:sometypeid, target_type: :foo)
-      expect(rule_type_registry).to receive(:get_type_id).with('Togls::Rule')
+      expect(::Togls.send(:rule_type_registry)).to receive(:get_type_id).with('Togls::Rule')
       subject.extract_storage_payload(rule)
     end
 
     it 'returns the rule\'s extracted storage payload with the target_type' do
       rule = Togls::Rule.new(:sometypeid, true, target_type: :foo)
-      allow(rule_type_registry).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
+      allow(::Togls.send(:rule_type_registry)).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
       expect(subject.extract_storage_payload(rule))
         .to eq({ 'type_id' => 'hoopty', 'data' => true, 'target_type' => 'foo' })
     end
@@ -255,7 +247,7 @@ RSpec.describe Togls::RuleRepository do
   describe '#reconstitute_rule' do
     context 'when rule data has target_type' do
       it 'constructs a rule with the target type' do
-        allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
+        allow(::Togls.send(:rule_type_registry)).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
         expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, true, target_type: :foo)
         subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true, 'target_type' => 'foo' })
       end
@@ -263,7 +255,7 @@ RSpec.describe Togls::RuleRepository do
 
     context 'when rule data does NOT have a target_type' do
       it 'constructs a rule without a target_type' do
-        allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
+        allow(::Togls.send(:rule_type_registry)).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
         expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, true)
         subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })
       end
@@ -271,7 +263,7 @@ RSpec.describe Togls::RuleRepository do
 
     it 'returns the rule' do
       rule = double('rule')
-      allow(rule_type_registry).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
+      allow(::Togls.send(:rule_type_registry)).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
       allow(Togls::Rules::Boolean).to receive(:new).with(:boolean, true).and_return(rule)
       expect(subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })).to eq(rule)
     end

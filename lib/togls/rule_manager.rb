@@ -44,7 +44,7 @@ module Togls
             Togls::RuleRepositoryDrivers::EnvOverrideDriver.new
           ]
 
-          @rule_repository = Togls::RuleRepository.new(rule_type_registry, rule_repository_drivers)
+          @rule_repository = Togls::RuleRepository.new(rule_repository_drivers)
         end
         @rule_repository
       end
