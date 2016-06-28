@@ -28,11 +28,15 @@ module Togls
         @rule_type_repository
       end
 
+      def register_default_rules
+        @rule_type_registry.register(:boolean, Togls::Rules::Boolean)
+        @rule_type_registry.register(:group, Togls::Rules::Group)
+      end
+
       def rule_type_registry
         if @rule_type_registry.nil?
           @rule_type_registry = RuleTypeRegistry.new(rule_type_repository)
-          @rule_type_registry.register(:boolean, Togls::Rules::Boolean)
-          @rule_type_registry.register(:group, Togls::Rules::Group)
+          register_default_rules
         end
         @rule_type_registry
       end
