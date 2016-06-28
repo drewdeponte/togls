@@ -29,9 +29,14 @@ module Togls
     end
 
     def get(id)
-      toggle_data = fetch_toggle_data(id)
-      return reconstitute_toggle(toggle_data) if toggle_data
-      Togls::ToggleMissingToggle.new
+      @drivers.reverse.each do |driver|
+        toggle_data = driver.get(id)
+        if toggle_data
+          toggle = reconstitute_toggle(toggle_data)
+          return toggle unless toggle.is_a?(::Togls::NullToggle)
+        end
+      end
+      Togls::NullToggle.new
     end
 
     def reconstitute_toggle(toggle_data)
@@ -54,31 +59,6 @@ module Togls
       rescue Togls::RuleFeatureTargetTypeMismatch
         Togls.logger.warn("Feature (#{feature.key}) with target type '#{feature.target_type}' has a rule (#{rule.id}) mismatch with target type '#{rule.target_type}'")
         return Togls::RuleFeatureMismatchToggle.new
-      end
-    end
-
-    def fetch_toggle_data(id)
-      toggle_data = nil
-      @drivers.reverse.each do |driver|
-        toggle_data = driver.get(id)
-        break if toggle_data
-      end
-      toggle_data
-    end
-
-    def fetch_all_toggle_data
-      toggle_data_collection = {}
-      @drivers.each do |driver|
-        toggle_data_collection.merge!(driver.all)
-      end
-      toggle_data_collection
-    end
-
-    def all
-      toggle_data_collection = fetch_all_toggle_data.values
-
-      toggle_data_collection.map do |toggle_data|
-        reconstitute_toggle(toggle_data)
       end
     end
   end
