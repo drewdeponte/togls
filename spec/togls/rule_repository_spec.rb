@@ -52,7 +52,7 @@ RSpec.describe Togls::RuleRepository do
       rule_data = double('rule data')
       allow(subject).to receive(:extract_storage_payload).and_return(rule_data)
       allow(subject.instance_variable_get(:@drivers)).to receive(:each).and_yield(driver)
-      expect(driver).to receive(:store).with(rule.id, rule_data)
+      expect(driver).to receive(:store).with(rule.id.to_s, rule_data)
       subject.store(rule)
     end
   end

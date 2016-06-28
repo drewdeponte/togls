@@ -18,13 +18,13 @@ module Togls
     def store(rule)
       rule_data = extract_storage_payload(rule)
       @drivers.each do |driver|
-        driver.store(rule.id, rule_data)
+        driver.store(rule.id.to_s, rule_data)
       end
     end
 
     def extract_storage_payload(rule)
       {
-        'id' => rule.id,
+        'id' => rule.id.to_s,
         'type_id' => ::Togls.send(:rule_type_registry).get_type_id(rule.class.to_s),
         'data' => rule.data,
         'target_type' => rule.target_type.to_s

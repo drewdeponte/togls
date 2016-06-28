@@ -121,7 +121,7 @@ RSpec.describe Togls::Rule do
   describe "#id" do
     it "returns the string representation of the id" do
       rule = Togls::Rules::Boolean.new(:some_rule, :boolean, true)
-      expect(rule.id).to eq("some_rule")
+      expect(rule.id).to eq(:some_rule)
     end
   end
 

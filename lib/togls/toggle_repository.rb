@@ -25,7 +25,7 @@ module Togls
     end
 
     def extract_storage_payload(toggle)
-      { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
+      { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id.to_s }
     end
 
     def get(id)
