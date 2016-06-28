@@ -37,13 +37,15 @@ module Togls
         @rule_type_registry
       end
 
+      def rule_repository_drivers
+        rule_repository_drivers = [
+          Togls::RuleRepositoryDrivers::InMemoryDriver.new,
+          Togls::RuleRepositoryDrivers::EnvOverrideDriver.new
+        ]
+      end
+
       def rule_repository
         if @rule_repository.nil?
-          rule_repository_drivers = [
-            Togls::RuleRepositoryDrivers::InMemoryDriver.new,
-            Togls::RuleRepositoryDrivers::EnvOverrideDriver.new
-          ]
-
           @rule_repository = Togls::RuleRepository.new(rule_repository_drivers)
         end
         @rule_repository
