@@ -60,10 +60,4 @@ RSpec.describe Togls::ToggleRepositoryDrivers::EnvOverrideDriver do
       end
     end
   end
-
-  describe "#all" do
-    it "passively returns an empty hash" do
-      expect(subject.all).to eq({})
-    end
-  end
 end

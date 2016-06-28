@@ -31,15 +31,7 @@ module Togls
     end
 
     def get(key)
-      toggle = @toggle_repository.get(key.to_s)
-      if toggle.is_a?(Togls::ToggleMissingToggle)
-        Togls.logger.warn("Feature identified by '#{key}' has not been defined")
-      end
-      toggle
-    end
-
-    def all
-      @toggle_repository.all
+      @toggle_repository.get(key.to_s)
     end
   end
 end

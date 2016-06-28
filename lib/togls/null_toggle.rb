@@ -18,6 +18,5 @@ module Togls
     end
   end
 
-  class ToggleMissingToggle < NullToggle; end
   class RuleFeatureMismatchToggle < NullToggle; end
 end

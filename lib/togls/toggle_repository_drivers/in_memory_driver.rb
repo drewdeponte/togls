@@ -27,14 +27,6 @@ module Togls
           end
         end
       end
-
-      def all
-        result = {}
-        @toggles_lock.synchronize do
-          @toggles.each_pair { |k, v| result[k] = Marshal.load(v) }
-        end
-        result
-      end
     end
   end
 end

@@ -32,10 +32,6 @@ module Togls
         end
       end
 
-      def all
-        {}
-      end
-
       private
 
       def toggle_env_key(toggle_id)

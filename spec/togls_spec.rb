@@ -456,7 +456,7 @@ RSpec.describe "Togl" do
         toggle.instance_variable_set(:@rule, a)
         toggle_repo.store(toggle)
 
-        expect(Togls.feature(:hoopty).instance_variable_get(:@toggle)).to be_a(Togls::RuleFeatureMismatchToggle)
+        expect(Togls.feature(:hoopty).instance_variable_get(:@toggle)).to be_a(Togls::NullToggle)
         expect(Togls.feature(:hoopty).on?).to eq(false)
       end
     end

@@ -27,14 +27,4 @@ RSpec.describe Togls::ToggleRepositoryDrivers::InMemoryDriver do
       end
     end
   end
-
-  describe "#all" do
-    it "returns the collection of toggles" do
-      feature = Togls::Feature.new("some_feature_key", "Some Feature Desc", :hoopty)
-      toggle = Togls::Toggle.new(feature)
-      toggle_data = { 'feature_id' => toggle.feature.id, 'rule_id' => toggle.rule.id }
-      subject.store(toggle.id, toggle_data)
-      expect(subject.all).to eq({"some_feature_key"=>{"feature_id"=>toggle.feature.id, "rule_id"=>toggle.rule.id}})
-    end
-  end
 end

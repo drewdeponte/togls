@@ -108,43 +108,107 @@ RSpec.describe Togls::ToggleRepository do
   end
 
   describe "#get" do
-    it "attempts to fetch toggle data" do
-      expect(subject).to receive(:fetch_toggle_data).with("some id")
+    it "reverse the drivers" do
+      drivers = subject.instance_variable_get(:@drivers)
+      expect(drivers).to receive(:reverse).and_return([])
       subject.get("some id")
     end
 
-    context "when the toggle data is found" do
-      before do
-        @toggle_data = double('toggle data')
-        allow(subject).to receive(:fetch_toggle_data).and_return(@toggle_data)
-      end
+    it "iterate over each driver in reverse order" do
+      drivers = subject.instance_variable_get(:@drivers)
+      reversed_drivers = double('reversed drivers')
+      allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+      expect(reversed_drivers).to receive(:each)
+      subject.get("some id")
+    end
 
-      it "reconstitutes a toggle from toggle data" do
-        expect(subject).to receive(:reconstitute_toggle).with(@toggle_data)
-        subject.get("some_id")
-      end
+    it "attempt to get the toggle data from each driver" do
+      driver = double('driver')
+      drivers = subject.instance_variable_get(:@drivers)
+      reversed_drivers = double('reversed drivers')
+      allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+      allow(reversed_drivers).to receive(:each).and_yield(driver)
+      expect(driver).to receive(:get).with("some id")
+      subject.get("some id")
+    end
 
-      it "returns the reconstituted toggle" do
-        toggle = double('toggle')
-        allow(subject).to receive(:reconstitute_toggle).and_return(toggle)
+    context 'when toggle data found' do
+      it 'attempts to reconstitute the toggle' do
+        toggle_data = double('toggle data')
+        driver_one = double('driver one')
+        driver_two = double('driver two')
+        drivers = subject.instance_variable_get(:@drivers)
+        reversed_drivers = double('reversed drivers')
+        allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+        allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
+        allow(driver_one).to receive(:get).with("some id").and_return(toggle_data)
+        expect(driver_two).not_to receive(:get).with("some id")
+        expect(subject).to receive(:reconstitute_toggle).with(toggle_data)
         subject.get("some id")
+      end
+
+      context 'when successfully reconstitutes the toggle' do
+        it 'returns the toggle' do
+          toggle = double('toggle')
+          toggle_data = double('toggle data')
+          driver_one = double('driver one')
+          driver_two = double('driver two')
+          drivers = subject.instance_variable_get(:@drivers)
+          reversed_drivers = double('reversed drivers')
+          allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+          allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
+          allow(driver_one).to receive(:get).with("some id").and_return(toggle_data)
+          expect(driver_two).not_to receive(:get).with("some id")
+          allow(subject).to receive(:reconstitute_toggle).with(toggle_data).and_return(toggle)
+          expect(subject.get("some id")).to eq(toggle)
+        end
+      end
+
+      context 'when fails to reconstitute the toggle' do
+        it 'falls through to the next driver' do
+          toggle_data = double('toggle data')
+          driver_one = double('driver one')
+          driver_two = double('driver two')
+          drivers = subject.instance_variable_get(:@drivers)
+          reversed_drivers = double('reversed drivers')
+          allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+          allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
+          allow(driver_one).to receive(:get).with("some id").and_return(toggle_data)
+          allow(subject).to receive(:reconstitute_toggle).with(toggle_data).and_return(::Togls::NullToggle.new)
+          expect(driver_two).to receive(:get).with("some id")
+          subject.get("some id")
+        end
+      end
+
+      context 'when has exhausted all drivers and still has not found a toggle' do
+        it 'returns the null toggle' do
+          toggle_data = double('toggle data')
+          driver_one = double('driver one')
+          driver_two = double('driver two')
+          drivers = subject.instance_variable_get(:@drivers)
+          reversed_drivers = double('reversed drivers')
+          allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+          allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
+          allow(driver_one).to receive(:get).with("some id").and_return(toggle_data)
+          allow(subject).to receive(:reconstitute_toggle).with(toggle_data).and_return(::Togls::NullToggle.new)
+          allow(driver_two).to receive(:get).with("some id")
+          expect(subject.get("some id")).to be_a(::Togls::NullToggle)
+        end
       end
     end
 
-    context "when the toggle data is NOT found" do
-      before do
-        allow(subject).to receive(:fetch_toggle_data).and_return(nil)
-      end
-
-      it "constructs a null toggle" do
-        expect(Togls::ToggleMissingToggle).to receive(:new)
+    context 'when toggle data not found' do
+      it 'falls through to the next driver' do
+        toggle_data = double('toggle data')
+        driver_one = double('driver one')
+        driver_two = double('driver two')
+        drivers = subject.instance_variable_get(:@drivers)
+        reversed_drivers = double('reversed drivers')
+        allow(drivers).to receive(:reverse).and_return(reversed_drivers)
+        allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
+        allow(driver_one).to receive(:get).with("some id")
+        expect(driver_two).to receive(:get).with("some id")
         subject.get("some id")
-      end
-
-      it "returns the null toggle" do
-        null_toggle = double('null toggle')
-        allow(Togls::ToggleMissingToggle).to receive(:new).and_return(null_toggle)
-        expect(subject.get("some id")).to eq(null_toggle)
       end
     end
   end
@@ -252,137 +316,6 @@ RSpec.describe Togls::ToggleRepository do
         allow(toggle).to receive(:rule=).with(rule)
         expect(subject.reconstitute_toggle(toggle_data)).to eq(toggle)
       end
-    end
-  end
-
-  describe "#fetch_toggle_data" do
-    it "reverse the drivers" do
-      drivers = subject.instance_variable_get(:@drivers)
-      expect(drivers).to receive(:reverse).and_return([])
-      subject.fetch_toggle_data("some id")
-    end
-
-    it "iterate over each driver in reverse order" do
-      drivers = subject.instance_variable_get(:@drivers)
-      reversed_drivers = double('reversed drivers')
-      allow(drivers).to receive(:reverse).and_return(reversed_drivers)
-      expect(reversed_drivers).to receive(:each)
-      subject.fetch_toggle_data("some id")
-    end
-
-    it "attempt to get the toggle data from each driver" do
-      driver = double('driver')
-      drivers = subject.instance_variable_get(:@drivers)
-      reversed_drivers = double('reversed drivers')
-      allow(drivers).to receive(:reverse).and_return(reversed_drivers)
-      allow(reversed_drivers).to receive(:each).and_yield(driver)
-      expect(driver).to receive(:get).with("some id")
-      subject.fetch_toggle_data("some id")
-    end
-
-    it "short circuits at the first toggle it finds" do
-      toggle_data = double('toggle data')
-      driver_one = double('driver one')
-      driver_two = double('driver two')
-      drivers = subject.instance_variable_get(:@drivers)
-      reversed_drivers = double('reversed drivers')
-      allow(drivers).to receive(:reverse).and_return(reversed_drivers)
-      allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
-      expect(driver_one).to receive(:get).with("some id").and_return(toggle_data)
-      expect(driver_two).not_to receive(:get).with("some id")
-      subject.fetch_toggle_data("some id")
-    end
-
-    context "when it finds a toggle data" do
-      it "returns the first toggle data it finds" do
-        toggle_data = double('toggle data')
-        driver_one = double('driver one')
-        driver_two = double('driver two')
-        drivers = subject.instance_variable_get(:@drivers)
-        reversed_drivers = double('reversed drivers')
-        allow(drivers).to receive(:reverse).and_return(reversed_drivers)
-        allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
-        allow(driver_one).to receive(:get).with("some id").and_return(toggle_data)
-        expect(subject.fetch_toggle_data("some id")).to eq(toggle_data)
-      end
-    end
-
-    context "when it doesn't find a toggle" do
-      it "returns nil" do
-        toggle_data = double('toggle data')
-        driver_one = double('driver one')
-        driver_two = double('driver two')
-        drivers = subject.instance_variable_get(:@drivers)
-        reversed_drivers = double('reversed drivers')
-        allow(drivers).to receive(:reverse).and_return(reversed_drivers)
-        allow(reversed_drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
-        allow(driver_one).to receive(:get).with("some id").and_return(nil)
-        allow(driver_two).to receive(:get).with("some id").and_return(nil)
-        expect(subject.fetch_toggle_data("some id")).to be_nil
-      end
-    end
-  end
-
-  describe "#fetch_all_toggle_data" do
-    it "iterate over each driver in order" do
-      drivers = subject.instance_variable_get(:@drivers)
-      expect(drivers).to receive(:each)
-      subject.fetch_all_toggle_data
-    end
-
-    it "attempt to get the toggle data from each driver" do
-      driver = double('driver')
-      drivers = subject.instance_variable_get(:@drivers)
-      allow(drivers).to receive(:each).and_yield(driver)
-      expect(driver).to receive(:all).and_return({})
-      subject.fetch_all_toggle_data
-    end
-
-    it "return a merged hash of all toggle data from all drivers" do
-      driver_one = double('driver one', all: { "foo" => "bar", "jack" => "black" })
-      driver_two = double('driver two', all: { "hoopty" => "doopty", "foo" => "car" })
-      drivers = subject.instance_variable_get(:@drivers)
-      allow(drivers).to receive(:each).and_yield(driver_one).and_yield(driver_two)
-      expect(subject.fetch_all_toggle_data).to eq({ "jack" => "black", "hoopty" => "doopty", "foo" => "car" })
-    end
-  end
-
-  describe "#all" do
-    it "fetches all toggle data" do
-      expect(subject).to receive(:fetch_all_toggle_data).and_return({})
-      subject.all
-    end
-
-    it "maps over all the toggle data entries" do
-      toggle_data_collection = double('toggle data entries')
-      toggle_data_collection_hash = double('toggle data entries', values: toggle_data_collection)
-      allow(subject).to receive(:fetch_all_toggle_data).and_return(toggle_data_collection_hash)
-      expect(toggle_data_collection).to receive(:map)
-      subject.all
-    end
-
-    it "reconstitutes each toggle" do
-      toggle_data = double('toggle data')
-      toggle_data_collection = double('toggle data entries')
-      toggle_data_collection_hash = double('toggle data entries', values: toggle_data_collection)
-      allow(subject).to receive(:fetch_all_toggle_data).and_return(toggle_data_collection_hash)
-      allow(toggle_data_collection).to receive(:map).and_yield(toggle_data)
-      expect(subject).to receive(:reconstitute_toggle).with(toggle_data)
-      subject.all
-    end
-
-    it "returns all the toggles" do
-      toggle = double('toggle')
-      toggle_data = double('toggle data')
-      toggle_data_collection = double('toggle data entries')
-      toggle_data_collection_hash = {
-        "badges" => { "feature_id" => "badges", "rule_id" => "aeuuaoeuoau23432" },
-        "login" => { "feature_id" => "login", "rule_id" => "213a124323a" }
-      }
-      allow(subject).to receive(:fetch_all_toggle_data).and_return(toggle_data_collection_hash)
-      allow(toggle_data_collection).to receive(:map).and_yield(toggle_data)
-      allow(subject).to receive(:reconstitute_toggle).and_return(toggle)
-      expect(subject.all.length).to eq(2)
     end
   end
 end

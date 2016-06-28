@@ -122,38 +122,11 @@ RSpec.describe Togls::ToggleRegistry do
       subject.get("some key")
     end
 
-    context "when the toggle is found" do
-      it "returns the obtained feature toggle" do
-        toggle = double('toggle')
-        toggle_repository = subject.instance_variable_get(:@toggle_repository)
-        allow(toggle_repository).to receive(:get).and_return(toggle)
-        expect(subject.get("some key")).to eq(toggle)
-      end
-    end
-
-    context "when the toggle is NOT found" do
-      before do
-        toggle_missing_toggle = Togls::ToggleMissingToggle.new
-        toggle_repository = subject.instance_variable_get(:@toggle_repository)
-        allow(toggle_repository).to receive(:get).and_return(toggle_missing_toggle)
-      end
-
-      it "logs a warning" do
-        expect(Togls.logger).to receive(:warn).with("Feature identified by 'some_id' has not been defined")
-        subject.get("some_id")
-      end
-
-      it "returns a null toggle" do
-        expect(subject.get("some not real key")).to be_a(Togls::ToggleMissingToggle)
-      end
-    end
-  end
-
-  describe "#all" do
-    it "fetches all toggles" do
+    it "returns the obtained feature toggle" do
+      toggle = double('toggle')
       toggle_repository = subject.instance_variable_get(:@toggle_repository)
-      expect(toggle_repository).to receive(:all)
-      subject.all
+      allow(toggle_repository).to receive(:get).and_return(toggle)
+      expect(subject.get("some key")).to eq(toggle)
     end
   end
 end
