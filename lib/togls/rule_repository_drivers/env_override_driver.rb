@@ -9,12 +9,12 @@ module Togls
       end
 
       def get(rule_id)
-        boolean_false = Togls::Rules::Boolean.new(:boolean, false)
-        boolean_true = Togls::Rules::Boolean.new(:boolean, true)
+        boolean_false = Togls::Rules::Boolean.new(:off, :boolean, false)
+        boolean_true = Togls::Rules::Boolean.new(:on, :boolean, true)
         if rule_id == boolean_true.id
-          return { 'type_id' => 'boolean', 'data' => true, 'target_type' => Togls::TargetTypes::NONE.to_s }
+          return { 'id' => 'on', 'type_id' => 'boolean', 'data' => true, 'target_type' => Togls::TargetTypes::NONE.to_s }
         elsif rule_id == boolean_false.id
-          return { 'type_id' => 'boolean', 'data' => false, 'target_type' => Togls::TargetTypes::NONE.to_s }
+          return { 'id' => 'off', 'type_id' => 'boolean', 'data' => false, 'target_type' => Togls::TargetTypes::NONE.to_s }
         else
           nil
         end

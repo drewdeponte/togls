@@ -24,8 +24,9 @@ module Togls
 
     def extract_storage_payload(rule)
       {
+        'id' => rule.id,
         'type_id' => ::Togls.send(:rule_type_registry).get_type_id(rule.class.to_s),
-        'data' => rule.data, 
+        'data' => rule.data,
         'target_type' => rule.target_type.to_s
       }
     end
@@ -51,14 +52,14 @@ module Togls
         raise Togls::RepositoryRuleDataInvalid, "None of the rule repository drivers claim to have the rule"
       end
 
-      ['type_id', 'data', 'target_type'].each do |k|
+      ['id', 'type_id', 'data', 'target_type'].each do |k|
         if !rule_data.has_key? k
           Togls.logger.debug "One of the rule repository drivers returned rule data that is missing the '#{k}'"
           raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data that is missing the '#{k}'"
         end
       end
 
-      ['type_id', 'target_type'].each do |k|
+      ['id', 'type_id', 'target_type'].each do |k|
         if !rule_data[k].is_a?(String)
           Togls.logger.debug "One of the rule repository drivers returned rule data with '#{k}' not being a string"
           raise Togls::RepositoryRuleDataInvalid, "One of the rule repository drivers returned rule data with '#{k}' not being a string"
@@ -69,10 +70,11 @@ module Togls
     def reconstitute_rule(rule_data)
       if rule_data.has_key?('target_type')
         ::Togls.rule_type(rule_data['type_id'])\
-          .new(rule_data['type_id'].to_sym, rule_data['data'],
+          .new(rule_data['id'].to_sym, rule_data['type_id'].to_sym, rule_data['data'],
                target_type: rule_data['target_type'].to_sym)
       else
-        ::Togls.rule_type(rule_data['type_id']).new(rule_data['type_id'].to_sym,
+        ::Togls.rule_type(rule_data['type_id']).new(rule_data['id'].to_sym,
+                                                    rule_data['type_id'].to_sym,
                                                     rule_data['data'])
       end
     end

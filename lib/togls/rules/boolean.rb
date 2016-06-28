@@ -6,7 +6,7 @@ module Togls
     # it's initialization data and when evaluated determines the toggle state
     # based on the initialization value. Example:
     #
-    # always_on = Togls::Rules::Boolean.new(:boolean, true)
+    # always_on = Togls::Rules::Boolean.new(:on, :boolean, true)
     # Togls.features do
     #   feature(:foo).on(always_on)
     # end
@@ -25,9 +25,9 @@ The Boolean rule type is the base line rule for Togls. It allows you to
 flag a feature on/off by specifing a boolean value as the initialization
 data. For example:
 
-Togls::Rules::Boolean.new(:boolean, true) # rule that always evaluates to on
+Togls::Rules::Boolean.new(:on, :boolean, true) # rule that always evaluates to on
 
-Togls::Rules::Boolean.new(:boolean, false) # rule that always evaluates to off
+Togls::Rules::Boolean.new(:off, :boolean, false) # rule that always evaluates to off
         }
       end
 

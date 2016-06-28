@@ -18,7 +18,8 @@ module Togls
       Togls::TargetTypes::NOT_SET
     end
 
-    def initialize(type_id, data = nil, target_type: Togls::TargetTypes::NOT_SET)
+    def initialize(id, type_id, data = nil, target_type: Togls::TargetTypes::NOT_SET)
+      @id = id
       @type_id = type_id
       @data = data
       @target_type = target_type
@@ -30,7 +31,7 @@ module Togls
     end
 
     def id
-      Togls::Helpers.sha1(@type_id, @data, target_type)
+      @id.to_s
     end
 
     def target_type

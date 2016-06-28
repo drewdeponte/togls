@@ -14,8 +14,8 @@ module Togls
         rule_type_registry.get(type_id)
       end
 
-      def rule(type_id, data = nil, target_type: Togls::TargetTypes::NOT_SET)
-        rule_type(type_id).new(type_id, data, target_type: target_type)
+      def rule(id, type_id, data = nil, target_type: Togls::TargetTypes::NOT_SET)
+        rule_type(type_id).new(id, type_id, data, target_type: target_type)
       end
 
       private

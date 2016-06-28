@@ -9,7 +9,7 @@ module Togls
 
     def initialize(feature)
       @feature = feature
-      @rule = Togls::Rules::Boolean.new(:boolean, false)
+      @rule = Togls::Rules::Boolean.new(:off, :boolean, false)
     end
 
     def id
