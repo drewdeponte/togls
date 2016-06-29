@@ -193,7 +193,7 @@ RSpec.describe Togls::RuleRepository do
       end
     end
 
-    context 'when rule data is id' do
+    context 'when rule data is missing id' do
       it 'logs and raises an exception' do
         rule_data = { 'type_id' => 'foo', 'data' => 'somedata', 'target_type' => 'sometype' }
         expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'id'")
