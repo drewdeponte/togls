@@ -23,10 +23,10 @@ module Togls
         return nil if ENV[toggle_env_key(toggle_id)].nil?
         if ENV[toggle_env_key(toggle_id)] == 'true'
           return { 'feature_id' => toggle_id, 'rule_id' =>
-                   Togls::Rules::Boolean.new(:boolean, true).id }
+                   Togls::Rules::Boolean.new(:on, :boolean, true).id.to_s }
         elsif ENV[toggle_env_key(toggle_id)] == 'false'
           return { 'feature_id' => toggle_id, 'rule_id' =>
-                   Togls::Rules::Boolean.new(:boolean, false).id }
+                   Togls::Rules::Boolean.new(:off, :boolean, false).id.to_s }
         else
           return nil
         end

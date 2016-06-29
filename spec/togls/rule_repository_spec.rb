@@ -34,7 +34,7 @@ RSpec.describe Togls::RuleRepository do
 
   describe "#store" do
     it "gets the storage payload" do
-      rule = Togls::Rule.new(:sometypeid, target_type: :foo)
+      rule = Togls::Rule.new(:some_rule, :sometypeid, target_type: :foo)
       allow(driver).to receive(:store)
       expect(subject).to receive(:extract_storage_payload).with(rule)
       subject.store(rule)
@@ -48,27 +48,27 @@ RSpec.describe Togls::RuleRepository do
     end
 
     it "store the rule data in each driver" do
-      rule = Togls::Rule.new(:sometypeid, target_type: :foo)
+      rule = Togls::Rule.new(:some_rule, :sometypeid, target_type: :foo)
       rule_data = double('rule data')
       allow(subject).to receive(:extract_storage_payload).and_return(rule_data)
       allow(subject.instance_variable_get(:@drivers)).to receive(:each).and_yield(driver)
-      expect(driver).to receive(:store).with(rule.id, rule_data)
+      expect(driver).to receive(:store).with(rule.id.to_s, rule_data)
       subject.store(rule)
     end
   end
 
   describe "#extract_storage_payload" do
     it 'gets the rule_type_id from rule type repository' do
-      rule = Togls::Rule.new(:sometypeid, target_type: :foo)
+      rule = Togls::Rule.new(:some_rule, :sometypeid, target_type: :foo)
       expect(::Togls.send(:rule_type_registry)).to receive(:get_type_id).with('Togls::Rule')
       subject.extract_storage_payload(rule)
     end
 
     it 'returns the rule\'s extracted storage payload with the target_type' do
-      rule = Togls::Rule.new(:sometypeid, true, target_type: :foo)
+      rule = Togls::Rule.new(:some_rule, :sometypeid, true, target_type: :foo)
       allow(::Togls.send(:rule_type_registry)).to receive(:get_type_id).with('Togls::Rule').and_return('hoopty')
       expect(subject.extract_storage_payload(rule))
-        .to eq({ 'type_id' => 'hoopty', 'data' => true, 'target_type' => 'foo' })
+        .to eq({ 'id' => 'some_rule', 'type_id' => 'hoopty', 'data' => true, 'target_type' => 'foo' })
     end
   end
 
@@ -176,7 +176,7 @@ RSpec.describe Togls::RuleRepository do
   describe '#validate_rule_data' do
     context 'when rule data is complete and proper' do
       it 'does not raise an exception' do
-        rule_data = { 'type_id' => 'sometype', 'data' => 'somedata', 'target_type' => 'sometype' }
+        rule_data = { 'id' => 'some_rule', 'type_id' => 'sometype', 'data' => 'somedata', 'target_type' => 'sometype' }
         expect {
           subject.validate_rule_data(rule_data)
         }.not_to raise_error
@@ -193,9 +193,19 @@ RSpec.describe Togls::RuleRepository do
       end
     end
 
+    context 'when rule data is missing id' do
+      it 'logs and raises an exception' do
+        rule_data = { 'type_id' => 'foo', 'data' => 'somedata', 'target_type' => 'sometype' }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'id'")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
     context 'when rule data is missing type_id' do
       it 'logs and raises an exception' do
-        rule_data = { 'data' => 'somedata', 'target_type' => 'sometype' }
+        rule_data = { 'id' => 'someid', 'data' => 'somedata', 'target_type' => 'sometype' }
         expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'type_id'")
         expect {
           subject.validate_rule_data(rule_data)
@@ -205,7 +215,7 @@ RSpec.describe Togls::RuleRepository do
 
     context 'when rule data is missing data' do
       it 'logs and raises an exception' do
-        rule_data = { 'type_id' => 'sometype', 'target_type' => 'sometype' }
+        rule_data = { 'id' => 'some_rule', 'type_id' => 'sometype', 'target_type' => 'sometype' }
         expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'data'")
         expect {
           subject.validate_rule_data(rule_data)
@@ -215,8 +225,18 @@ RSpec.describe Togls::RuleRepository do
 
     context 'when rule data is missing target_type' do
       it 'logs and raises an exception' do
-        rule_data = { 'type_id' => 'sometype', 'data' => 'somedata' }
+        rule_data = { 'id' => 'some_rule', 'type_id' => 'sometype', 'data' => 'somedata' }
         expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data that is missing the 'target_type'")
+        expect {
+          subject.validate_rule_data(rule_data)
+        }.to raise_error(Togls::RepositoryRuleDataInvalid)
+      end
+    end
+
+    context 'when rule data id is not a string' do
+      it 'logs and raises an exception' do
+        rule_data = { 'id' => 23423, 'type_id' => 'aoeuaoe', 'data' => 'somedata', 'target_type' => 'sometype' }
+        expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data with 'id' not being a string")
         expect {
           subject.validate_rule_data(rule_data)
         }.to raise_error(Togls::RepositoryRuleDataInvalid)
@@ -225,7 +245,7 @@ RSpec.describe Togls::RuleRepository do
 
     context 'when rule data type_id is not a string' do
       it 'logs and raises an exception' do
-        rule_data = { 'type_id' => 232323, 'data' => 'somedata', 'target_type' => 'sometype' }
+        rule_data = { 'id' => 'some_rule', 'type_id' => 232323, 'data' => 'somedata', 'target_type' => 'sometype' }
         expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data with 'type_id' not being a string")
         expect {
           subject.validate_rule_data(rule_data)
@@ -235,7 +255,7 @@ RSpec.describe Togls::RuleRepository do
 
     context 'when rule data target_type is not a string' do
       it 'logs and raises an exception' do
-        rule_data = { 'type_id' => 'aoeua', 'data' => 'aoeu', 'target_type' => 23423 }
+        rule_data = { 'id' => 'some_rule', 'type_id' => 'aoeua', 'data' => 'aoeu', 'target_type' => 23423 }
         expect(Togls.logger).to receive(:debug).with("One of the rule repository drivers returned rule data with 'target_type' not being a string")
         expect {
           subject.validate_rule_data(rule_data)
@@ -248,24 +268,24 @@ RSpec.describe Togls::RuleRepository do
     context 'when rule data has target_type' do
       it 'constructs a rule with the target type' do
         allow(::Togls.send(:rule_type_registry)).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-        expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, true, target_type: :foo)
-        subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true, 'target_type' => 'foo' })
+        expect(Togls::Rules::Boolean).to receive(:new).with(:on, :boolean, true, target_type: :foo)
+        subject.reconstitute_rule({ 'id' => 'on', 'type_id' => 'boolean', 'data' => true, 'target_type' => 'foo' })
       end
     end
 
     context 'when rule data does NOT have a target_type' do
       it 'constructs a rule without a target_type' do
         allow(::Togls.send(:rule_type_registry)).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-        expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, true)
-        subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })
+        expect(Togls::Rules::Boolean).to receive(:new).with(:on, :boolean, true)
+        subject.reconstitute_rule({ 'id' => 'on', 'type_id' => 'boolean', 'data' => true })
       end
     end
 
     it 'returns the rule' do
       rule = double('rule')
       allow(::Togls.send(:rule_type_registry)).to receive(:get).with('boolean').and_return(Togls::Rules::Boolean)
-      allow(Togls::Rules::Boolean).to receive(:new).with(:boolean, true).and_return(rule)
-      expect(subject.reconstitute_rule({ 'type_id' => 'boolean', 'data' => true })).to eq(rule)
+      allow(Togls::Rules::Boolean).to receive(:new).with(:on, :boolean, true).and_return(rule)
+      expect(subject.reconstitute_rule({ 'id' => 'on', 'type_id' => 'boolean', 'data' => true })).to eq(rule)
     end
   end
 end

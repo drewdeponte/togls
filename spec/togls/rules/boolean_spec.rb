@@ -21,7 +21,7 @@ RSpec.describe Togls::Rules::Boolean do
 
   describe "#run" do
     it "returns the provided boolean value" do
-      bool_rule = Togls::Rules::Boolean.new(:boolean, true)
+      bool_rule = Togls::Rules::Boolean.new(:some_rule, :boolean, true)
       expect(bool_rule.run(double)).to eq(true)
     end
   end

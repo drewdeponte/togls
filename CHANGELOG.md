@@ -10,6 +10,7 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Changed`: Rules to be identified by an abstract given string id
 * `Changed`: Rule and Rule Type management to be global under Togls
 * `Changed`: The testing interface to allow for contract enforcement in tests
   and allow altering existing feature rules within tests.

@@ -33,13 +33,13 @@ RSpec.describe Togls::Toggler do
       it "creates a new rule" do
         allow(toggle_repository).to receive(:store)
         allow(toggle).to receive(:rule=)
-        expect(Togls::Rules::Boolean).to receive(:new).once.and_return(Togls::Rules::Boolean.new(:boolean))
+        expect(Togls::Rules::Boolean).to receive(:new).once.and_return(Togls::Rules::Boolean.new(:on, :boolean, true))
         subject.on
       end
     end
 
     it "sets the toggle's rule to the new rule" do
-      rule = Togls::Rules::Boolean.new(:boolean)
+      rule = Togls::Rules::Boolean.new(:off, :boolean, true)
       toggle_repository = subject.instance_variable_get(:@toggle_repository)
       allow(toggle_repository).to receive(:store)
       allow(Togls::Rules::Boolean).to receive(:new).and_return(rule)
@@ -72,7 +72,7 @@ RSpec.describe Togls::Toggler do
         toggle_repository = subject.instance_variable_get(:@toggle_repository)
         allow(toggle_repository).to receive(:store)
         allow(toggle).to receive(:rule=)
-        expect(Togls::Rules::Boolean).to receive(:new).with(:boolean, false)
+        expect(Togls::Rules::Boolean).to receive(:new).with(:off, :boolean, false)
         subject.off
       end
     end

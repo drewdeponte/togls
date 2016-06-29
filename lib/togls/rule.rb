@@ -4,7 +4,7 @@ module Togls
   # The Rule is an abstract base class that is intended to act as an interface
   # for other rules to be implemented against.
   class Rule
-    attr_reader :data, :type_id
+    attr_reader :data, :type_id, :id
 
     def self.title
       raise Togls::NotImplemented, "Rule type title not implemented"
@@ -18,7 +18,8 @@ module Togls
       Togls::TargetTypes::NOT_SET
     end
 
-    def initialize(type_id, data = nil, target_type: Togls::TargetTypes::NOT_SET)
+    def initialize(id, type_id, data = nil, target_type: Togls::TargetTypes::NOT_SET)
+      @id = id
       @type_id = type_id
       @data = data
       @target_type = target_type
@@ -27,10 +28,6 @@ module Togls
 
     def run(key, target = nil)
       raise Togls::NotImplemented, "Rule's #run method must be implemented"
-    end
-
-    def id
-      Togls::Helpers.sha1(@type_id, @data, target_type)
     end
 
     def target_type
