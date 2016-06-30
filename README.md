@@ -169,7 +169,7 @@ based on group membership.
 ```ruby
 # Create a group rule so the feature is on if the user is a member of
 # the group.
-alpha_testers = Togls.rule(:group, ["user1@email.com", "user2@example.com"], target_type: :user_email_address)
+alpha_testers = Togls.rule(:alpha_testers, :group, ["user1@email.com", "user2@example.com"], target_type: :user_email_address)
 
 Togls.release do
   feature(:new_contact_form, "use new contact form", target_type: :user_email_address).on(alpha_testers)
@@ -221,7 +221,7 @@ in the example above and it would look something like the following:
 ```ruby
 # Create a group rule so the feature is on if the user is a member of
 # the group.
-alpha_testers = Togls.rule(:group, [1, 23, 42, 83], :user_id)
+alpha_testers = Togls.rule(:alpha_testers, :group, [1, 23, 42, 83], :user_id)
 
 Togls.release do
   feature(:new_contact_form, "use new contact form", :user_id).on(alpha_testers)
