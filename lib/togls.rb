@@ -1,5 +1,6 @@
 require 'togls/version'
 require 'togls/errors'
+require 'togls/logger_management'
 require 'togls/helpers'
 require 'togls/target_types'
 require 'togls/toggle_repository_drivers'
