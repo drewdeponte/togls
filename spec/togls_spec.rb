@@ -14,6 +14,19 @@ RSpec.describe "Togl" do
     end
   end
 
+  describe 'logger management' do
+    it 'sets the logger' do
+      Togls.logger Logger.new(STDOUT)
+    end
+
+    it 'gets the logger' do
+      logger = Logger.new(STDOUT)
+      optional_logger = Togls.logger logger
+      expect(optional_logger).to be_a(OptionalLogger::Logger)
+      expect(optional_logger.wrapped_logger).to eq(logger)
+    end
+  end
+
   describe 'registering rule types' do
     it 'registers the rule type' do
       rule_klass = Class.new(Togls::Rule) do
