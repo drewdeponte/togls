@@ -28,10 +28,6 @@ module Togls
         Toggler.new(release_toggle_registry.instance_variable_get(:@toggle_repository), release_toggle_registry.get(key))
       end
 
-      def logger
-        @logger ||= Logger.new(STDOUT)
-      end
-
       def enable_test_mode
         @previous_release_toggle_registry = @release_toggle_registry
         @release_toggle_registry = test_toggle_registry

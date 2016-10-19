@@ -44,16 +44,6 @@ RSpec.describe Togls::FeatureToggleRegistryManager do
     end
   end
 
-  describe ".logger" do
-    it "memoizes a new logger instance" do
-      logger = double('logger')
-      klass.instance_variable_set(:@logger, nil)
-      allow(Logger).to receive(:new).with(STDOUT).and_return(logger)
-      expect(klass.logger).to eq(logger)
-      expect(klass.logger).to eq(logger)
-    end
-  end
-
   describe '.enable_test_mode' do
     it 'stores the current release toggle registry' do
       test_registry = double('test registry')
