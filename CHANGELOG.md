@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+#### [v3.0.0] - 2016-10-19
+
 * `Changed`: `Togls.logger` over to the `optional_logger` gem
 * `Changed`: Rules to be identified by an abstract given string id
 * `Changed`: Rule and Rule Type management to be global under Togls
