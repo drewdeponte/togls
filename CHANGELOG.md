@@ -121,7 +121,8 @@ that you can set version constraints properly.
   feature toggles
 * `Added`: basic feature toggles able to be switched on/off
 
-[Unreleased]: https://github.com/codebreakdown/togls/compare/v2.2.1...HEAD
+[Unreleased]: https://github.com/codebreakdown/togls/compare/v3.0.0...HEAD
+[v3.0.0]: https://github.com/codebreakdown/togls/compare/v2.2.1...v3.0.0
 [v2.2.1]: https://github.com/codebreakdown/togls/compare/v2.2.0...v2.2.1
 [v2.2.0]: https://github.com/codebreakdown/togls/compare/v2.1.1...v2.2.0
 [v2.1.1]: https://github.com/codebreakdown/togls/compare/v2.1.0...v2.1.1
