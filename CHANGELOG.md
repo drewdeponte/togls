@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Changed`: `optional_logger` to v2.0.0
+
 #### [v3.0.0] - 2016-10-19
 
 * `Changed`: `Togls.logger` over to the `optional_logger` gem
