@@ -34,7 +34,7 @@ require 'togls/default_feature_target_type_manager'
 # Togls is the primary interface to the out of the box toggle registry. It is
 # the namespace the DSL is exposed under.
 module Togls
-  include OptionalLogger::LoggerManagement
+  extend OptionalLogger::LoggerManagement
   include RuleManager
   include FeatureToggleRegistryManager
   include DefaultFeatureTargetTypeManager
