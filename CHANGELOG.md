@@ -12,6 +12,8 @@ that you can set version constraints properly.
 
 #### [v3.1.0] - 2016-10-26
 
+* `Added`: toggle evelaution logging
+* `Changed`: debug logging to warn logging
 * `Changed`: `optional_logger` to v2.0.0
 
 #### [v3.0.0] - 2016-10-19
