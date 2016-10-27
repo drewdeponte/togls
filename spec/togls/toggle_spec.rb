@@ -405,7 +405,7 @@ RSpec.describe Togls::Toggle do
     end
 
     it "runs the associated rule" do
-      rule = double('rule')
+      rule = double('rule', id: 'myrule')
       target = double('target')
       subject.instance_variable_set(:@rule, rule)
       allow(subject).to receive(:validate_target).with(target)
@@ -414,8 +414,19 @@ RSpec.describe Togls::Toggle do
       subject.on?(target)
     end
 
+    it "logs the evaluation" do
+      rule = double('rule', id: 'myrule')
+      target = double('target')
+      subject.instance_variable_set(:@rule, rule)
+      allow(subject).to receive(:validate_target).with(target)
+      allow(feature).to receive(:key).and_return("key")
+      allow(rule).to receive(:run).and_return(true)
+      expect(Togls.logger).to receive(:info).with("Togls evaluated feature(key).on?(#<Double \"target\">) to true using rule, myrule.")
+      subject.on?(target)
+    end
+
     it "returns the result of run" do
-      rule = double('rule')
+      rule = double('rule', id: 'myrule')
       target = double('target')
       result = double('result')
       subject.instance_variable_set(:@rule, rule)
@@ -435,7 +446,7 @@ RSpec.describe Togls::Toggle do
     end
 
     it "runs the associated rule" do
-      rule = double('rule')
+      rule = double('rule', id: 'myrule')
       target = double('target')
       subject.instance_variable_set(:@rule, rule)
       allow(subject).to receive(:validate_target).with(target)
@@ -444,8 +455,19 @@ RSpec.describe Togls::Toggle do
       subject.off?(target)
     end
 
+    it "logs the evaluation" do
+      rule = double('rule', id: 'myrule')
+      target = double('target')
+      subject.instance_variable_set(:@rule, rule)
+      allow(subject).to receive(:validate_target).with(target)
+      allow(feature).to receive(:key).and_return("key")
+      allow(rule).to receive(:run).and_return(false)
+      expect(Togls.logger).to receive(:info).with("Togls evaluated feature(key).off?(#<Double \"target\">) to true using rule, myrule.")
+      subject.off?(target)
+    end
+
     it "returns the opposite boolean of the result of run" do
-      rule = double('rule')
+      rule = double('rule', id: 'myrule')
       target = double('target')
       result = false
       subject.instance_variable_set(:@rule, rule)

@@ -71,12 +71,16 @@ module Togls
 
     def on?(target = nil)
       validate_target(target)
-      @rule.run(@feature.key, target)
+      result = @rule.run(@feature.key, target)
+      Togls.logger.info("Togls evaluated feature(#{@feature.key}).on?(#{target.inspect}) to #{result.inspect} using rule, #{@rule.id}.")
+      result
     end
 
     def off?(target = nil)
       validate_target(target)
-      !@rule.run(@feature.key, target)
+      result = !@rule.run(@feature.key, target)
+      Togls.logger.info("Togls evaluated feature(#{@feature.key}).off?(#{target.inspect}) to #{result.inspect} using rule, #{@rule.id}.")
+      result
     end
   end
 end
