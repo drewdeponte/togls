@@ -10,10 +10,13 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
-#### [v3.1.0] - 2016-10-26
+#### [v3.2.0] - 2016-10-27
 
 * `Added`: toggle evelaution logging
 * `Changed`: debug logging to warn logging
+
+#### [v3.1.0] - 2016-10-26
+
 * `Changed`: `optional_logger` to v2.0.0
 
 #### [v3.0.0] - 2016-10-19
@@ -127,7 +130,8 @@ that you can set version constraints properly.
   feature toggles
 * `Added`: basic feature toggles able to be switched on/off
 
-[Unreleased]: https://github.com/codebreakdown/togls/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/codebreakdown/togls/compare/v3.2.0...HEAD
+[v3.2.0]: https://github.com/codebreakdown/togls/compare/v3.2.0...v3.1.0
 [v3.1.0]: https://github.com/codebreakdown/togls/compare/v3.1.0...v3.0.0
 [v3.0.0]: https://github.com/codebreakdown/togls/compare/v2.2.1...v3.0.0
 [v2.2.1]: https://github.com/codebreakdown/togls/compare/v2.2.0...v2.2.1
