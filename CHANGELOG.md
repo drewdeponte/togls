@@ -27,62 +27,62 @@ that you can set version constraints properly.
 * `Changed`: The testing interface to allow for contract enforcement in tests
   and allow altering existing feature rules within tests.
 * `Added`: `Togls.rule` method to simplify rule construction from `type_id`
-  ([#86](https://github.com/codebreakdown/togls/issues/86))
+  ([#86](https://github.com/uptech/togls/issues/86))
 * `Changed`: Rule construction to require an abstract rule `type_id`
-  ([#86](https://github.com/codebreakdown/togls/issues/86))
+  ([#86](https://github.com/uptech/togls/issues/86))
 * `Added`: Feature repository response validation
 * `Added`: validation of targets against feature target_type contract
-  ([#78](https://github.com/codebreakdown/togls/issues/78))
+  ([#78](https://github.com/uptech/togls/issues/78))
 * `Added`: setting a default feature target type
-  ([#69](https://github.com/codebreakdown/togls/issues/69))
+  ([#69](https://github.com/uptech/togls/issues/69))
 * `Added`: logging for target type mismatches/erroneous states
-  ([#69](https://github.com/codebreakdown/togls/issues/69))
+  ([#69](https://github.com/uptech/togls/issues/69))
 * `Changed`: in code feature rule association API to require `target_type`
-  ([#69](https://github.com/codebreakdown/togls/issues/69))
+  ([#69](https://github.com/uptech/togls/issues/69))
 * `Added`: rule instance target types and switch type checking over
-  ([#67](https://github.com/codebreakdown/togls/issues/67))
+  ([#67](https://github.com/uptech/togls/issues/67))
 * `Added`: optional target types, and target type checking
-  ([#65](https://github.com/codebreakdown/togls/issues/65))
+  ([#65](https://github.com/uptech/togls/issues/65))
 * `Changed`: rule type repository to store meta data
-  ([#62](https://github.com/codebreakdown/togls/issues/62))
+  ([#62](https://github.com/uptech/togls/issues/62))
 * `Added`: uniqueness check for rule types
-  ([#61](https://github.com/codebreakdown/togls/issues/61)
+  ([#61](https://github.com/uptech/togls/issues/61)
 * `Changed`: rule repository to use rule type repository
-  ([#59](https://github.com/codebreakdown/togls/issues/59))
+  ([#59](https://github.com/uptech/togls/issues/59))
 * `Added`: rule type registration
-  ([#59](https://github.com/codebreakdown/togls/issues/59))
+  ([#59](https://github.com/uptech/togls/issues/59))
 * `Changed`: driver construction to RegistryManager
-  ([#56](https://github.com/codebreakdown/togls/issues/56))
+  ([#56](https://github.com/uptech/togls/issues/56))
 * `Removed`: `TestToggleRegistry`
-  ([#56](https://github.com/codebreakdown/togls/issues/56))
+  ([#56](https://github.com/uptech/togls/issues/56))
 * `Changed`: `ReleaseToggleRegistry` to `ToggleRegistry`
-  ([#56](https://github.com/codebreakdown/togls/issues/56))
+  ([#56](https://github.com/uptech/togls/issues/56))
 * `Removed`: `features` rake task
-  ([#48](https://github.com/codebreakdown/togls/issues/48))
+  ([#48](https://github.com/uptech/togls/issues/48))
 * `Added`: `test_mode` block style method
-  ([#44](https://github.com/codebreakdown/togls/issues/44))
+  ([#44](https://github.com/uptech/togls/issues/44))
 * `Changed`: `Togls.features` to `Togls.release`
-  ([#38](https://github.com/codebreakdown/togls/issues/38))
+  ([#38](https://github.com/uptech/togls/issues/38))
 * `Changed`: Renamed `FeatureToggleRegistry` to `ReleaseToggleRegistry`
-  ([#41](https://github.com/codebreakdown/togls/issues/41))
+  ([#41](https://github.com/uptech/togls/issues/41))
 * `Added`: `FeatureToggleRegistryManager` methods, `enable_test_mode` &
   `disable_test_mode`
 * `Removed`: `features=` setter
 * `Changed`: `FeatureRepository` moved from `Registry` to `RegistryManager` 
-  ([#40](https://github.com/codebreakdown/togls/issues/40))
+  ([#40](https://github.com/uptech/togls/issues/40))
 * `Removed`: `FeatureToggleRegistry.create` and `TestToggleRegistry.create`
 * `Changed`: `ReleaseToggleRegistryManager` to `FeatureToggleRegistryManager`
 * `Added`: Base Error class for Togls exceptions
-  ([#39](https://github.com/codebreakdown/togls/issues/39))
+  ([#39](https://github.com/uptech/togls/issues/39))
 * `Added`: Exception for when a feature has already been defined in the feature
   repository
-  ([#42](https://github.com/codebreakdown/togls/issues/42))
+  ([#42](https://github.com/uptech/togls/issues/42))
 
 #### [v2.2.1] - 2016-03-24
 
 * `Added`: in-memory driver `set`, `get`, `all` Marshaling to correct a threading
   reference based collision.
-  ([#35](https://github.com/codebreakdown/togls/issues/35))
+  ([#35](https://github.com/uptech/togls/issues/35))
 
 #### [v2.2.0] - 2016-03-04
 
@@ -94,13 +94,13 @@ that you can set version constraints properly.
 
 * `Fixed`: env variable override wasn't falling through to in
   code defined memory value.
-  ([#24](https://github.com/codebreakdown/togls/issues/24))
+  ([#24](https://github.com/uptech/togls/issues/24))
 
 #### [v2.1.0] - 2015-11-24
 
 * `Fixed`: exceptions happened on evaluation after setting
   `Togls.features = nil`
-  ([#19](https://github.com/codebreakdown/togls/issues/19))
+  ([#19](https://github.com/uptech/togls/issues/19))
 
 #### [v2.0.0] - 2015-11-23
 
@@ -130,15 +130,15 @@ that you can set version constraints properly.
   feature toggles
 * `Added`: basic feature toggles able to be switched on/off
 
-[Unreleased]: https://github.com/codebreakdown/togls/compare/v3.2.0...HEAD
-[v3.2.0]: https://github.com/codebreakdown/togls/compare/v3.2.0...v3.1.0
-[v3.1.0]: https://github.com/codebreakdown/togls/compare/v3.1.0...v3.0.0
-[v3.0.0]: https://github.com/codebreakdown/togls/compare/v2.2.1...v3.0.0
-[v2.2.1]: https://github.com/codebreakdown/togls/compare/v2.2.0...v2.2.1
-[v2.2.0]: https://github.com/codebreakdown/togls/compare/v2.1.1...v2.2.0
-[v2.1.1]: https://github.com/codebreakdown/togls/compare/v2.1.0...v2.1.1
-[v2.1.0]: https://github.com/codebreakdown/togls/compare/v2.0.0...v2.1.0
-[v2.0.0]: https://github.com/codebreakdown/togls/compare/v1.1.0...v2.0.0
-[v1.1.0]: https://github.com/codebreakdown/togls/compare/v1.0.0...v1.1.0
-[v1.0.0]: https://github.com/codebreakdown/togls/compare/v0.1.0...v1.0.0
-[v0.1.0]: https://github.com/codebreakdown/togls/compare/0fa2feb...v0.1.0
+[Unreleased]: https://github.com/uptech/togls/compare/v3.2.0...HEAD
+[v3.2.0]: https://github.com/uptech/togls/compare/v3.2.0...v3.1.0
+[v3.1.0]: https://github.com/uptech/togls/compare/v3.1.0...v3.0.0
+[v3.0.0]: https://github.com/uptech/togls/compare/v2.2.1...v3.0.0
+[v2.2.1]: https://github.com/uptech/togls/compare/v2.2.0...v2.2.1
+[v2.2.0]: https://github.com/uptech/togls/compare/v2.1.1...v2.2.0
+[v2.1.1]: https://github.com/uptech/togls/compare/v2.1.0...v2.1.1
+[v2.1.0]: https://github.com/uptech/togls/compare/v2.0.0...v2.1.0
+[v2.0.0]: https://github.com/uptech/togls/compare/v1.1.0...v2.0.0
+[v1.1.0]: https://github.com/uptech/togls/compare/v1.0.0...v1.1.0
+[v1.0.0]: https://github.com/uptech/togls/compare/v0.1.0...v1.0.0
+[v0.1.0]: https://github.com/uptech/togls/compare/0fa2feb...v0.1.0
