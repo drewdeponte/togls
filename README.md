@@ -2,8 +2,7 @@
 [![Build Status](https://travis-ci.org/uptech/togls.svg?branch=master)](https://travis-ci.org/uptech/togls)
 [![Code Climate](https://codeclimate.com/github/uptech/togls/badges/gpa.svg)](https://codeclimate.com/github/uptech/togls)
 [![Test Coverage](https://codeclimate.com/github/uptech/togls/badges/coverage.svg)](https://codeclimate.com/github/uptech/togls/coverage)
-[![Dependency Status](https://gemnasium.com/codebreakdown/togls.svg)](https://gemnasium.com/codebreakdown/togls)
-[![Inline docs](http://inch-ci.org/github/codebreakdown/togls.svg?branch=master)](http://inch-ci.org/github/codebreakdown/togls)
+[![Inline docs](http://inch-ci.org/github/uptech/togls.svg?branch=master)](http://inch-ci.org/github/uptech/togls)
 
 # Togls
 
