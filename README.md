@@ -1,5 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/togls.svg)](http://badge.fury.io/rb/togls)
-[![Build Status](https://travis-ci.org/codebreakdown/togls.svg?branch=master)](https://travis-ci.org/codebreakdown/togls)
+[![Build Status](https://travis-ci.org/uptech/togls.svg?branch=master)](https://travis-ci.org/uptech/togls)
 [![Code Climate](https://codeclimate.com/github/codebreakdown/togls/badges/gpa.svg)](https://codeclimate.com/github/codebreakdown/togls)
 [![Test Coverage](https://codeclimate.com/github/codebreakdown/togls/badges/coverage.svg)](https://codeclimate.com/github/codebreakdown/togls/coverage)
 [![Dependency Status](https://gemnasium.com/codebreakdown/togls.svg)](https://gemnasium.com/codebreakdown/togls)
