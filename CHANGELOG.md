@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+* `Added`: support for Ruby 2.4.0
+
 #### [v3.2.0] - 2016-10-27
 
 * `Added`: toggle evelaution logging
