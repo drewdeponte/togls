@@ -58,8 +58,9 @@ RSpec.describe Togls::ToggleRegistry do
       desc = double('feature desc')
       key = "some_key"
       feature = double(Togls::Feature)
+      feature = Togls::Feature.new(:somekey, "some description", Togls::TargetTypes::NONE)
       allow(Togls::Feature).to receive(:new).and_return(feature)
-      expect(Togls::Toggle).to receive(:new).with(feature).and_return(double.as_null_object)
+      expect(Togls::Toggle).to receive(:new).with(feature).and_return(Togls::Toggle.new(feature))
       subject.feature(key, desc)
     end
 
@@ -90,7 +91,8 @@ RSpec.describe Togls::ToggleRegistry do
       Togls.default_feature_target_type :hoopty
       key = "some_key"
       desc = double('feature desc')
-      toggle = double('toggle').as_null_object
+      feature = Togls::Feature.new(key, desc, Togls::TargetTypes::NONE)
+      toggle = Togls::Toggle.new(feature)
       toggler = double('toggler')
       allow(Togls::Toggle).to receive(:new).and_return(toggle)
       allow(Togls::Toggler).to receive(:new).and_return(toggler)
