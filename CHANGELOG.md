@@ -10,6 +10,8 @@ that you can set version constraints properly.
 
 #### [Unreleased] - now
 
+#### [v3.2.1] - 2017-03-16
+
 * Added support for Ruby 2.4.0
 
 #### [v3.2.0] - 2016-10-27
@@ -132,7 +134,8 @@ that you can set version constraints properly.
   feature toggles
 * Added basic feature toggles able to be switched on/off
 
-[Unreleased]: https://github.com/uptech/togls/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/uptech/togls/compare/v3.2.1...HEAD
+[v3.2.1]: https://github.com/uptech/togls/compare/v3.2.1...v3.2.0
 [v3.2.0]: https://github.com/uptech/togls/compare/v3.2.0...v3.1.0
 [v3.1.0]: https://github.com/uptech/togls/compare/v3.1.0...v3.0.0
 [v3.0.0]: https://github.com/uptech/togls/compare/v2.2.1...v3.0.0
