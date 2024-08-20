@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'An ultra light weight yet ridiculously powerful' \
                        ' ruby feature toggle gem that supports the concept' \
                        ' of release toggles and business toggles.'
-  spec.homepage      = 'http://github.com/codebreakdown/togls'
+  spec.homepage      = 'http://github.com/drewdeponte/togls'
   spec.license       = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
@@ -25,9 +25,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'optional_logger', '~> 2.0'
-  spec.add_development_dependency 'bundler', '~> 1.15'
-  spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rspec', '~> 3.5'
-  spec.add_development_dependency 'pry', '~> 0.10'
+  spec.add_dependency 'optional_logger', '~> 2.1'
+  spec.add_development_dependency 'bundler', '~> 2.5'
+  spec.add_development_dependency 'rake', '~> 13.2'
+  spec.add_development_dependency 'rspec', '~> 3.13'
+  spec.add_development_dependency 'pry', '~> 0.14'
 end
